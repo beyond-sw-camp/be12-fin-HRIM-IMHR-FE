@@ -8,7 +8,7 @@ const route = useRoute();
 
 <template>
   <h1>
-    HelloWorld
+    test
   </h1>
 </template>
 

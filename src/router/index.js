@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 
 import ESGEducationManagementpage from '../pages/ESGEducationManagementpage.vue';
+import Home from '../pages/Home.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -15,9 +16,9 @@ import ESGEducationManagementpage from '../pages/ESGEducationManagementpage.vue'
 
 const routes = [
   {
-    path: '/header',
-    name: 'header',
-    component: Headers
+    path: '/',
+    name: 'home',
+    component: Home
   },
   {
     path: '/test',

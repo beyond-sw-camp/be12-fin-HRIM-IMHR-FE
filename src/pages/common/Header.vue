@@ -1,27 +1,49 @@
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
+import { ref, defineEmits } from "vue";
+import Sidebar from "./Sidebar.vue";
 
 const route = useRouter();
+const emit = defineEmits(["toggle-sidebar"]);
+
+// 사이드 바 상태
+const toggleSidebar = () => {
+  emit("toggle-sidebar");
+};
 </script>
 
 <template>
-  <nav class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-50">
+  <header
+    class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-50"
+  >
     <!-- 왼쪽 로고 -->
-    <div class="text-blue-600 font-bold text-xl">IM HR</div>
+    <div class="flex items-center gap-2">
+      <router-link to="/test">
+        <div class="text-blue-600 font-bold text-5xl">IMHR</div>
+      </router-link>
 
-    <!-- 가운데 제목 -->
-    <div class="text-gray-700 text-lg font-semibold">타 기업 ESG 대시보드</div>
-
-    <!-- 오른쪽 사용자 정보 -->
-    <div class="flex items-center gap-4">
-      <span class="text-gray-900 font-medium">홍길동 님</span>
-      <button class="text-yellow-500">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V9a6 6 0 10-12 0v5c0 .386-.149.735-.405 1.005L4 17h5m6 0a3 3 0 11-6 0"></path>
-        </svg>
+      <button @click="toggleSidebar" class="p-2 bg-transparent border-none">
+        <img 
+        style="width: 100%; height: auto"
+        src="/src/assets/icon/mynaui_tally-three.png" />
       </button>
     </div>
-  </nav>
+
+    <!-- 오른쪽 사용자 정보 -->
+    <div class="flex items-center gap-4 ml-auto">
+      <router-link class="text-gray-900 text-4xl" to="/test">
+        홍길동 님
+      </router-link>
+      <!-- 수정 해야함함 -->
+      <router-link to="/test">
+        <img
+          src="/src/assets/icon/mynaui_bell.png"
+          style="width: 80%; height: auto"
+        />
+      </router-link>
+    </div>
+
+  </header>
 </template>
 
 <style scoped>

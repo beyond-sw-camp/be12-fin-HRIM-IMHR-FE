@@ -3,11 +3,15 @@ import { useRoute } from 'vue-router';
 
 
 const route = useRoute();
+
 </script>
 
 <template>
-  <router-view></router-view>
+  <h1>
+    HelloWorld
+  </h1>
 </template>
+
 
 <style scoped>
 </style>

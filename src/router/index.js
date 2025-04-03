@@ -1,25 +1,28 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import { useMemberStore } from '../stores/useMemberStore';
+// import { useMemberStore } from '../stores/useMemberStore';
 
-import Home from "/src/pages/home/Home.vue";
+import ESGEducationManagementpage from '../pages/ESGEducationManagementpage.vue';
 
-const checkLogin = async (from, to, next) => {
-  const memberStore = useMemberStore();
-  // await memberStore.loginCheck();
-  if(memberStore.isLogin) {
-    return next();
-  }
+// const checkLogin = async (from, to, next) => {
+//   const memberStore = useMemberStore();
+//   // await memberStore.loginCheck();
+//   if(memberStore.isLogin) {
+//     return next();
+//   }
 
-  next("/login");
-}
+//   next("/login");
+// }
 
 const routes = [
   {
-    path: '/review/:idx',
-    name: 'Review',
-    component: Review,
-    meta: { showHeader: true, showFooter: true },
-    beforeEnter: checkLogin,
+    path: '/header',
+    name: 'header',
+    component: Headers
+  },
+  {
+    path: '/test',
+    name: 'esgEducationManagementpage',
+    component: ESGEducationManagementpage
   },
 ]
 

@@ -7,7 +7,7 @@ const route = useRoute();
 <template>
   <!-- 전체 배경 -->
   <div
-    class="bg-white min-h-[calc(90vh-4rem)] overflow-y-auto transition-all p-6 rounded-lg"
+    class="bg-white min-h-[calc(93vh-4rem)] overflow-y-auto transition-all p-6 rounded-lg"
   >
     <div
       class="relative w-full justify-between items-center mb-4 transition-all"

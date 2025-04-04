@@ -2,15 +2,15 @@
 </script>
 
 <template>
-  <h1 class="text-5xl font-bold mb-4">IM HR</h1>
-
-  <p class="text-lg mt-2">
-    기업의 모든 인재 관리를 간편하게
-    <br />
-    지속가능한 미래를 실현합니다.
-  </p>
+  <div class="flex flex-col justify-center items-center text-white text-center w-full h-full">
+    <h1 class="text-6xl font-bold mb-4">IMHR</h1>
+    <p class="text-lg mt-2">
+      기업의 모든 인재 관리를 간편하게
+      <br />
+      지속가능한 미래를 실현합니다.
+    </p>
+  </div>
 </template>
-
 
 <style scoped>
 </style>

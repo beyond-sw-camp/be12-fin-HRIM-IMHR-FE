@@ -6,29 +6,37 @@ const route = useRouter();
 </script>
 
 <template>
-  <div class="flex min-h-screen">
-    <!-- 우측 로그셋션 -->
-    <div class="hidden md:flex md:w-1/2 bg-gradient-to-b from-blue-500 to-blue-600 text-white justify-center items-center">
+  <div class="flex flex-col md:flex-row min-h-screen">
+
+    <!-- 비슷한 페이지마다 아래 처럼 구현하면됨 -->
+    <div class="md:hidden flex justify-center items-center w-full py-6 bg-gradient-to-b from-blue-500 to-blue-600">
       <LogoSection />
     </div>
 
+    <div class="hidden md:flex md:w-1/2 bg-gradient-to-b from-blue-500 to-blue-600 justify-center items-center">
+      <LogoSection />
+    </div>
+    <!-- 위에까지만 아래는 다른 내용! -->
+
     <div class="w-full md:w-1/2 flex justify-center items-center bg-white p-6">
       <div class="w-full max-w-md border-2 border-blue-300 rounded-xl p-8 shadow-md">
-        <p class="text-center text-gray-600 mb-4">
-          <span class="text-blue-600 font-semibold">IMHR</span>에 오신 걸 환영합니다.
+        <p class="text-center text-gray-600 mb-4 text-2xl">
+          <span class="text-blue-600 font-semibold ">IMHR</span>에 오신 걸 환영합니다.
         </p>
 
-        <form @submit.prevent="login" class="space-y-4">
-          <input placeholder="이메일" class="input" />
-          <input placeholder="비밀번호" class="input" />
+        <form @submit.prevent="login" class="flex flex-col space-y-3">
+          <input type="email" placeholder="이메일" 
+            class="w-full px-4 py-3 border border-blue-500 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300" />
 
+          <input type="password" placeholder="비밀번호" 
+            class="w-full px-4 py-3 border border-blue-500 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300" />
           <!-- 역할 선택 -->
-          <div class="flex justify-between items-center text-sm text-gray-700">
+          <div class="flex justify-center items-center text-sm text-gray-700 gap-6">
             <label>
-              <input type="radio" name="role" /> 관리자
+              <input type="radio" name="role" class="mr-1" /> 관리자
             </label>
             <label>
-              <input type="radio" name="role" /> 임직원
+              <input type="radio" name="role" class="mr-1" /> 임직원
             </label>
           </div>
 
@@ -60,7 +68,4 @@ const route = useRouter();
 </template>
 
 <style scoped>
-.input {
-  @apply w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200;
-}
 </style>

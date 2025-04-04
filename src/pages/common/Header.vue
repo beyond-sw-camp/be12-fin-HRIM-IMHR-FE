@@ -4,8 +4,11 @@ import { ref, defineEmits } from "vue";
 
 import Sidebar from "./Sidebar.vue";
 
+import { defineProps } from "vue";
+
 
 const route = useRouter();
+const emit = defineEmits(["toggle-sidebar"]);
 
 const props = defineProps(["toggleSidebar"]);
 </script>

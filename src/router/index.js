@@ -5,12 +5,13 @@ import ESGEducationManagementpage from '../pages/Education/ESGEducationManagemen
 import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import ActivityListView from '../pages/activity/ActivityListView.vue';
-import ESGEducationDetails from '../pages/Education/ESGEducationDetails.vue';
 // 사내 캠페인 관련
 import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
 import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
 import reportListView from '../pages/report/reportList.vue';
+import AllActivityDetails from '../pages/common/AllActivityDetails.vue';
 import reporDetailView from '../pages/report/reportDetail.vue';
+
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -39,9 +40,9 @@ const routes = [
     component: ESGEducationManagementpage
   },
   {
-    path: '/edudetails',
-    name: 'edudetails',
-    component: ESGEducationDetails
+    path: '/aaDetails',
+    name: 'aaDetails',
+    component: AllActivityDetails
   },
   {
     path: '/dashboard',

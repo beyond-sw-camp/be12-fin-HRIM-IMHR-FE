@@ -6,6 +6,9 @@ import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import ActivityListView from '../pages/activity/ActivityListView.vue';
 import ESGEducationDetails from '../pages/Education/ESGEducationDetails.vue';
+// 사내 캠페인 관련
+import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
+import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -47,7 +50,17 @@ const routes = [
     path: '/activity',
     name: 'ActivityList',
     component: ActivityListView
-  } 
+  },
+  {
+    path: '/admin/campaign-list',
+    name: 'ActivityCampaignList',
+    component: ActivityCampaignListView
+  },
+  {
+    path: '/admin/campaign-detail',
+    name: 'ActivityCampaignDetail',
+    component: ActivityCampaignDetailView
+  }
 
 
 ]

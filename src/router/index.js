@@ -10,6 +10,7 @@ import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetail
 import reportListView from '../pages/report/reportList.vue';
 import AllActivityDetails from '../pages/activity/AllActivityDetails.vue';
 import reporDetailView from '../pages/report/reportDetail.vue';
+import productListView from '../pages/product/productList.vue';
 
 
 // const checkLogin = async (from, to, next) => {
@@ -72,6 +73,11 @@ const routes = [
     path: '/reportDetail',
     name: 'reportDetail',
     component: reporDetailView
+  },
+  {
+    path: '/productList',
+    name: 'productList',
+    component: productListView
   },
 
 

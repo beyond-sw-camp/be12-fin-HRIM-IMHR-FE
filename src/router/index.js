@@ -2,7 +2,6 @@ import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 import Home from '../pages/Home.vue';
 import Loginpage from '../pages/Member/Loginpage.vue';
-import Header from '../pages/common/Header.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();

@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/vue3": "^6.1.17",
     "axios": "^1.8.4",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",

@@ -4,7 +4,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 import ESGEducationManagementpage from '../pages/ESGEducationManagementpage.vue';
 import Home from '../pages/Home.vue';
 import LogoSection from '../pages/common/LogoSection.vue';
-import Logintest from '../pages/Member/Logintest.vue';
+import Loginpage from '../pages/Member/Loginpage.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -24,8 +24,8 @@ const routes = [
   },
   {
     path: '/test',
-    name: 'logintest',
-    component: Logintest
+    name: 'loginpage',
+    component: Loginpage
   },
   {
     path: '/logo',

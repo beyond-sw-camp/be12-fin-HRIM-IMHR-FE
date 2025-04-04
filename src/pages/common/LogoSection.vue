@@ -2,10 +2,8 @@
 </script>
 
 <template>
-  <div class="w-1/2 bg-gradient-to-b from-blue-500 to-blue-600 text-white flex flex-col justify-center items-center">
-    
-    <h1 class="text-5xl font-bold mb-4">IM HR</h1>
-
+  <div class="flex flex-col justify-center items-center text-white text-center w-full h-full">
+    <h1 class="text-6xl font-bold mb-4">IMHR</h1>
     <p class="text-lg mt-2">
       기업의 모든 인재 관리를 간편하게
       <br />
@@ -13,7 +11,6 @@
     </p>
   </div>
 </template>
-
 
 <style scoped>
 </style>

@@ -5,6 +5,7 @@ import ESGEducationManagementpage from '../pages/Education/ESGEducationManagemen
 import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import ActivityListView from '../pages/activity/ActivityListView.vue';
+import ESGEducationDetails from '../pages/Education/ESGEducationDetails.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -31,6 +32,11 @@ const routes = [
     path: '/edumanagment',
     name: 'edumanagment',
     component: ESGEducationManagementpage
+  },
+  {
+    path: '/edudetails',
+    name: 'edudetails',
+    component: ESGEducationDetails
   },
   {
     path: '/dashboard',

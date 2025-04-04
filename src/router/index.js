@@ -11,6 +11,7 @@ import reportListView from '../pages/report/reportList.vue';
 import AllActivityDetails from '../pages/activity/AllActivityDetails.vue';
 import reporDetailView from '../pages/report/reportDetail.vue';
 import productListView from '../pages/product/productList.vue';
+import Calendar from '../pages/Calendar/Calendar.vue';
 
 
 // const checkLogin = async (from, to, next) => {
@@ -79,8 +80,11 @@ const routes = [
     name: 'productList',
     component: productListView
   },
-
-
+  {
+    path: '/calendat',
+    name: 'calendat',
+    component: Calendar
+  },
 ]
 
 const router = createRouter({

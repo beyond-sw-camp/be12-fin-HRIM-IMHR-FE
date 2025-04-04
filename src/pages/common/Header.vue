@@ -55,19 +55,6 @@ const props = defineProps(["toggleSidebar"]);
       </button>
     </div>
   </header>
-
-  <div class="flex">
-    <!-- ✅ 사이드바 -->
-    <Sidebar :isOpen="isSidebarOpen" />
-
-    <!-- ✅ 메인 컨텐츠: 사이드바 열릴 때만 오른쪽 이동 -->
-    <main
-      class="flex-1 min-h-screen transition-all duration-300 pt-16"
-      :class="{ 'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen }"
-    >
-      <router-view />
-    </main>
-  </div>
 </template>
 
 <style scoped>

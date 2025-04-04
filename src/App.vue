@@ -20,9 +20,9 @@ const toggleSidebar = () => {
   <Sidebar :isOpen="isSidebarOpen" />
 
   <!-- 메인 컨텐츠 -->
-  <div 
-    :class="{ 'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen }" 
+  <div
     class="flex-1 transition-all duration-300 mt-16 p-6 bg-gray-100"
+    :class="{ 'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen }" 
   >
     <router-view />
   </div>

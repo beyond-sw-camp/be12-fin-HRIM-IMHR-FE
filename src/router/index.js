@@ -5,11 +5,10 @@ import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
 import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import ActivityListView from '../pages/activity/ActivityListView.vue';
-// 사내 캠페인 관련
 import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
 import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
 import reportListView from '../pages/report/reportList.vue';
-import AllActivityDetails from '../pages/common/AllActivityDetails.vue';
+import AllActivityDetails from '../pages/activity/AllActivityDetails.vue';
 import reporDetailView from '../pages/report/reportDetail.vue';
 
 

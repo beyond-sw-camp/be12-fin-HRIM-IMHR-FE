@@ -1,14 +1,14 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import Sidebar from "./Sidebar.vue";
 
 const route = useRouter();
-const emit = defineEmits(["toggle-sidebar"]);
 
-// 사이드 바 상태
+const isSidebarOpen = ref(true);
+
 const toggleSidebar = () => {
-  emit("toggle-sidebar");
+  isSidebarOpen.value = !isSidebarOpen.value;
 };
 </script>
 
@@ -23,9 +23,10 @@ const toggleSidebar = () => {
       </router-link>
 
       <button @click="toggleSidebar" class="p-2 bg-transparent border-none">
-        <img 
-        style="width: 100%; height: auto"
-        src="/src/assets/icon/mynaui_tally-three.png" />
+        <img
+          style="width: 100%; height: auto"
+          src="/src/assets/icon/mynaui_tally-three.png"
+        />
       </button>
     </div>
 
@@ -42,8 +43,20 @@ const toggleSidebar = () => {
         />
       </router-link>
     </div>
-
   </header>
+
+  <div class="flex">
+    <!-- ✅ 사이드바 -->
+    <Sidebar :isOpen="isSidebarOpen" />
+
+    <!-- ✅ 메인 컨텐츠: 사이드바 열릴 때만 오른쪽 이동 -->
+    <main
+      class="flex-1 min-h-screen transition-all duration-300 pt-16"
+      :class="{ 'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen }"
+    >
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <style scoped>

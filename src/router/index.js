@@ -1,13 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 
-import ESGEducationManagementpage from '../pages/ESGEducationManagementpage.vue';
 import Home from '../pages/Home.vue';
-<<<<<<< Updated upstream
-=======
 import Loginpage from '../pages/Member/Loginpage.vue';
 import ESGEducationManagementpage from '../pages/Education/ESGEducationManagementpage.vue';
->>>>>>> Stashed changes
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -26,10 +22,6 @@ const routes = [
     component: Home
   },
   {
-<<<<<<< Updated upstream
-    path: '/test',
-    name: 'esgEducationManagementpage',
-=======
     path: '/login',
     name: 'loginpage',
     component: Loginpage
@@ -37,7 +29,6 @@ const routes = [
   {
     path: '/edumanagment',
     name: 'edumanagment',
->>>>>>> Stashed changes
     component: ESGEducationManagementpage
   },
 ]

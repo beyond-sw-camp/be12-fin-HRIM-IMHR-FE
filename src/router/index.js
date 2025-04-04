@@ -13,6 +13,21 @@ import reporDetailView from '../pages/report/reportDetail.vue';
 import productListView from '../pages/product/productList.vue';
 import Calendar from '../pages/Calendar/Calendar.vue';
 import productDetailView from '../pages/product/productDetail.vue';
+// 관리자 관련
+import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
+import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
+import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
+// 홈
+import HomeView from '../pages/home/HomeView.vue'
+// 로그인 및 인증 관련
+import AdminLoginView from '../pages/admin/AdminLoginView.vue'
+import FindIdView from '../pages/auth/FindIdView.vue'
+import ResetPasswordView from '../pages/auth/ResetPasswordView.vue'
+import ChangePasswordView from '../pages/auth/ChangePasswordView.vue'
+
+// 회원가입
+import CompanyRegisterView from '../pages/register/CompanyRegisterView.vue'
+import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
 
 
 // const checkLogin = async (from, to, next) => {
@@ -91,6 +106,22 @@ const routes = [
     name: 'productDetail',
     component: productDetailView
   },
+  { path: '/', component: HomeView },
+
+  // 로그인 & 인증
+  { path: '/login', component: AdminLoginView },
+  { path: '/find-id', component: FindIdView },
+  { path: '/reset-password', component: ResetPasswordView },
+  { path: '/change-password', component: ChangePasswordView },
+
+  // 관리자 기능
+  { path: '/admin/user-approval', component: AdminUserApprovalView },
+  { path: '/admin/user-search', component: AdminUserSearchView },
+  { path: '/admin/user-permission', component: AdminPermissionTransferView },
+
+  // 회원가입
+  { path: '/register/company', component: CompanyRegisterView },
+  { path: '/register/employee', component: EmployeeRegisterView },
   
 ]
 

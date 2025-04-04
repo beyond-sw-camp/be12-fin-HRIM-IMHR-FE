@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 import Home from '../pages/Home.vue';
+import ESGEducationManagementpage from '../pages/Education/ESGEducationManagementpage.vue';
 import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import ActivityListView from '../pages/activity/ActivityListView.vue';
@@ -25,6 +26,11 @@ const routes = [
     path: '/login',
     name: 'loginpage',
     component: Loginpage
+  },
+  {
+    path: '/edumanagment',
+    name: 'edumanagment',
+    component: ESGEducationManagementpage
   },
   {
     path: '/dashboard',

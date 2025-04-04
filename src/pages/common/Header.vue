@@ -1,20 +1,18 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+
 import Sidebar from "./Sidebar.vue";
+
 
 const route = useRouter();
 
-const isSidebarOpen = ref(true);
-
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
-};
+const props = defineProps(["toggleSidebar"]);
 </script>
 
 <template>
   <header
-    class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-50"
+    class="bg-white shadow-md w-full w-screen h-16 flex items-center px-6 fixed top-0 left-0 z-50"
   >
     <!-- 왼쪽 로고 -->
     <div class="flex items-center gap-2">
@@ -22,7 +20,10 @@ const toggleSidebar = () => {
         <div class="text-blue-600 font-bold text-5xl">IMHR</div>
       </router-link>
 
-      <button @click="toggleSidebar" class="p-2 bg-transparent border-none">
+      <button
+        @click="props.toggleSidebar"
+        class="p-2 bg-transparent border-none"
+      >
         <img
           style="width: 100%; height: auto"
           src="/src/assets/icon/mynaui_tally-three.png"
@@ -30,18 +31,25 @@ const toggleSidebar = () => {
       </button>
     </div>
 
-    <!-- 오른쪽 사용자 정보 -->
+    <!-- 오른쪽 사용자 정보 - 로그인 후 -->
     <div class="flex items-center gap-4 ml-auto">
       <router-link class="text-gray-900 text-4xl" to="/test">
-        홍길동 님
+        홍길동
       </router-link>
-      <!-- 수정 해야함함 -->
+      <!-- 수정 해야함 -->
       <router-link to="/test">
         <img
           src="/src/assets/icon/mynaui_bell.png"
           style="width: 80%; height: auto"
         />
       </router-link>
+
+      <button
+        type="button"
+        class="rounded hidden border border-blue-700 py-1.5 px-2 text-center text-sm font-medium text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 md:inline-block rounded-lg"
+      >
+        로그아웃
+      </button>
     </div>
   </header>
 

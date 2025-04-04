@@ -10,6 +10,7 @@ import ESGEducationDetails from '../pages/Education/ESGEducationDetails.vue';
 import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
 import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
 import reportListView from '../pages/report/reportList.vue';
+import reporDetailView from '../pages/report/reportDetail.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -66,6 +67,11 @@ const routes = [
     path: '/reportList',
     name: 'reportList',
     component: reportListView
+  },
+  {
+    path: '/reportDetail',
+    name: 'reportDetail',
+    component: reporDetailView
   },
 
 

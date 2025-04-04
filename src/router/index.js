@@ -9,6 +9,7 @@ import ESGEducationDetails from '../pages/Education/ESGEducationDetails.vue';
 // 사내 캠페인 관련
 import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
 import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
+import reportListView from '../pages/report/reportList.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -60,7 +61,12 @@ const routes = [
     path: '/admin/campaign-detail',
     name: 'ActivityCampaignDetail',
     component: ActivityCampaignDetailView
-  }
+  },
+  {
+    path: '/reportList',
+    name: 'reportList',
+    component: reportListView
+  },
 
 
 ]

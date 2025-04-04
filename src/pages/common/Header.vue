@@ -1,23 +1,13 @@
 <script setup>
 import { useRouter } from "vue-router";
-<<<<<<< Updated upstream
 import { ref, defineEmits } from "vue";
+
 import Sidebar from "./Sidebar.vue";
-=======
-import { defineProps } from "vue";
->>>>>>> Stashed changes
+
 
 const route = useRouter();
-const emit = defineEmits(["toggle-sidebar"]);
 
-<<<<<<< Updated upstream
-// 사이드 바 상태
-const toggleSidebar = () => {
-  emit("toggle-sidebar");
-};
-=======
 const props = defineProps(["toggleSidebar"]);
->>>>>>> Stashed changes
 </script>
 
 <template>
@@ -30,12 +20,6 @@ const props = defineProps(["toggleSidebar"]);
         <div class="text-blue-600 font-bold text-5xl">IMHR</div>
       </router-link>
 
-<<<<<<< Updated upstream
-      <button @click="toggleSidebar" class="p-2 bg-transparent border-none">
-        <img 
-        style="width: 100%; height: auto"
-        src="/src/assets/icon/mynaui_tally-three.png" />
-=======
       <button
         @click="props.toggleSidebar"
         class="p-2 bg-transparent border-none"
@@ -44,7 +28,6 @@ const props = defineProps(["toggleSidebar"]);
           style="width: 100%; height: auto"
           src="/src/assets/icon/mynaui_tally-three.png"
         />
->>>>>>> Stashed changes
       </button>
     </div>
 
@@ -68,8 +51,20 @@ const props = defineProps(["toggleSidebar"]);
         로그아웃
       </button>
     </div>
-
   </header>
+
+  <div class="flex">
+    <!-- ✅ 사이드바 -->
+    <Sidebar :isOpen="isSidebarOpen" />
+
+    <!-- ✅ 메인 컨텐츠: 사이드바 열릴 때만 오른쪽 이동 -->
+    <main
+      class="flex-1 min-h-screen transition-all duration-300 pt-16"
+      :class="{ 'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen }"
+    >
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <style scoped>

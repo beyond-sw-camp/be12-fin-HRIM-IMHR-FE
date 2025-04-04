@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 import Home from '../pages/Home.vue';
-import ESGEducationManagementpage from '../pages/Education/ESGEducationManagementpage.vue';
+import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
 import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import ActivityListView from '../pages/activity/ActivityListView.vue';
@@ -35,7 +35,7 @@ const routes = [
   {
     path: '/edumanagment',
     name: 'edumanagment',
-    component: ESGEducationManagementpage
+    component: ESGEducationListpage
   },
   {
     path: '/aaDetails',

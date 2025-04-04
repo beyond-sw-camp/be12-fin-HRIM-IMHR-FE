@@ -3,6 +3,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 import Home from '../pages/Home.vue';
 import Loginpage from '../pages/Member/Loginpage.vue';
 import Header from '../pages/common/Header.vue';
+import DashboardView from '../pages/dashboard/Dashboard.vue'
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -24,6 +25,11 @@ const routes = [
     path: '/login',
     name: 'loginpage',
     component: Loginpage
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardView
   }
 ]
 

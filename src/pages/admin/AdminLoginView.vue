@@ -1,64 +1,84 @@
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToFindId = () => {
+  router.push('/find-id')
+}
+
+const goToResetPassword = () => {
+  router.push('/reset-password')
+}
+
+const goToCompanyRegister = () => {
+  router.push('/register/company')
+}
+
+const goToEmployeeRegister = () => {
+  router.push('/register/employee')
+}
+</script>
+
 <template>
-  <div class="flex h-screen">
-    <!-- 좌측 설명 -->
-    <div class="w-1/2 bg-gradient-to-b from-blue-500 to-blue-600 text-white flex flex-col justify-center items-center">
-      <h1 class="text-5xl font-bold mb-4">IM HR</h1>
-      <p class="text-lg text-center w-3/4 leading-relaxed">
-        기업의 모든 이해 관계자 가치를 높이고 <br />
+  <div class="flex flex-col md:flex-row h-screen w-full">
+    <!-- 왼쪽 브랜드 영역 -->
+    <div class="hidden md:flex w-full md:w-1/2 bg-gradient-to-r from-blue-500 to-blue-700 text-white items-center justify-center flex-col px-10">
+      <h1 class="text-4xl font-bold mb-4">IM HR</h1>
+      <p class="text-lg text-center leading-relaxed">
+        기업의 모든 이해 관계자 가치를 높이고<br />
         지속가능한 미래를 실현합니다.
       </p>
     </div>
 
-    <!-- 우측 로그인 폼 -->
-    <div class="w-1/2 flex justify-center items-center bg-white">
-      <div class="w-[400px] border-2 border-blue-300 rounded-xl p-8">
-        <p class="text-center text-gray-600 mb-4">
-          <span class="text-blue-600 font-semibold">IMHR</span>에 오신 걸 환영합니다.
-        </p>
+    <!-- 로그인 폼 -->
+    <div class="w-full md:w-1/2 flex items-center justify-center bg-white p-6">
+      <div class="w-full max-w-sm p-6 border border-gray-200 rounded shadow-md">
+        <h2 class="text-center mb-6 text-xl text-gray-800 font-semibold">IMHR에 오신 걸 환영합니다.</h2>
+        
+        <form>
+          <label class="block mb-2 text-sm text-gray-700">이메일</label>
+          <input type="email" class="w-full mb-4 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300" />
 
-        <form @submit.prevent="login" class="space-y-4">
-          <input v-model="form.email" type="email" placeholder="이메일" class="input" />
-          <input v-model="form.password" type="password" placeholder="비밀번호" class="input" />
+          <label class="block mb-2 text-sm text-gray-700">비밀번호</label>
+          <input type="password" class="w-full mb-4 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300" />
 
-          <!-- 역할 선택 -->
-          <div class="flex justify-between items-center text-sm text-gray-700">
-            <label><input type="radio" value="admin" v-model="form.role" /> 관리자</label>
-            <label><input type="radio" value="employee" v-model="form.role" /> 임직원</label>
+          <!-- 권한 선택 -->
+          <div class="flex items-center space-x-4 mb-4 text-sm text-gray-700">
+            <label class="flex items-center">
+              <input type="radio" name="role" value="admin" checked class="mr-1" />
+              관리자
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="role" value="employee" class="mr-1" />
+              임직원
+            </label>
           </div>
 
-          <button type="submit"
-                  class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
             로그인
           </button>
         </form>
 
-        <div class="mt-4 text-center text-sm text-gray-500">
-          <router-link to="/find-id" class="hover:underline">아이디 찾기</router-link>
-          &nbsp;|&nbsp;
-          <router-link to="/reset-password" class="hover:underline">비밀번호 재설정</router-link>
+        <!-- 링크 버튼 영역 -->
+        <div class="flex justify-between text-sm mt-4 text-gray-600">
+          <button @click="goToFindId" class="hover:underline">아이디 찾기</button>
+          <span>|</span>
+          <button @click="goToResetPassword" class="hover:underline">비밀번호 재설정</button>
+        </div>
+
+        <!-- 회원가입 버튼 영역 -->
+        <div class="flex flex-col gap-2 mt-6">
+          <button @click="goToCompanyRegister"
+                  class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
+            기업 회원가입
+          </button>
+          <button @click="goToEmployeeRegister"
+                  class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
+            임직원 회원가입
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-const form = ref({
-  email: '',
-  password: '',
-  role: 'admin'
-})
-
-const login = () => {
-  console.log('로그인 정보:', form.value)
-  alert('로그인 시도')
-}
-</script>
-
-<style scoped>
-.input {
-  @apply w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200;
-}
-</style>

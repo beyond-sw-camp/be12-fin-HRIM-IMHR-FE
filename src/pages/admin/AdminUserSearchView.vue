@@ -1,22 +1,8 @@
 <template>
     <div class="flex h-screen">
-      <!-- 사이드바 -->
-      <aside class="w-60 bg-gradient-to-b from-blue-500 to-blue-600 text-white p-4">
-        <h1 class="text-3xl font-bold mb-6">IM HR</h1>
-        <ul class="space-y-2 text-sm">
-          <li v-for="menu in menus" :key="menu">
-            <button class="w-full text-left hover:underline"><span>▼</span> {{ menu }}</button>
-          </li>
-        </ul>
-      </aside>
   
       <!-- 본문 -->
       <main class="flex-1 bg-gray-50">
-        <!-- 헤더 -->
-        <header class="flex justify-end items-center px-6 py-4 border-b bg-white">
-          <span class="text-lg font-semibold">홍길동 님</span>
-          <span class="text-yellow-400 text-xl ml-4">🔔</span>
-        </header>
   
         <!-- 검색창 -->
         <div class="flex justify-center mt-8 mb-4">

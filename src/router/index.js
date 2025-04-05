@@ -1,25 +1,6 @@
-import { createWebHistory, createRouter } from 'vue-router';
-// import { useMemberStore } from '../stores/useMemberStore';
-import Home from '../pages/Home.vue';
-import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
-import Loginpage from '../pages/Member/Loginpage.vue';
-import DashboardView from '../pages/dashboard/Dashboard.vue';
-import ActivityListView from '../pages/activity/ActivityListView.vue';
-import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
-import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
-import reportListView from '../pages/report/reportList.vue';
-import AllActivityDetails from '../pages/activity/AllActivityDetails.vue';
-import reporDetailView from '../pages/report/reportDetail.vue';
-import productListView from '../pages/product/productList.vue';
-import Calendar from '../pages/Calendar/Calendar.vue';
-import productDetailView from '../pages/product/productDetail.vue';
-// 관리자 관련
-import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
-import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
-import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
-// 홈
-import HomeView from '../pages/home/HomeView.vue'
-// 로그인 및 인증 관련
+import { createWebHistory, createRouter } from 'vue-router'
+
+// 로그인 & 인증
 import AdminLoginView from '../pages/admin/AdminLoginView.vue'
 import FindIdView from '../pages/auth/FindIdView.vue'
 import ResetPasswordView from '../pages/auth/ResetPasswordView.vue'
@@ -29,118 +10,156 @@ import ChangePasswordView from '../pages/auth/ChangePasswordView.vue'
 import CompanyRegisterView from '../pages/register/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
 
+// 관리자
+import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
+import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
+import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
 
-// const checkLogin = async (from, to, next) => {
-//   const memberStore = useMemberStore();
-//   // await memberStore.loginCheck();
-//   if(memberStore.isLogin) {
-//     return next();
-//   }
+// 활동
+import ActivityListView from '../pages/activity/ActivityListView.vue'
+import AllActivityDetails from '../pages/activity/AllActivityDetails.vue'
+import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue'
+import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue'
 
-//   next("/login");
-// }
+// 보고서
+import ReportListView from '../pages/report/reportList.vue'
+import ReportDetailView from '../pages/report/reportDetail.vue'
+
+// 제품
+import ProductListView from '../pages/product/productList.vue'
+import ProductDetailView from '../pages/product/productDetail.vue'
+
+// 교육
+import ESGEducationListpage from '../pages/education/ESGEducationListpage.vue'
+
+// 캘린더
+import Calendar from '../pages/calendar/Calendar.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Home
-  },
+  // 기본 리다이렉트
+  { path: '/', redirect: '/login' },
+
+  // 로그인 & 인증 (레이아웃 없이)
   {
     path: '/login',
-    name: 'loginpage',
-    component: Loginpage
+    name: 'adminLogin',
+    component: AdminLoginView,
+    meta: { hideLayout: true }
   },
   {
-    path: '/edumanagment',
-    name: 'edumanagment',
-    component: ESGEducationListpage
+    path: '/find-id',
+    name: 'findId',
+    component: FindIdView,
+    meta: { hideLayout: true }
   },
   {
-    path: '/aaDetails',
-    name: 'aaDetails',
-    component: AllActivityDetails
+    path: '/reset-password',
+    name: 'resetPassword',
+    component: ResetPasswordView,
+    meta: { hideLayout: true }
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: DashboardView
+    path: '/change-password',
+    name: 'changePassword',
+    component: ChangePasswordView,
+    meta: { hideLayout: true }
   },
+
+  // 회원가입 (레이아웃 없이)
+  {
+    path: '/register/company',
+    name: 'companyRegister',
+    component: CompanyRegisterView,
+    meta: { hideLayout: true }
+  },
+  {
+    path: '/register/employee',
+    name: 'employeeRegister',
+    component: EmployeeRegisterView,
+    meta: { hideLayout: true }
+  },
+
+  // 관리자
+  {
+    path: '/admin/user-approval',
+    name: 'adminUserApproval',
+    component: AdminUserApprovalView
+  },
+  {
+    path: '/admin/user-search',
+    name: 'adminUserSearch',
+    component: AdminUserSearchView
+  },
+  {
+    path: '/admin/user-permission',
+    name: 'adminUserPermission',
+    component: AdminPermissionTransferView
+  },
+
+  // 활동
   {
     path: '/activity',
-    name: 'ActivityList',
+    name: 'activityList',
     component: ActivityListView
   },
   {
+    path: '/activity/all',
+    name: 'allActivityDetails',
+    component: AllActivityDetails
+  },
+  {
     path: '/admin/campaign-list',
-    name: 'ActivityCampaignList',
+    name: 'campaignList',
     component: ActivityCampaignListView
   },
   {
     path: '/admin/campaign-detail',
-    name: 'ActivityCampaignDetail',
+    name: 'campaignDetail',
     component: ActivityCampaignDetailView
   },
+
+  // 보고서
   {
-    path: '/reportList',
+    path: '/reports',
     name: 'reportList',
-    component: reportListView
+    component: ReportListView
   },
   {
-    path: '/reportDetail',
+    path: '/reports/:id',
     name: 'reportDetail',
-    component: reporDetailView
+    component: ReportDetailView
   },
+
+  // 제품
   {
-    path: '/productList',
+    path: '/products',
     name: 'productList',
-    component: productListView
+    component: ProductListView
   },
   {
-    path: '/calendat',
-    name: 'calendat',
-    component: Calendar
-  },
-  {
-    path: '/productDetail',
+    path: '/products/:id',
     name: 'productDetail',
-    component: productDetailView
+    component: ProductDetailView
   },
-  { path: '/', component: HomeView },
 
-  // 로그인 & 인증
-  { path: '/login', component: AdminLoginView },
-  { path: '/find-id', component: FindIdView },
-  { path: '/reset-password', component: ResetPasswordView },
-  { path: '/change-password', component: ChangePasswordView },
+  // 교육
+  {
+    path: '/education',
+    name: 'esgEducation',
+    component: ESGEducationListpage
+  },
 
-  // 관리자 기능
-  { path: '/admin/user-approval', component: AdminUserApprovalView },
-  { path: '/admin/user-search', component: AdminUserSearchView },
-  { path: '/admin/user-permission', component: AdminPermissionTransferView },
-
-  // 회원가입
-  { path: '/register/company', component: CompanyRegisterView },
-  { path: '/register/employee', component: EmployeeRegisterView },
-  
+  // 캘린더
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: Calendar
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
-//   scrollBehavior(to, from, savedPosition) {
-//     if (to.hash) {
-//       return {
-//         el: to.hash,
-//         behavior: 'smooth',
-//       }
-//     }
-//     if (savedPosition) {
-//       return savedPosition
-//     } else {
-//       return { top: 0 }
-//     }
-//   }
+  routes
 })
 
-export default router;
+export default router

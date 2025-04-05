@@ -1,33 +1,36 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import Header from "./pages/common/Header.vue";
-import Sidebar from "./pages/common/Sidebar.vue";
+import { useRoute } from 'vue-router'
+import { ref, computed } from 'vue'
+import Header from './pages/common/Header.vue'
+import Sidebar from './pages/common/Sidebar.vue'
 
-const route = useRouter();
-const isSidebarOpen = ref(false);
-
+const isSidebarOpen = ref(false)
 const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
-};
+  isSidebarOpen.value = !isSidebarOpen.value
+}
+
+const route = useRoute()
+const hideLayout = computed(() => route.meta?.hideLayout === true)
 </script>
 
 <template>
-<Header :toggleSidebar="toggleSidebar"></Header>
+  <div>
+    <!-- 헤더 -->
+    <Header v-if="!hideLayout" :toggleSidebar="toggleSidebar" />
 
-<div class="flex min-h-screen">
-  <!-- 사이드바 -->
-  <Sidebar :isOpen="isSidebarOpen" />
+    <!-- 레이아웃 -->
+    <div class="flex" :class="{ 'pt-16': !hideLayout }">
+      <Sidebar v-if="!hideLayout" :isOpen="isSidebarOpen" />
 
-  <!-- 메인 컨텐츠 -->
-  <div
-    class="flex-1 transition-all duration-300 mt-16 p-6 bg-gray-100"
-    :class="{ 'ml-64': isSidebarOpen, 'ml-0': !isSidebarOpen }" 
-  >
-    <router-view />
+      <main
+        class="flex-1 min-h-screen transition-all duration-300"
+        :class="{
+          'ml-64': isSidebarOpen && !hideLayout,
+          'ml-0': hideLayout
+        }"
+      >
+        <router-view />
+      </main>
+    </div>
   </div>
-</div>
 </template>
-
-<style scoped>
-</style>

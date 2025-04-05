@@ -1,165 +1,123 @@
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router';
+// import { useMemberStore } from '../stores/useMemberStore';
+import Home from '../pages/Home.vue';
+import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
+import Loginpage from '../pages/Member/Loginpage.vue';
+import DashboardView from '../pages/dashboard/Dashboard.vue';
+import ActivityListView from '../pages/activity/ActivityListView.vue';
+import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
+import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
+import reportListView from '../pages/report/reportList.vue';
+import AllActivityDetails from '../pages/activity/AllActivityDetails.vue';
+import reporDetailView from '../pages/report/reportDetail.vue';
+import productListView from '../pages/product/productList.vue';
+import Calendar from '../pages/Calendar/Calendar.vue';
+import productDetailView from '../pages/product/productDetail.vue';
+import partnerListView from '../pages/partner/partnerList.vue';
 
-// 로그인 & 인증
-import AdminLoginView from '../pages/admin/AdminLoginView.vue'
-import FindIdView from '../pages/auth/FindIdView.vue'
-import ResetPasswordView from '../pages/auth/ResetPasswordView.vue'
-import ChangePasswordView from '../pages/auth/ChangePasswordView.vue'
 
-// 회원가입
-import CompanyRegisterView from '../pages/register/CompanyRegisterView.vue'
-import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
+// const checkLogin = async (from, to, next) => {
+//   const memberStore = useMemberStore();
+//   // await memberStore.loginCheck();
+//   if(memberStore.isLogin) {
+//     return next();
+//   }
 
-// 관리자
-import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
-import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
-import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
-
-// 활동
-import ActivityListView from '../pages/activity/ActivityListView.vue'
-import AllActivityDetails from '../pages/activity/AllActivityDetails.vue'
-import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue'
-import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue'
-
-// 보고서
-import ReportListView from '../pages/report/reportList.vue'
-import ReportDetailView from '../pages/report/reportDetail.vue'
-
-// 제품
-import ProductListView from '../pages/product/productList.vue'
-import ProductDetailView from '../pages/product/productDetail.vue'
-
-// 교육
-import ESGEducationListpage from '../pages/education/ESGEducationListpage.vue'
-
-// 캘린더
-import Calendar from '../pages/calendar/Calendar.vue'
+//   next("/login");
+// }
 
 const routes = [
-  // 기본 리다이렉트
-  { path: '/', redirect: '/login' },
-
-  // 로그인 & 인증 (레이아웃 없이)
+  {
+    path: '/',
+    name: 'home',
+    component: Home
+  },
   {
     path: '/login',
-    name: 'adminLogin',
-    component: AdminLoginView,
-    meta: { hideLayout: true }
+    name: 'loginpage',
+    component: Loginpage
   },
   {
-    path: '/find-id',
-    name: 'findId',
-    component: FindIdView,
-    meta: { hideLayout: true }
+    path: '/edumanagment',
+    name: 'edumanagment',
+    component: ESGEducationListpage
   },
   {
-    path: '/reset-password',
-    name: 'resetPassword',
-    component: ResetPasswordView,
-    meta: { hideLayout: true }
-  },
-  {
-    path: '/change-password',
-    name: 'changePassword',
-    component: ChangePasswordView,
-    meta: { hideLayout: true }
-  },
-
-  // 회원가입 (레이아웃 없이)
-  {
-    path: '/register/company',
-    name: 'companyRegister',
-    component: CompanyRegisterView,
-    meta: { hideLayout: true }
-  },
-  {
-    path: '/register/employee',
-    name: 'employeeRegister',
-    component: EmployeeRegisterView,
-    meta: { hideLayout: true }
-  },
-
-  // 관리자
-  {
-    path: '/admin/user-approval',
-    name: 'adminUserApproval',
-    component: AdminUserApprovalView
-  },
-  {
-    path: '/admin/user-search',
-    name: 'adminUserSearch',
-    component: AdminUserSearchView
-  },
-  {
-    path: '/admin/user-permission',
-    name: 'adminUserPermission',
-    component: AdminPermissionTransferView
-  },
-
-  // 활동
-  {
-    path: '/activity',
-    name: 'activityList',
-    component: ActivityListView
-  },
-  {
-    path: '/activity/all',
-    name: 'allActivityDetails',
+    path: '/aaDetails',
+    name: 'aaDetails',
     component: AllActivityDetails
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardView
+  },
+  {
+    path: '/activity',
+    name: 'ActivityList',
+    component: ActivityListView
+  },
+  {
     path: '/admin/campaign-list',
-    name: 'campaignList',
+    name: 'ActivityCampaignList',
     component: ActivityCampaignListView
   },
   {
     path: '/admin/campaign-detail',
-    name: 'campaignDetail',
+    name: 'ActivityCampaignDetail',
     component: ActivityCampaignDetailView
   },
-
-  // 보고서
   {
-    path: '/reports',
+    path: '/reportList',
     name: 'reportList',
-    component: ReportListView
+    component: reportListView
   },
   {
-    path: '/reports/:id',
+    path: '/reportDetail',
     name: 'reportDetail',
-    component: ReportDetailView
+    component: reporDetailView
   },
-
-  // 제품
   {
-    path: '/products',
+    path: '/productList',
     name: 'productList',
-    component: ProductListView
+    component: productListView
   },
   {
-    path: '/products/:id',
-    name: 'productDetail',
-    component: ProductDetailView
-  },
-
-  // 교육
-  {
-    path: '/education',
-    name: 'esgEducation',
-    component: ESGEducationListpage
-  },
-
-  // 캘린더
-  {
-    path: '/calendar',
-    name: 'calendar',
+    path: '/calendat',
+    name: 'calendat',
     component: Calendar
-  }
+  },
+  {
+    path: '/productDetail',
+    name: 'productDetail',
+    component: productDetailView
+  },
+  {
+    path: '/partnerList',
+    name: 'partnerList',
+    component: partnerListView
+  },
+
+
+
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+//   scrollBehavior(to, from, savedPosition) {
+//     if (to.hash) {
+//       return {
+//         el: to.hash,
+//         behavior: 'smooth',
+//       }
+//     }
+//     if (savedPosition) {
+//       return savedPosition
+//     } else {
+//       return { top: 0 }
+//     }
+//   }
 })
 
-export default router
+export default router;

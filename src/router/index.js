@@ -29,8 +29,8 @@ import partnerListView from '../pages/partner/partnerList.vue';
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'dashboard',
+    component: DashboardView
   },
   {
     path: '/login',

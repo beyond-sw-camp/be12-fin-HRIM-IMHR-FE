@@ -33,7 +33,7 @@ const routes = [
     component: DashboardView
   },
   {
-    path: '/login',
+    path: '/login2',
     name: 'loginpage',
     component: Loginpage
   },

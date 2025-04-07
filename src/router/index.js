@@ -1,6 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
-import Home from '../pages/Home.vue';
 // 로그인 & 인증
 import AdminLoginView from '../pages/admin/AdminLoginView.vue'
 import FindIdView from '../pages/auth/FindIdView.vue'
@@ -36,9 +35,7 @@ import ProductDetailView from '../pages/product/productDetail.vue'
 import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
 
 // 캘린더
-import Calendar from '../pages/Calendar/Calendar.vue';
-
-import Loginpage from '../pages/Member/Loginpage.vue';
+import Calendar from '../pages/Calendar/Calendar.vue'
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import PartnerDashboardView from '../pages/dashboard/partnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
@@ -72,11 +69,6 @@ const routes = [
     name: 'adminLogin',
     component: AdminLoginView,
     meta: { hideLayout: true }
-  },
-  {
-    path: '/login2',
-    name: 'loginpage',
-    component: Loginpage
   },
   {
     path: '/find-id',

@@ -15,6 +15,8 @@ import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
 import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
 import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
 import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
+import SettingView from '../pages/admin/Setting.vue'
+
 
 // 활동
 import ActivityListView from '../pages/activity/ActivityListView.vue';
@@ -55,7 +57,7 @@ import MyPageView from '../pages/mypage/MyPageView.vue';
 // }
 
 const routes = [
-  {path: '/', redirect: '/dashboard'},
+  { path: '/', redirect: '/dashboard' },
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -106,8 +108,8 @@ const routes = [
     meta: { hideLayout: true }
   },
 
-   // 관리자
-   {
+  // 관리자
+  {
     path: '/admin/user-approval',
     name: 'adminUserApproval',
     component: AdminUserApprovalView
@@ -174,7 +176,7 @@ const routes = [
     name: 'esgEducation',
     component: ESGEducationListpage
   },
-  
+
   // 캘린더
   {
     path: '/calendar',
@@ -189,39 +191,45 @@ const routes = [
     component: PartnerListView
   },
 
-   // 마이페이지
-   {
+  // 마이페이지
+  {
     path: '/mypage',
     name: 'mypage',
     component: MyPageView
   },
-     // 파트너 회사 대시보드
-     {
-      path: '/partner/:idx',
-      name: 'partner',
-      component: PartnerDashboardView
-    },
+  // 파트너 회사 대시보드
+  {
+    path: '/partner/:idx',
+    name: 'partner',
+    component: PartnerDashboardView
+  },
+  // 회사 ESG 갱신 주기 설정
+  {
+    path: '/setting/:idx',
+    name: 'setting',
+    component: SettingView
+  },
 
-  
+
 
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-//   scrollBehavior(to, from, savedPosition) {
-//     if (to.hash) {
-//       return {
-//         el: to.hash,
-//         behavior: 'smooth',
-//       }
-//     }
-//     if (savedPosition) {
-//       return savedPosition
-//     } else {
-//       return { top: 0 }
-//     }
-//   }
+  //   scrollBehavior(to, from, savedPosition) {
+  //     if (to.hash) {
+  //       return {
+  //         el: to.hash,
+  //         behavior: 'smooth',
+  //       }
+  //     }
+  //     if (savedPosition) {
+  //       return savedPosition
+  //     } else {
+  //       return { top: 0 }
+  //     }
+  //   }
 })
 
 export default router;

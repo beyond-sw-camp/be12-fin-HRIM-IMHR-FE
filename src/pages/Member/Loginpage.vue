@@ -8,23 +8,19 @@ const router = useRouter()
 <template>
   <div class="flex flex-col md:flex-row min-h-screen">
 
-    <!-- 왼쪽 브랜드 영역 -->
-    <div class="hidden md:flex md:w-1/2 bg-gradient-to-b from-blue-500 to-blue-600 text-white flex-col justify-center items-center p-12">
-      <h1 class="text-4xl font-bold mb-4">IM HR</h1>
-      <p class="text-center text-lg leading-relaxed">
-        기업의 모든 이해 관계자 가치를 높이고<br />
-        지속가능한 미래를 실현합니다.
-      </p>
+    <!-- 왼쪽 로고고 영역 -->
+    <div class="hidden md:flex md:w-1/2 bg-gradient-to-b from-slate-800 to-slate-900 text-white flex-col justify-center items-center p-12">
+      <LogoSection/>
     </div>
 
-    <!-- 모바일용 로고 -->
-    <div class="md:hidden flex justify-center items-center w-full py-6 bg-gradient-to-b from-blue-500 to-blue-600">
+    <!-- 왼쪽 로고 영역 모바일용 로고 -->
+    <div class="md:hidden flex justify-center items-center w-full py-6 bg-gradient-to-b from-slate-800 to-slate-900">
       <LogoSection />
     </div>
 
     <!-- 오른쪽 비밀번호 찾기 폼 -->
     <div class="w-full md:w-1/2 flex justify-center items-center bg-white p-6">
-      <div class="w-full max-w-md border-2 border-blue-300 rounded-xl p-8 shadow-md bg-white">
+      <div class="w-full max-w-md border-2 border-slate-800 rounded-xl p-8 shadow-md bg-white">
         <h2 class="text-center text-2xl font-semibold text-gray-800 mb-6">비밀번호 찾기</h2>
 
         <p class="text-sm text-gray-600 mb-4">이메일로 인증</p>
@@ -43,10 +39,17 @@ const router = useRouter()
 
           <button
             type="submit"
-            class="w-full py-3 border border-blue-500 text-blue-600 font-semibold rounded hover:bg-blue-50"
+            class="w-full py-3 border border-slate-800 text-slate-800 font-semibold rounded hover:bg-blue-50"
           >
-            이메일 인증 요청
+            임직원 회원가입
           </button>
+
+          <router-link
+            type="submit"
+            class="w-full py-3 item-center border border-slate-800 text-slate-8000 font-semibold rounded hover:bg-blue-50"
+          >
+            관리자 회원가입
+          </router-link>
         </form>
 
         <div class="mt-6 text-center text-sm text-gray-500">

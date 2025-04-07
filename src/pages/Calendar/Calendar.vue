@@ -1,15 +1,20 @@
 <script setup>
-import FullCalendar from '@fullcalendar/vue3'
-// import dayGridPlugin from '@fullcalendar/daygrid'
-// import interactionPlugin from '@fullcalendar/interaction'
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/vuecal.css'
 </script>
 
 <!-- 
 받아야할 수도?
-npm install @fullcalendar/vue3 @fullcalendar/core @fullcalendar/daygrid @fullcalendar/timegrid
+npm install vue-cal
  -->
 <template>
-  <FullCalendar :options="calendarOptions" />
+   <VueCal
+    style="height: 600px"
+    default-view="week"
+    :events="[
+      { start: '2025-04-01 10:00', end: '2025-04-01 11:00', title: 'ESG 회의' }
+    ]"
+  />
 </template>
 
 <style scoped>

@@ -23,7 +23,7 @@ const handleLogout = () => {
     <!-- 왼쪽 로고 -->
     <div class="flex items-center gap-2">
       <router-link to="/">
-        <div class="text-blue-600 font-bold text-2xl md:text-4xl">IMHR</div>
+        <div class="text-slate-800 font-bold text-2xl md:text-4xl">IMHR</div>
       </router-link>
 
       <button @click="props.toggleSidebar" class="p-2">
@@ -45,7 +45,7 @@ const handleLogout = () => {
       <button
         @click="handleLogout"
         type="button"
-        class="hidden md:inline-block border border-blue-700 py-1.5 px-3 text-sm text-blue-700 rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        class="hidden md:inline-block border border-slate-800 py-1.5 px-3 text-sm text-slate-800 rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
       >
         로그아웃
       </button>

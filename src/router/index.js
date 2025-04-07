@@ -38,7 +38,8 @@ import Calendar from '../pages/Calendar/Calendar.vue';
 
 import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
-import partnerListView from '../pages/partner/partnerList.vue';
+import PartnerDashboardView from '../pages/dashboard/partnerDashboard.vue';
+import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
@@ -185,7 +186,7 @@ const routes = [
   {
     path: '/partnerList',
     name: 'partnerList',
-    component: partnerListView
+    component: PartnerListView
   },
 
    // 마이페이지
@@ -194,7 +195,14 @@ const routes = [
     name: 'mypage',
     component: MyPageView
   },
+     // 파트너 회사 대시보드
+     {
+      path: '/partner/:idx',
+      name: 'partner',
+      component: PartnerDashboardView
+    },
 
+  
 
 ]
 

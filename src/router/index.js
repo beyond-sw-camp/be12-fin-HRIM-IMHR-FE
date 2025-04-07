@@ -40,6 +40,8 @@ import Loginpage from '../pages/Member/Loginpage.vue';
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import partnerListView from '../pages/partner/partnerList.vue';
 
+// 마이페이지
+import MyPageView from '../pages/mypage/MyPageView.vue';
 
 // const checkLogin = async (from, to, next) => {
 //   const memberStore = useMemberStore();
@@ -179,10 +181,18 @@ const routes = [
     component: Calendar
   },
 
+  // 파트너사
   {
     path: '/partnerList',
     name: 'partnerList',
     component: partnerListView
+  },
+
+   // 마이페이지
+   {
+    path: '/mypage',
+    name: 'mypage',
+    component: MyPageView
   },
 
 

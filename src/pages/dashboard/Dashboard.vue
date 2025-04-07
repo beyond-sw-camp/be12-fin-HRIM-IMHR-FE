@@ -44,7 +44,8 @@
           <div class="text-sm text-gray-500 mb-2">ESG 진단 점수</div>
           <div id="donutWrapper" class="relative w-full max-w-[200px] aspect-[2/1]">
             <canvas ref="donutChart"></canvas>
-            <div id="donutCenter" class="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xl font-bold text-green-400">74.6</div>
+            <div id="donutCenter"
+              class="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-xl font-bold text-green-400">74.6</div>
           </div>
           <div class="text-center text-pink-600 mt-2">타업체대비 8.5점 높아요!</div>
         </div>
@@ -57,9 +58,29 @@
       </section>
 
       <!-- 이달의 사원 -->
-      <section class="mt-8">
+      <div class="bg-white shadow p-4 rounded mb-6 mt-6">
         <h2 class="text-lg font-semibold mb-4">이달의 사원</h2>
-      </section>
+        <div class="flex justify-between text-center">
+          <div style="display: flex; gap: 10px;">
+            <div>🥇</div>
+            <div>홍길동</div>
+            <div>코멘트 갯수 :</div>
+            <div>100</div>
+          </div>
+          <div class="flex gap-2.5">
+            <div>🥈</div>
+            <div>임꺽정</div>
+            <div>코멘트 갯수 :</div>
+            <div>99</div>
+          </div>
+          <div class="flex gap-2.5">
+            <div>🥉</div>
+            <div>너구리</div>
+            <div>코멘트 갯수 :</div>
+            <div>98</div>
+          </div>
+        </div>
+      </div>
 
       <!-- 영역별 점수 변동 추이 -->
       <section class="mt-8">

@@ -9,14 +9,14 @@ const router = useRouter()
   <div class="flex flex-col md:flex-row min-h-screen">
 
     <!-- 왼쪽 로고고 영역 -->
-    <div class="hidden md:flex md:w-1/2 bg-gradient-to-b from-slate-800 to-slate-900 text-white flex-col justify-center items-center p-12">
+    <!-- <div class="hidden md:flex md:w-1/2 bg-gradient-to-b from-slate-800 to-slate-900 text-white flex-col justify-center items-center p-12"> -->
       <LogoSection/>
-    </div>
+    <!-- </div> -->
 
     <!-- 왼쪽 로고 영역 모바일용 로고 -->
-    <div class="md:hidden flex justify-center items-center w-full py-6 bg-gradient-to-b from-slate-800 to-slate-900">
+    <!-- <div class="md:hidden flex justify-center items-center w-full py-6 bg-gradient-to-b from-slate-800 to-slate-900">
       <LogoSection />
-    </div>
+    </div> -->
 
     <!-- 오른쪽 비밀번호 찾기 폼 -->
     <div class="w-full md:w-1/2 flex justify-center items-center bg-white p-6">

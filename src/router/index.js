@@ -28,8 +28,9 @@ import ReportListView from '../pages/report/reportList.vue'
 import ReportDetailView from '../pages/report/reportDetail.vue'
 
 // 제품
-import ProductListView from '../pages/product/productList.vue'
-import ProductDetailView from '../pages/product/productDetail.vue'
+import ProductListView from '../pages/product/ProductList.vue'
+import ProductDetailView from '../pages/product/ProductDetail.vue'
+import ProductRegistView from '../pages/product/ProductRegist.vue'
 
 // 교육
 import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
@@ -204,12 +205,18 @@ const routes = [
     name: 'setting',
     component: SettingView
   },
-    // 피드백 양식 관리
-    {
-      path: '/feedbackForm/:idx',
-      name: 'feedbackForm',
-      component: FeedbackFormView
-    },
+  // 피드백 양식 관리
+  {
+    path: '/feedbackForm/:idx',
+    name: 'feedbackForm',
+    component: FeedbackFormView
+  },
+  // 친환경 제품 등록
+  {
+    path: '/productRegist',
+    name: 'productRegist',
+    component: ProductRegistView
+  },
 
 
 

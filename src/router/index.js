@@ -44,6 +44,9 @@ import PartnerDashboardView from '../pages/dashboard/partnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 마이페이지
+import FeedbackFormView from '../pages/feedback/FeedbackForm.vue';
+
+// 피드백
 import MyPageView from '../pages/mypage/MyPageView.vue';
 
 // const checkLogin = async (from, to, next) => {
@@ -209,6 +212,12 @@ const routes = [
     name: 'setting',
     component: SettingView
   },
+    // 피드백 양식 관리
+    {
+      path: '/feedbackForm/:idx',
+      name: 'feedbackForm',
+      component: FeedbackFormView
+    },
 
 
 

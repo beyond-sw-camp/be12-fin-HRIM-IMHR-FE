@@ -24,7 +24,7 @@ const props = defineProps({
         </li>
         <li>
           <!-- 캘린더: 추후 구현 예정 -->
-          <router-link to="/products/1" class="block hover:bg-slate-700 px-4 py-2 rounded-md">캘린더</router-link>
+          <router-link to="/calendar" class="block hover:bg-slate-700 px-4 py-2 rounded-md">캘린더</router-link>
         </li>
         <li>
           <router-link to="/activity" class="block hover:bg-slate-700 px-4 py-2 rounded-md">ESG 활동 관리</router-link>

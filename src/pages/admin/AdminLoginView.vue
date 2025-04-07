@@ -5,7 +5,7 @@ import LogoSection from '../common/LogoSection.vue'
 const router = useRouter()
 
 const goToFindId = () => router.push('/find-id')
-const goToResetPassword = () => router.push('/reset-password')
+const goToResetPassword = () => router.push('/change-password') // ✅ 수정된 경로
 const goToCompanyRegister = () => router.push('/register/company')
 const goToEmployeeRegister = () => router.push('/register/employee')
 </script>
@@ -15,7 +15,7 @@ const goToEmployeeRegister = () => router.push('/register/employee')
     <!-- 왼쪽 로고 영역 -->
     <LogoSection />
 
-    <!-- 오른쪽 로그인 폼 -->
+    <!-- 로그인 영역 -->
     <div class="w-full md:w-1/2 flex items-center justify-center bg-white p-6">
       <div class="w-full max-w-sm p-6 border border-gray-200 rounded shadow-md">
         <h2 class="text-center mb-6 text-xl text-gray-800 font-semibold">IMHR에 오신 걸 환영합니다.</h2>
@@ -47,7 +47,7 @@ const goToEmployeeRegister = () => router.push('/register/employee')
           </button>
         </form>
 
-        <!-- 회원가입 버튼 -->
+        <!-- 회원가입 버튼 영역 -->
         <div class="flex flex-col gap-2 mt-4">
           <button @click="goToCompanyRegister"
                   class="w-full bg-slate-700 text-white py-2 rounded hover:bg-slate-800 transition">
@@ -59,7 +59,7 @@ const goToEmployeeRegister = () => router.push('/register/employee')
           </button>
         </div>
 
-        <!-- 아이디/비밀번호 찾기 -->
+        <!-- 하단 링크 -->
         <div class="flex justify-between text-sm mt-4 text-slate-400">
           <button @click="goToFindId" class="hover:underline">아이디 찾기</button>
           <span>|</span>

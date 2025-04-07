@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const currentPage = ref(1)
 
 const user = ref({
   name: '홍길동',
@@ -30,6 +31,10 @@ const logout = () => {
 
 const goToActivityDetail = () => {
   router.push('/activity/all')
+}
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) currentPage.value = page
 }
 </script>
 
@@ -96,15 +101,34 @@ const goToActivityDetail = () => {
       </div>
 
       <!-- 페이지네이션 -->
-      <div class="mt-6 flex justify-center text-sm text-slate-600 space-x-2">
-        <button class="hover:underline">&larr; 이전</button>
-        <span class="font-bold text-black">1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>...</span>
-        <span>68</span>
-        <button class="hover:underline">다음 &rarr;</button>
-      </div>
+      <div class="mt-6 flex justify-center space-x-2 text-sm text-gray-600">
+      <button
+        @click="goToPage(currentPage - 1)"
+        :disabled="currentPage === 1"
+        class="px-2 py-1 border rounded disabled:opacity-40"
+      >
+        이전
+      </button>
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        @click="goToPage(page)"
+        :class="[
+          'px-3 py-1 rounded border',
+          page === currentPage ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'
+        ]"
+      >
+        {{ page }}
+      </button>
+      <button
+        @click="goToPage(currentPage + 1)"
+        :disabled="currentPage === totalPages"
+        class="px-2 py-1 border rounded disabled:opacity-40"
+      >
+        다음
+      </button>
+    </div>
+
     </main>
   </div>
 </template>

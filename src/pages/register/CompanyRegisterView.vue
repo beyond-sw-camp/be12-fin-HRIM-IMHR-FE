@@ -33,12 +33,12 @@ const submit = () => {
         <h2 class="text-xl font-semibold text-center mb-6">관리자 회원 가입</h2>
 
         <form @submit.prevent="submit" class="space-y-3">
-          <input v-model="form.name" type="text" placeholder="이름" class="input" />
-          <input v-model="form.userId" type="text" placeholder="아이디" class="input" />
-          <input v-model="form.password" type="password" placeholder="비밀번호" class="input" />
-          <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="input" />
+          <input v-model="form.name" type="text" placeholder="이름" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.userId" type="text" placeholder="아이디" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.password" type="password" placeholder="비밀번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
           <input v-model="form.companyName" type="text" placeholder="회사명" class="input" />
-          <input v-model="form.businessNumber" type="text" placeholder="사업자 등록 번호" class="input" />
+          <input v-model="form.businessNumber" type="text" placeholder="사업자 등록 번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
 
           <!-- 사업자 등록 버튼 -->
           <button type="button"
@@ -79,6 +79,10 @@ const submit = () => {
         파일 선택
       </button>
 
+      <button class="mt-3 w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition font-semibold">
+        확인
+      </button>
+
       <!-- 닫기 -->
       <button @click="isModalOpen = false" class="absolute top-2 right-3 text-slate-500 hover:text-black text-lg">&times;</button>
     </div>
@@ -86,7 +90,4 @@ const submit = () => {
 </template>
 
 <style scoped>
-.input {
-  @apply w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500;
-}
 </style>

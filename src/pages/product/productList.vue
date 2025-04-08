@@ -81,7 +81,13 @@
       <button class="hover:underline">68</button>
       <button class="text-blue-600 px-2 py-1 hover:underline">다음 →</button>
     </div>
+
+
+    <router-link to="/productRegist" class="flex justify-end">
+      <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">등록</button>
+    </router-link>
   </div>
+
 </template>
 
 <script setup>

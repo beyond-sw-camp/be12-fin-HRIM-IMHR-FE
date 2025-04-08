@@ -72,9 +72,11 @@
                     <button class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50">
                         저장
                     </button>
-                    <button class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50">
+                    
+                    <router-link to="" @click.prevent="$router.back()"
+                    class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50">
                         취소
-                    </button>
+                    </router-link>
                 </div>
             </form>
         </div>

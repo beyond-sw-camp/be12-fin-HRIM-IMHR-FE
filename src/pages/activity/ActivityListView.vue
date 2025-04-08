@@ -33,6 +33,7 @@
             :key="index"
             class="border-b hover:bg-slate-50 transition"
         >
+
           <td class="py-2">
               <span
                   class="text-white text-xs px-3 py-1 rounded-md inline-block"
@@ -45,8 +46,13 @@
                 {{ activity.status }}
               </span>
           </td>
+
           <td>{{ activity.topic }}</td>
-          <td>{{ activity.content }}</td>
+
+          <router-link to="/activeDetails/1">
+            <td>{{ activity.content }}</td>
+          </router-link>
+
           <td>
             <button
                 class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"

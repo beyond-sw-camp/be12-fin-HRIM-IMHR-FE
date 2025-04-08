@@ -128,7 +128,7 @@ const routes = [
     component: ActivityListView
   },
   {
-    path: '/activity/all',
+    path: '/activeDetails/1',
     name: 'allActivityDetails',
     component: AllActivityDetails
   },
@@ -150,7 +150,7 @@ const routes = [
     component: ReportListView
   },
   {
-    path: '/reports/:id',
+    path: '/reports/1',
     name: 'reportDetail',
     component: ReportDetailView
   },
@@ -195,7 +195,7 @@ const routes = [
   },
   // 파트너 회사 대시보드
   {
-    path: '/partner/:idx',
+    path: '/partner/1',
     name: 'partner',
     component: PartnerDashboardView
   },

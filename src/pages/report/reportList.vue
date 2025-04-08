@@ -48,7 +48,7 @@
             <td class="border px-4 py-2">{{ report.department }}</td>
             <td class="border px-4 py-2">{{ report.period }}</td>
             <td class="border px-4 py-2">
-              <a href="#" class="text-blue-500 hover:underline">상세보기</a>
+              <router-link to="/reports/1" class="text-blue-500 hover:underline">상세보기</router-link>
             </td>
           </tr>
         </tbody>

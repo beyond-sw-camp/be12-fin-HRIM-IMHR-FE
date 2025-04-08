@@ -20,6 +20,9 @@ const props = defineProps({
           <router-link to="/admin/user-search" class="block hover:bg-slate-700 px-4 py-2 rounded-md">사원 관리</router-link>
         </li>
         <li>
+          <router-link to="/reports" class="block hover:bg-slate-700 px-4 py-2 rounded-md">인사 리포트 관리</router-link>
+        </li>
+        <li>
           <router-link to="/products" class="block hover:bg-slate-700 px-4 py-2 rounded-md">친환경 제품 관리</router-link>
         </li>
         <li>

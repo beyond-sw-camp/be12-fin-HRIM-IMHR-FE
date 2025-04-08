@@ -39,7 +39,11 @@ const searchQuery = ref('')
           <td class="p-3">
             <span class="bg-yellow-500 text-white px-3 py-1 rounded-md">대기 중</span>
           </td>
-          <td class="p-3">ESG 교육 1</td>
+
+          <router-link to="/activeDetails/1">
+            <td class="p-3">ESG 교육 1</td>
+          </router-link>
+          
           <td class="p-3">2025.02.12</td>
           <td class="p-3">
             <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
@@ -51,7 +55,11 @@ const searchQuery = ref('')
           <td class="p-3">
             <span class="bg-red-500 text-white px-3 py-1 rounded-md">승인 반려</span>
           </td>
-          <td class="p-3">ESG 교육 2</td>
+          
+          <router-link to="/activeDetails/1">
+            <td class="p-3">ESG 교육 2</td>
+          </router-link>
+
           <td class="p-3">2025.02.15</td>
           <td class="p-3">
             <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
@@ -59,11 +67,16 @@ const searchQuery = ref('')
             </button>
           </td>
         </tr>
+        
         <tr class="border-b hover:bg-slate-50" v-for="i in 3" :key="i">
           <td class="p-3">
             <span class="bg-green-500 text-white px-3 py-1 rounded-md">승인</span>
           </td>
-          <td class="p-3">ESG 교육 3</td>
+          
+          <router-link to="/activeDetails/1">
+            <td class="p-3">ESG 교육 3</td>
+          </router-link>
+
           <td class="p-3">2025.02.18</td>
           <td class="p-3">
             <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">

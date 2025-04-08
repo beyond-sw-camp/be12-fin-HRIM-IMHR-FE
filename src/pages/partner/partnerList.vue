@@ -44,12 +44,17 @@
             :key="index"
             class="hover:bg-slate-50 border-b"
         >
-          <td class="p-2">{{ company.name }}</td>
+
+          <router-link to="/partner/1">
+            <td class="p-2">{{ company.name }}</td>
+          </router-link>
+
           <td class="p-2">{{ company.totalGrade }}</td>
           <td class="p-2">{{ company.environment }}</td>
           <td class="p-2">{{ company.social }}</td>
           <td class="p-2">{{ company.governance }}</td>
           <td class="p-2">{{ company.score }}</td>
+
           <td class="p-2">
             <button
                 class="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 transition"

@@ -28,7 +28,7 @@ import ReportListView from '../pages/report/reportList.vue'
 import ReportDetailView from '../pages/report/reportDetail.vue'
 
 // 제품
-import ProductListView from '../pages/product/ProductList.vue'
+import ProductListView from '../pages/product/productList.vue'
 import ProductDetailView from '../pages/product/ProductDetail.vue'
 import ProductRegistView from '../pages/product/ProductRegist.vue'
 

@@ -39,7 +39,7 @@ const menuSections = [
       { path: '/reports', label: '인사 리포트 관리' },
       { path: '/activity', label: 'ESG 활동 관리' },
       { path: '/education', label: '교육 관리' },
-      
+      { path: '/calendar', label: '캘린더' },
     ]
   }
 ]

@@ -38,8 +38,8 @@ import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
 // 캘린더
 import Calendar from '../pages/Calendar/Calendar.vue'
 import DashboardView from '../pages/dashboard/Dashboard.vue';
-import PartnerDashboardView from '../pages/dashboard/partnerDashboard.vue';
-import PartnerListView from '../pages/partner/partnerList.vue';
+import PartnerDashboardView from '../pages/dashboard/PartnerDashboard.vue';
+import PartnerListView from '../pages/partner/PartnerList.vue';
 
 // 마이페이지
 import FeedbackFormView from '../pages/feedback/FeedbackForm.vue';

@@ -1,174 +1,125 @@
 <script setup>
-import { useRoute } from "vue-router";
+import { ref } from 'vue'
 
-const route = useRoute();
+const searchQuery = ref('')
 </script>
 
 <template>
-  <!-- 전체 배경 -->
-  <div
-    class="bg-white min-h-[calc(93vh-4rem)] overflow-y-auto transition-all p-6 rounded-lg"
-  >
-    <div
-      class="relative w-full justify-between items-center mb-4 transition-all"
-    >
+  <div class="bg-gray-50 min-h-screen p-10">
+    <!-- 🏷️ 페이지 상단 제목 -->
+    <h1 class="text-3xl font-bold text-center text-slate-800 mb-10">교육 관리</h1>
+
+    <!-- 🔍 검색 바 -->
+    <div class="relative max-w-xl mx-auto mb-8">
       <input
-        v-model="searchQuery"
-        placeholder="내용 검색"
-        class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          v-model="searchQuery"
+          placeholder="내용을 입력해주세요"
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
       <button
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 px-4 py-1 rounded"
+          class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900"
       >
         검색
       </button>
     </div>
 
-    <table class="w-full border-collapse bg-white shadow-md">
-      <thead>
-        <tr class="bg-blue-500 text-white">
-          <th class="p-3">상태</th>
-          <th class="p-3">내용</th>
-          <th class="p-3">날짜</th>
-          <th class="p-3">삭제</th>
+    <!-- 📋 테이블 -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow max-w-5xl mx-auto">
+      <table class="w-full table-auto border-collapse text-center text-sm text-slate-800">
+        <thead class="bg-slate-100 border-b text-slate-700">
+        <tr>
+          <th class="p-3 border">상태</th>
+          <th class="p-3 border">내용</th>
+          <th class="p-3 border">날짜</th>
+          <th class="p-3 border">삭제</th>
         </tr>
-      </thead>
-
-      <tbody>
-        <!-- 수기 작성한 데이터 -->
-        <tr class="text-center border-b">
+        </thead>
+        <tbody>
+        <tr class="border-b hover:bg-slate-50">
           <td class="p-3">
-            <span
-              class="px-3 py-1 text-white rounded-md min-w-[95px] inline-block text-center bg-yellow-500"
-              >대기 중</span
-            >
+            <span class="bg-yellow-500 text-white px-3 py-1 rounded-md">대기 중</span>
           </td>
-          <td class="p-3">ESG 교육 1</td>
+
+          <router-link to="/activeDetails/1">
+            <td class="p-3">ESG 교육 1</td>
+          </router-link>
+          
           <td class="p-3">2025.02.12</td>
           <td class="p-3">
-            <button class="bg-red-600 text-white px-3 py-1 rounded-md">
+            <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
               삭제
             </button>
           </td>
         </tr>
-
-        <tr class="text-center border-b">
+        <tr class="border-b hover:bg-slate-50">
           <td class="p-3">
-            <span
-              class="px-3 py-1 text-white rounded-md min-w-[95px] inline-block text-center bg-red-500"
-              >승인 반려</span
-            >
+            <span class="bg-red-500 text-white px-3 py-1 rounded-md">승인 반려</span>
           </td>
-          <td class="p-3">ESG 교육 2</td>
+          
+          <router-link to="/activeDetails/1">
+            <td class="p-3">ESG 교육 2</td>
+          </router-link>
+
           <td class="p-3">2025.02.15</td>
           <td class="p-3">
-            <button class="bg-red-600 text-white px-3 py-1 rounded-md">
+            <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
               삭제
             </button>
           </td>
         </tr>
-
-        <tr class="text-center border-b">
+        
+        <tr class="border-b hover:bg-slate-50" v-for="i in 3" :key="i">
           <td class="p-3">
-            <span
-              class="px-3 py-1 text-white rounded-md min-w-[95px] inline-block text-center bg-green-500"
-              >승인</span
-            >
+            <span class="bg-green-500 text-white px-3 py-1 rounded-md">승인</span>
           </td>
-          <td class="p-3">ESG 교육 3</td>
+          
+          <router-link to="/activeDetails/1">
+            <td class="p-3">ESG 교육 3</td>
+          </router-link>
+
           <td class="p-3">2025.02.18</td>
           <td class="p-3">
-            <button class="bg-red-600 text-white px-3 py-1 rounded-md">
+            <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
               삭제
             </button>
           </td>
         </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <tr class="text-center border-b">
-          <td class="p-3">
-            <span
-              class="px-3 py-1 text-white rounded-md min-w-[95px] inline-block text-center bg-green-500"
-              >승인</span
-            >
-          </td>
-          <td class="p-3">ESG 교육 3</td>
-          <td class="p-3">2025.02.18</td>
-          <td class="p-3">
-            <button class="bg-red-600 text-white px-3 py-1 rounded-md">
-              삭제
-            </button>
-          </td>
-        </tr>
+    <!-- 📄 페이지네이션 -->
+    <div class="mt-8 flex justify-center space-x-2 text-sm">
+      <button class="bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-900">← 이전</button>
+      <button class="bg-slate-800 text-white px-3 py-1 rounded font-bold">1</button>
+      <button class="bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-900">다음 →</button>
+    </div>
 
-        <tr class="text-center border-b">
-          <td class="p-3">
-            <span
-              class="px-3 py-1 text-white rounded-md min-w-[95px] inline-block text-center bg-green-500"
-              >승인</span
-            >
-          </td>
-          <td class="p-3">ESG 교육 3</td>
-          <td class="p-3">2025.02.18</td>
-          <td class="p-3">
-            <button class="bg-red-600 text-white px-3 py-1 rounded-md">
-              삭제
-            </button>
-          </td>
-        </tr>
-
-        <!-- 데이터 값있을 때 해볼것 -->
-        <!-- <tr
-          v-for="(item, index) in filterData()"
-          :key="index"
-          class="text-center border-b"
+    <!-- ➕ 활동 추가 -->
+    <div class="mt-12 bg-white p-6 rounded-md shadow-md space-y-4 max-w-5xl mx-auto">
+      <h2 class="text-lg font-semibold text-slate-800">활동 추가</h2>
+      <div class="flex flex-col md:flex-row gap-4">
+        <input
+            placeholder="내용 입력"
+            class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"
+        />
+        <select
+            class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"
         >
-          <td class="p-3">
-            <span
-              class="px-3 py-1 text-white rounded-md"
-              :class="{
-                'bg-yellow-500': item.status === '대기 중',
-                'bg-red-500': item.status === '승인 반려',
-                'bg-green-500': item.status === '승인',
-              }"
-            >
-              {{ item.status }}
-            </span>
-          </td>
-
-          <td class="p-3">{{ item.content }}</td>
-
-          <td class="p-3">{{ item.date }}</td>
-
-          <td class="p-3">
-            <button
-              @click="deleteItem(index)"
-              class="bg-red-600 text-white px-3 py-1 rounded-md"
-            >
-              삭제
-            </button>
-          </td>
-
-        </tr> -->
-      </tbody>
-    </table>
-
-    <!-- 페이지네이션 -->
-    <div class="mt-4 flex justify-center">
-      <button class="px-4 py-2 mx-1 bg-blue-600 text-white rounded-md">
-        이전
-      </button>
-
-      <button class="px-4 py-2 mx-1 bg-gray-300 text-black rounded-md">
-        1
-      </button>
-
-      <button class="px-4 py-2 mx-1 bg-blue-600 text-white rounded-md">
-        다음
-      </button>
+          <option disabled selected>주제 선택</option>
+          <option>봉사</option>
+          <option>기부</option>
+        </select>
+        <input
+            type="file"
+            class="border border-gray-300 rounded-md px-4 py-2"
+        />
+        <button
+            class="bg-slate-800 text-white px-6 py-2 rounded-md hover:bg-slate-900 transition"
+        >
+          승인 요청
+        </button>
+      </div>
     </div>
   </div>
 </template>
-
-
-<style scoped>
-</style>

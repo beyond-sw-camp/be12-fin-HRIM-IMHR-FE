@@ -29,7 +29,8 @@ import ReportDetailView from '../pages/report/reportDetail.vue'
 
 // 제품
 import ProductListView from '../pages/product/productList.vue'
-import ProductDetailView from '../pages/product/productDetail.vue'
+import ProductDetailView from '../pages/product/ProductDetail.vue'
+import ProductRegistView from '../pages/product/ProductRegist.vue'
 
 // 교육
 import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
@@ -38,8 +39,8 @@ import ESGEducationListpage from '../pages/Education/ESGEducationListpage.vue';
 import Calendar from '../pages/Calendar/Calendar.vue';
 
 import DashboardView from '../pages/dashboard/Dashboard.vue';
-import PartnerDashboardView from '../pages/dashboard/partnerDashboard.vue';
-import PartnerListView from '../pages/partner/partnerList.vue';
+import PartnerDashboardView from '../pages/dashboard/PartnerDashboard.vue';
+import PartnerListView from '../pages/partner/PartnerList.vue';
 
 // 마이페이지
 import FeedbackFormView from '../pages/feedback/FeedbackForm.vue';
@@ -129,7 +130,7 @@ const routes = [
     component: ActivityListView
   },
   {
-    path: '/activity/all',
+    path: '/activeDetails/1',
     name: 'allActivityDetails',
     component: AllActivityDetails
   },
@@ -151,7 +152,7 @@ const routes = [
     component: ReportListView
   },
   {
-    path: '/reports/:id',
+    path: '/reports/1',
     name: 'reportDetail',
     component: ReportDetailView
   },
@@ -196,7 +197,7 @@ const routes = [
   },
   // 파트너 회사 대시보드
   {
-    path: '/partner/:idx',
+    path: '/partner/1',
     name: 'partner',
     component: PartnerDashboardView
   },
@@ -206,12 +207,18 @@ const routes = [
     name: 'setting',
     component: SettingView
   },
-    // 피드백 양식 관리
-    {
-      path: '/feedbackForm/:idx',
-      name: 'feedbackForm',
-      component: FeedbackFormView
-    },
+  // 피드백 양식 관리
+  {
+    path: '/feedbackForm/:idx',
+    name: 'feedbackForm',
+    component: FeedbackFormView
+  },
+  // 친환경 제품 등록
+  {
+    path: '/productRegist',
+    name: 'productRegist',
+    component: ProductRegistView
+  },
 
 
 

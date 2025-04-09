@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white  mx-auto">
+  <div class="bg-white mx-auto">
     <div class="grid grid-cols-7 text-base font-bold overflow-hidden">
       <div
         v-for="(day, i) in ['일', '월', '화', '수', '목', '금', '토']"
@@ -45,21 +45,15 @@
           class="mt-1"
         >
           <div
-            :class="[
-              'flex items-center min-w-0 h-6 px-1 rounded-md text-xs font-bold text-zinc-800 truncate',
-              categoryStyleMap[event.category]?.bg,
-            ]"
+            class="flex items-center min-w-0 h-6 px-1 rounded-md text-xs font-bold text-white truncate"
+            :style="{ backgroundColor: event.color }"
           >
-            <div
-              :class="[
-                'flex-shrink-0 w-1 h-4 mr-1',
-                categoryStyleMap[event.category]?.border,
-              ]"
-            ></div>
             {{ event.title }} ({{ event.time }})
           </div>
         </div>
+
       </div>
+
     </div>
   </div>
 </template>
@@ -67,7 +61,14 @@
 <script setup>
 import { computed } from "vue";
 
-const props = defineProps(["year", "month", "events"]);
+const props = defineProps({
+  year: Number,
+  month: Number,
+  events: {
+    type: Array,
+    default: () => []
+  }
+})
 const emit = defineEmits(["date-click"]);
 
 const today = new Date();

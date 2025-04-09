@@ -25,25 +25,25 @@ const handleLogout = () => {
         class="p-3 rounded hover:bg-slate-100 transition"
         aria-label="사이드바 열기"
       >
-        <Menu class="w-11 h-11 text-slate-800 mt-0.5" />
+        <Menu class="w-11 h-11 text-slate-800 mt-0.5"/>
       </button>
     </div>
 
     <!-- 🔹 오른쪽 사용자 영역 -->
-    <div class="flex items-center gap-4 ml-auto">
-      <router-link to="/mypage" class="text-slate-700 text-base md:text-3xl font-medium hover:underline">
+    <div class="flex items-center gap-4 ml-auto mr-2 mb-1">
+      <router-link to="/mypage" class="text-slate-700 text-base md:text-3xl font-medium hover:underline mr-2 font-semibold">
         홍길동
       </router-link>
 
-      <router-link to="/notifications">
-        <Bell class="w-7 h-7 text-slate-800 hover:opacity-80 transition" />
+      <router-link to="/notifications" class="mr-2">
+        <Bell class="w-7 h-7 text-slate-800 hover:opacity-80 transition"/>
       </router-link>
 
       <!-- 로그아웃 버튼 -->
       <button
         @click="handleLogout"
         type="button"
-        class="hidden md:inline-block border border-slate-800 py-1.5 px-4 text-sm text-slate-800 rounded hover:bg-slate-100 transition"
+        class="hidden md:inline-block border-2 border-slate-800 py-1.5 px-4 text-sm text-slate-800 rounded hover:bg-slate-100 transition font-semibold"
       >
         로그아웃
       </button>

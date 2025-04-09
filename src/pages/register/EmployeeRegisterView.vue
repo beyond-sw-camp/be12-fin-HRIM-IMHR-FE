@@ -29,11 +29,11 @@ const submit = () => {
         <h2 class="text-xl font-semibold text-center mb-6">임직원 회원가입</h2>
 
         <form @submit.prevent="submit" class="space-y-3">
-          <input v-model="form.name" type="text" placeholder="이름" class="input" />
-          <input v-model="form.department" type="text" placeholder="부서" class="input" />
-          <input v-model="form.email" type="email" placeholder="이메일" class="input" />
-          <input v-model="form.password" type="password" placeholder="비밀번호" class="input" />
-          <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="input" />
+          <input v-model="form.name" type="text" placeholder="이름" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.department" type="text" placeholder="부서" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.email" type="email" placeholder="이메일" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.password" type="password" placeholder="비밀번호" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
 
           <button type="submit"
                   class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition">
@@ -50,7 +50,4 @@ const submit = () => {
 </template>
 
 <style scoped>
-.input {
-  @apply w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500;
-}
 </style>

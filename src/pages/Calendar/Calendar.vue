@@ -1,95 +1,46 @@
-<script setup>
-import { ref, computed } from 'vue';
-
-const calendar = ref(null);
-const isDark = ref(false);
-const showDatePicker = ref(false);
-const dragValue = ref(null);
-
-function moveToday() {
-  calendar.value.move(new Date());
-}
-
-const selectDragAttribute = computed(() => ({
-  popover: {
-    visibility: 'hover',
-    isInteractive: false,
-  },
-}));
-
-const attrs = ref([
-  {
-    key: 'today',
-    highlight: true,
-    dates: new Date(),
-  },
-]);
-
-const range = ref({
-  start: new Date(2025, 3, 6),
-  end: new Date(2025, 3, 10),
-});
-
-function toggleDatePicker() {
-  showDatePicker.value = !showDatePicker.value
-}
-</script>
-
-<!-- 
-npm install v-calendar@next @popperjs/core
-npm uninstall v-calendar@next @popperjs/core
- -->
-
 <template>
-  
-  <VCalendar 
-  expanded borderless 
-  ref="calendar"
-  :attributes='attrs'
-  class="my-calendar"
-  v-model.range="range" mode="dateTime"
-  >
-  <!-- is-dark="system" -->
-
-    <template #footer>
-      <div class="w-full px-4 pb-3">
-        <button
-          class="bg-slate-700 hover:bg-slate-800 text-white font-bold w-full px-3 py-1 rounded-md"
-          @click="moveToday"
-        >
-          Today
-        </button>
-        <button
-          class="mt-4 bg-slate-700 hover:bg-slate-800 text-white font-bold w-full px-3 py-1 rounded-md"
-           @click="toggleDatePicker"
-        >
-          일정 추가
-        </button>
+  <div class="w-full min-h-screen bg-white px-4 sm:px-10 md:px-20 pt-5 ">
+      <div class="max-w-screen-xl mx-auto rounded-xl border border-gray-200 p-4 shadow-m">
+          <CalendarHeader :year="year" :month="month" @prev="prevMonth" @next="nextMonth" />
+          <CalendarMonth :year="year" :month="month" :events="events" @date-click="handleDateClick" />
       </div>
-    </template>
-
-  </VCalendar>
-
-  <div v-if="showDatePicker" class="p-4">
-    <VDatePicker
-      v-model.range="range"
-      :select-attribute="selectDragAttribute"
-      :drag-attribute="selectDragAttribute"
-      @drag="dragValue = $event"
-    >
-      <template #day-popover="{ format }">
-        <div class="text-sm">
-          {{ format(dragValue ? dragValue.start : range.start, 'MMM D') }}
-          -
-          {{ format(dragValue ? dragValue.end : range.end, 'MMM D') }}
-        </div>
-      </template>
-    </VDatePicker>
   </div>
 </template>
 
-<style scoped>
-.my-calendar .vc-container-1 {
-  color: #fc0505;
+
+<script setup>
+import { ref } from 'vue'
+import CalendarHeader from './CalendarHeader.vue'
+import CalendarMonth from './CalendarMonth.vue'
+
+
+const today = new Date()
+const year = ref(today.getFullYear())
+const month = ref(today.getMonth() + 1)
+
+const events = ref([])
+
+
+
+function handleDateClick(date) {
+  selectedBooking.value = bookingInfo.value.find(item => item.date === date) || null
 }
-</style>
+
+function prevMonth() {
+  if (month.value === 1) {
+      month.value = 12
+      year.value--
+  } else {
+      month.value--
+  }
+}
+
+function nextMonth() {
+  if (month.value === 12) {
+      month.value = 1
+      year.value++
+  } else {
+      month.value++
+  }
+}
+</script>

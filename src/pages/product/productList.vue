@@ -9,29 +9,16 @@
     <div
       class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="gray"
-        class="w-5 h-5"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"
-        />
-      </svg>
+      <Search color="black" :size="30" />
+
       <input
         type="text"
-        v-model="search"
-        placeholder="제품명 또는 제품번호로 검색"
+        placeholder="검색어를 입력하세요"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
+
       <button
-        @click="onSearch"
-        class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition"
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
       >
         검색
       </button>
@@ -92,6 +79,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { Search } from "lucide-vue-next";
 
 const search = ref("");
 

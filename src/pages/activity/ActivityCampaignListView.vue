@@ -4,15 +4,19 @@
     <h2 class="text-2xl font-bold text-slate-800 text-center mb-8">사내 캠페인 리스트</h2>
 
     <!-- 검색창 -->
-    <div class="flex items-center justify-center gap-4 bg-white p-4 rounded-lg shadow max-w-2xl mx-auto mb-8">
+    <div
+      class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8"
+    >
+      <Search color="black" :size="30" />
+
       <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="캠페인명 검색"
-          class="flex-1 border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+        type="text"
+        placeholder="캠페인명 검색"
+        class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
+
       <button
-          class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 text-sm transition"
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
       >
         검색
       </button>
@@ -53,6 +57,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { Search } from "lucide-vue-next";
 
 const router = useRouter()
 const searchQuery = ref('')

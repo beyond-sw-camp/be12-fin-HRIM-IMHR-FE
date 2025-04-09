@@ -3,14 +3,20 @@
     <h1 class="text-4xl font-bold text-slate-800 mb-8 text-center">협력사 리스트</h1>
 
     <!-- 검색창 -->
-    <div class="flex items-center gap-4 bg-white p-5 rounded-md shadow mb-6 max-w-4xl mx-auto">
+    <div
+      class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8"
+    >
+      <Search color="black" :size="30" />
+
       <input
-          v-model="search"
-          type="text"
-          placeholder="검색어를 입력하세요"
-          class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500 focus:outline-none"
+        type="text"
+        placeholder="검색어를 입력하세요"
+        class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
-      <button class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 shadow">
+
+      <button
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
+      >
         검색
       </button>
     </div>
@@ -95,6 +101,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Search } from "lucide-vue-next";
 
 const search = ref('')
 const page = ref(1)

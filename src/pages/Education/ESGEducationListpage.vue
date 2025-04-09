@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { Search } from "lucide-vue-next";
 
 const searchQuery = ref('')
 </script>
@@ -7,21 +8,27 @@ const searchQuery = ref('')
 <template>
   <div class="bg-gray-50 min-h-screen p-10">
     <!-- 🏷️ 페이지 상단 제목 -->
-    <h1 class="text-3xl font-bold text-center text-slate-800 mb-10">교육 관리</h1>
+    <h1 class="text-4xl font-bold text-center text-slate-800 mb-10">교육 관리</h1>
 
     <!-- 🔍 검색 바 -->
-    <div class="relative max-w-xl mx-auto mb-8">
+    <div
+      class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8"
+    >
+      <Search color="black" :size="30" />
+
       <input
-          v-model="searchQuery"
-          placeholder="내용을 입력해주세요"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
+        v-model="searchQuery"
+        placeholder="내용을 입력해주세요"
+        class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
+
       <button
-          class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900"
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
       >
         검색
       </button>
     </div>
+    
 
     <!-- 📋 테이블 -->
     <div class="overflow-x-auto bg-white rounded-lg shadow max-w-5xl mx-auto">

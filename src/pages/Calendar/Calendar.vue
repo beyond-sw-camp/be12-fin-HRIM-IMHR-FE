@@ -1,95 +1,123 @@
-<script setup>
-import { ref, computed } from 'vue';
-
-const calendar = ref(null);
-const isDark = ref(false);
-const showDatePicker = ref(false);
-const dragValue = ref(null);
-
-function moveToday() {
-  calendar.value.move(new Date());
-}
-
-const selectDragAttribute = computed(() => ({
-  popover: {
-    visibility: 'hover',
-    isInteractive: false,
-  },
-}));
-
-const attrs = ref([
-  {
-    key: 'today',
-    highlight: true,
-    dates: new Date(),
-  },
-]);
-
-const range = ref({
-  start: new Date(2025, 3, 6),
-  end: new Date(2025, 3, 10),
-});
-
-function toggleDatePicker() {
-  showDatePicker.value = !showDatePicker.value
-}
-</script>
-
-<!-- 
-npm install v-calendar@next @popperjs/core
-npm uninstall v-calendar@next @popperjs/core
- -->
-
 <template>
-  
-  <VCalendar 
-  expanded borderless 
-  ref="calendar"
-  :attributes='attrs'
-  class="my-calendar"
-  v-model.range="range" mode="dateTime"
-  >
-  <!-- is-dark="system" -->
-
-    <template #footer>
-      <div class="w-full px-4 pb-3">
-        <button
-          class="bg-slate-700 hover:bg-slate-800 text-white font-bold w-full px-3 py-1 rounded-md"
-          @click="moveToday"
-        >
-          Today
-        </button>
-        <button
-          class="mt-4 bg-slate-700 hover:bg-slate-800 text-white font-bold w-full px-3 py-1 rounded-md"
-           @click="toggleDatePicker"
-        >
-          일정 추가
-        </button>
-      </div>
-    </template>
-
-  </VCalendar>
-
-  <div v-if="showDatePicker" class="p-4">
-    <VDatePicker
-      v-model.range="range"
-      :select-attribute="selectDragAttribute"
-      :drag-attribute="selectDragAttribute"
-      @drag="dragValue = $event"
+  <div class="w-full min-h-screen bg-white px-2 sm:px-10 md:px-20 pt-5">
+    <div
+      class="max-w-screen-xl mx-auto rounded-xl border border-gray-200 p-4 shadow-m"
     >
-      <template #day-popover="{ format }">
-        <div class="text-sm">
-          {{ format(dragValue ? dragValue.start : range.start, 'MMM D') }}
-          -
-          {{ format(dragValue ? dragValue.end : range.end, 'MMM D') }}
-        </div>
-      </template>
-    </VDatePicker>
+      <CalendarHeader
+        :year="year"
+        :month="month"
+        @prev="prevMonth"
+        @next="nextMonth"
+        @open-add="openAddEvent()"
+      />
+
+      <CalendarMonth
+        :year="year"
+        :month="month"
+        :events="events"
+        @date-click="handleDateClick"
+      />
+    </div>
+
+    <AddEvent
+      :visible="showAddModal"
+      :date="selectedDate"
+      @close="showAddModal = false"
+      @save="handleAddEvent"
+    />
+
+    <EventDetail
+      :visible="showDetailModal"
+      :date="selectedDate"
+      :events="events.filter((e) => e.date === selectedDate)"
+      @close="showDetailModal = false"
+      @add-event="openAddEvent"
+    />
   </div>
 </template>
 
-<style scoped>
-.my-calendar .vc-container-1 {
-  color: #fc0505;
+
+<script setup>
+import { ref } from "vue";
+import CalendarHeader from "./CalendarHeader.vue";
+import CalendarMonth from "./CalendarMonth.vue";
+import AddEvent from "./Event/AddEvent.vue";
+import EventDetail from "./Event/EventDetail.vue";
+
+const today = new Date();
+const year = ref(today.getFullYear());
+const month = ref(today.getMonth() + 1);
+const events = ref([]);
+
+const showAddModal = ref(false);
+const showDetailModal = ref(false);
+const selectedDate = ref(null);
+const selectedEvents = ref([]);
+
+function handleDateClick(date) {
+  const foundEvents = events.value.filter((e) => {
+    const dateObj = new Date(date);
+    const start = new Date(e.startDate);
+    const end = new Date(e.endDate);
+    return dateObj >= start && dateObj <= end;
+  });
+
+  selectedDate.value = date;
+  selectedEvents.value = foundEvents;
+  showDetailModal.value = true;
 }
-</style>
+
+function handleAddEvent(event) {
+  // 날짜 범위에 맞게 여러 날짜로 분할하여 이벤트 삽입
+  const start = new Date(event.startDate);
+  const end = new Date(event.endDate);
+  const newEvents = [];
+
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().split("T")[0];
+    newEvents.push({
+      date: dateStr,
+      title: event.title,
+      time: event.time,
+      color: event.color,
+      startDate: event.startDate,
+      endDate: event.endDate,
+    });
+  }
+
+  events.value.push(...newEvents);
+
+  if (selectedDate.value) {
+  const dateObj = new Date(selectedDate.value)
+  selectedEvents.value = events.value.filter((e) => {
+    const start = new Date(e.startDate)
+    const end = new Date(e.endDate)
+    return dateObj >= start && dateObj <= end
+  })
+}
+}
+
+function openAddEvent(date = null) {
+  // date가 없으면 오늘 날짜로
+  selectedDate.value = date || new Date().toISOString().split("T")[0]
+  showAddModal.value = true
+}
+
+function prevMonth() {
+  if (month.value === 1) {
+    month.value = 12;
+    year.value--;
+  } else {
+    month.value--;
+  }
+}
+
+function nextMonth() {
+  if (month.value === 12) {
+    month.value = 1;
+    year.value++;
+  } else {
+    month.value++;
+  }
+}
+</script>

@@ -1,22 +1,19 @@
 <template>
   <div class="p-8 bg-gray-50 min-h-screen">
-    <h1 class="text-2xl font-bold text-slate-800 mb-8 text-center">협력사 리스트</h1>
+    <h1 class="text-4xl font-bold text-slate-800 mb-8 text-center">협력사 리스트</h1>
 
     <!-- 검색창 -->
-    <section class="flex items-center w-full max-w-xl mx-auto mb-8">
+    <div class="flex items-center gap-4 bg-white p-5 rounded-md shadow mb-6 max-w-4xl mx-auto">
       <input
-          type="text"
           v-model="search"
-          placeholder="협력사명 검색"
-          class="flex-1 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-slate-500"
+          type="text"
+          placeholder="검색어를 입력하세요"
+          class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500 focus:outline-none"
       />
-      <button
-          @click="onSearch"
-          class="px-6 py-2 bg-slate-800 text-white rounded-r-md hover:bg-slate-900 transition"
-      >
+      <button class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 shadow">
         검색
       </button>
-    </section>
+    </div>
 
     <!-- 테이블 -->
     <div class="overflow-x-auto bg-white rounded shadow">

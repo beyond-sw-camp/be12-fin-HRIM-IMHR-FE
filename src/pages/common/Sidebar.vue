@@ -4,28 +4,42 @@ const props = defineProps({
 })
 
 const menuSections = [
+  // {
+  //   title: '관리',
+  //   items: [
+  //     { path: '/dashboard', label: 'ESG 현황' },
+  //     { path: '/admin/user-search', label: '사원 관리' },
+  //     { path: '/admin/campaign-list', label: '사내 캠페인 관리' },
+  //     { path: '/products', label: '친환경 제품 관리' },
+  //     { path: '/partnerList', label: '협력사 관리' }
+  //   ]
+  // },
+  // {
+  //   title: '통계',
+  //   items: [
+  //     { path: '/reports', label: '인사 리포트 관리' },
+  //     { path: '/activity', label: 'ESG 활동 관리' },
+  //     { path: '/education', label: '교육 관리' }
+  //   ]
+  // },
+  // {
+  //   title: '기타',
+  //   items: [
+  //     { path: '/calendar', label: '캘린더' }
+  //   ]
+  // },
   {
-    title: '관리',
+    title: '',
     items: [
-      { path: '/dashboard', label: 'ESG 현황' },
+    { path: '/dashboard', label: 'ESG 현황' },
       { path: '/admin/user-search', label: '사원 관리' },
       { path: '/admin/campaign-list', label: '사내 캠페인 관리' },
       { path: '/products', label: '친환경 제품 관리' },
-      { path: '/partnerList', label: '협력사 관리' }
-    ]
-  },
-  {
-    title: '통계',
-    items: [
+      { path: '/partnerList', label: '협력사 관리' },
       { path: '/reports', label: '인사 리포트 관리' },
       { path: '/activity', label: 'ESG 활동 관리' },
-      { path: '/education', label: '교육 관리' }
-    ]
-  },
-  {
-    title: '기타',
-    items: [
-      { path: '/calendar', label: '캘린더' }
+      { path: '/education', label: '교육 관리' },
+      
     ]
   }
 ]
@@ -61,7 +75,7 @@ const menuSections = [
         </li>
 
         <li>
-          <div class="text-xs text-slate-400 uppercase tracking-wide px-2 mt-6 mb-2">설정 예정</div>
+          <!-- <div class="text-xs text-slate-400 uppercase tracking-wide px-2 mt-6 mb-2">설정 예정</div> -->
           <span class="block px-4 py-2 text-slate-400 cursor-not-allowed">설정</span>
         </li>
       </ul>

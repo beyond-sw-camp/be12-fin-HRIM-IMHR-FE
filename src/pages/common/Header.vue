@@ -1,6 +1,8 @@
 <script setup>
 import { defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
+import { Menu  } from 'lucide-vue-next'
+import { Bell } from 'lucide-vue-next'
 
 const emit = defineEmits(['toggle-sidebar'])
 
@@ -17,25 +19,25 @@ const handleLogout = () => {
   <header class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-50">
     <!-- 🔹 로고 + 햄버거 버튼 -->
     <div class="flex items-center gap-3">
-      <router-link to="/" class="text-slate-800 font-bold text-2xl md:text-3xl">IMHR</router-link>
+      <router-link to="/" class="text-slate-800 font-bold text-2xl md:text-5xl">IMHR</router-link>
 
       <button
         @click="emit('toggle-sidebar')"
-        class="p-1 rounded hover:bg-slate-100 transition"
+        class="p-3 rounded hover:bg-slate-100 transition"
         aria-label="사이드바 열기"
       >
-        <img src="/src/assets/icon/mynaui_tally-three.png" alt="menu" class="w-6 h-6" />
+        <Menu class="w-11 h-11 text-slate-800 mt-0.5" />
       </button>
     </div>
 
     <!-- 🔹 오른쪽 사용자 영역 -->
     <div class="flex items-center gap-4 ml-auto">
-      <router-link to="/mypage" class="text-slate-700 text-base md:text-lg font-medium hover:underline">
+      <router-link to="/mypage" class="text-slate-700 text-base md:text-3xl font-medium hover:underline">
         홍길동
       </router-link>
 
       <router-link to="/notifications">
-        <img src="/src/assets/icon/mynaui_bell.png" alt="알림" class="w-6 h-6 hover:opacity-80 transition" />
+        <Bell class="w-7 h-7 text-slate-800 hover:opacity-80 transition" />
       </router-link>
 
       <!-- 로그아웃 버튼 -->

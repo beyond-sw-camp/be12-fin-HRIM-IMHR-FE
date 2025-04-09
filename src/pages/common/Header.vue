@@ -17,9 +17,8 @@ const handleLogout = () => {
 
 <template>
   <header class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-50">
-    <!-- 🔹 로고 + 햄버거 버튼 -->
     <div class="flex items-center gap-3">
-      <router-link to="/" class="text-slate-800 font-bold text-2xl md:text-5xl">IMHR</router-link>
+      <router-link to="/" class="text-slate-800 font-bold text-2xl md:text-5xl ml-2 mb-1">IMHR</router-link>
 
       <button
         @click="emit('toggle-sidebar')"

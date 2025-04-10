@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-50 min-h-screen p-10">
     <!-- 제목 -->
-    <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">
+    <h1 class="text-4xl font-bold text-center text-slate-800 mb-10">
       사원 관리
     </h1>
 
@@ -58,7 +58,9 @@
             </td>
 
             <td class="border">
-              <router-link to="/admin/user-approval">
+              <router-link
+                :to="{ path: `/admin/user_approval/${user.id}`, query: {status: user.status}}"
+              >
                 {{ user.id }}
               </router-link>
             </td>

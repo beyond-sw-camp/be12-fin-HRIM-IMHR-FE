@@ -6,7 +6,7 @@
 
     <!-- 검색창 -->
     <div
-      class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-2"
+      class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-3"
     >
       <Search color="black" :size="30" />
 
@@ -23,7 +23,7 @@
       </button>
     </div>
 
-    <div class="flex justify-end">
+    <div class="flex justify-end" v-if="userRole === 'manager'">
       <button
         @click="registerModule = true"
         class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
@@ -37,19 +37,17 @@
       <table class="w-full table-auto text-center">
         <thead class="bg-slate-100 text-slate-700">
           <tr>
-            <th class="p-3 border">회사명</th>
+            <th class="p-3 border" rowspan="2">회사명</th>
             <th class="p-3 border" colspan="4">KCGS</th>
             <th class="p-3 border">IMHR</th>
-            <th class="p-3 border"></th>
+            <th class="p-3 border" rowspan="2" v-if="userRole === 'manager'">삭제</th>
           </tr>
           <tr>
-            <th></th>
             <th class="p-2 border">종합등급</th>
             <th class="p-2 border">환경</th>
             <th class="p-2 border">사회</th>
             <th class="p-2 border">지배구조</th>
             <th class="p-2 border">총점</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -68,7 +66,7 @@
             <td class="p-2">{{ company.governance }}</td>
             <td class="p-2">{{ company.score }}</td>
 
-            <td class="p-2">
+            <td class="p-2" v-if="userRole === 'manager'">
               <button
                 class="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 transition"
                 @click="openDeleteModal(index)"
@@ -230,4 +228,7 @@ const onSearch = () => {
   console.log(`검색어: ${search.value}`);
   page.value = 1;
 };
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

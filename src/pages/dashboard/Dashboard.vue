@@ -20,7 +20,7 @@
         <h2 class="text-xl font-bold mb-4">이달의 사원</h2>
         <div class="flex space-x-6">
           <div v-for="(employee, index) in employees" :key="index">
-            🥇 {{ employee.name }}<br />코멘트 갯수: {{ employee.comments }}
+            🥇 {{ employee.name }}<br />코멘트 개수: {{ employee.comments }}
           </div>
         </div>
       </div>

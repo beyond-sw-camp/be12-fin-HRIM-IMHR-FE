@@ -171,7 +171,7 @@ const routes = [
   // 교육
   {
     path: '/educationList/1',
-    name: 'education',
+    name: 'eSGEducationListpage',
     component: ESGEducationListpage
   },
 

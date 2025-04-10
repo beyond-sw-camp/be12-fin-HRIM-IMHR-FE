@@ -62,7 +62,7 @@ import MyPageView from '../pages/mypage/MyPageView.vue';
 const routes = [
   { path: '/', redirect: '/dashboard' },
   {
-    path: '/dashboard',
+    path: '/dashboard/1',
     name: 'dashboard',
     component: DashboardView
   },
@@ -147,7 +147,7 @@ const routes = [
 
   // 보고서
   {
-    path: '/reports',
+    path: '/reportsList/1',
     name: 'reportList',
     component: ReportListView
   },

@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router'
 import { ref, computed } from 'vue'
 import Header from './pages/common/Header.vue'
-import Sidebar from './pages/common/ManagerSidebar.vue'
+import Sidebar from './pages/common/ExecutiveSidebar.vue'
 
 // 사이드바 열림 상태
 const isSidebarOpen = ref(true)

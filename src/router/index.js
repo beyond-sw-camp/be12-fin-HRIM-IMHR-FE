@@ -40,7 +40,7 @@ import Calendar from '../pages/Calendar/Calendar.vue';
 
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import PartnerDashboardView from '../pages/dashboard/PartnerDashboard.vue';
-import PartnerListView from '../pages/partner/PartnerList.vue';
+import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 마이페이지
 import FeedbackFormView from '../pages/feedback/FeedbackForm.vue';
@@ -108,9 +108,10 @@ const routes = [
 
   // 관리자
   {
-    path: '/admin/user-approval',
-    name: 'adminUserApproval',
-    component: AdminUserApprovalView
+    path: '/admin/user_approval/:id',
+    name: 'user_approval',
+    component: AdminUserApprovalView,
+    props: true
   },
   {
     path: '/admin/user-search/1',

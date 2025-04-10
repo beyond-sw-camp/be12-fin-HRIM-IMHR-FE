@@ -1,22 +1,34 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '../../stores/useMemberStore';
 import LogoSection from '../common/LogoSection.vue'
+
+const memberStore = useMemberStore();
+const router = useRouter();
 
 const form = ref({
   name: '',
-  department: '',
+  memberId: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  companyCode: '',
+  employeeCode: '',
 })
 
-const submit = () => {
+const submit = async () => {
   if (form.value.password !== form.value.confirmPassword) {
     alert('비밀번호가 일치하지 않습니다.')
     return
   }
   console.log('임직원 회원가입:', form.value)
-  alert('회원가입이 완료되었습니다!')
+  const response = await memberStore.personalSignup(form.value);
+  console.log(response);
+  if(response.data.isSuccess){
+    alert('회원가입이 완료되었습니다!');
+    router.push("/login");
+  }
 }
 </script>
 
@@ -30,10 +42,12 @@ const submit = () => {
 
         <form @submit.prevent="submit" class="space-y-3">
           <input v-model="form.name" type="text" placeholder="이름" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
-          <input v-model="form.department" type="text" placeholder="부서" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.memberId" type="text" placeholder="ID" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
           <input v-model="form.email" type="email" placeholder="이메일" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
           <input v-model="form.password" type="password" placeholder="비밀번호" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
           <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.companyCode" type="text" placeholder="회사코드" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
+          <input v-model="form.employeeCode" type="text" placeholder="사원코드(선택)" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-slate-500" />
 
           <button type="submit"
                   class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition">

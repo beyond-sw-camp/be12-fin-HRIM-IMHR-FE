@@ -32,6 +32,10 @@ export const useMemberStore = defineStore('member', {
             );
             return response;
         },
+        async personalSignup(form) {
+            const response = await axios.post("/api/member/signup/personal", form);
+            return response;
+        },
         async fetchMember() {
             // const response = await axios.post("/api/user/info")
             // this.userInfo = response.data.data;

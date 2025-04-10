@@ -2,9 +2,10 @@
 import { useRoute } from 'vue-router'
 import { ref, computed } from 'vue'
 import Header from './pages/common/Header.vue'
-import ManagerSidebar from './pages/common/ManagerSidebar.vue'
-// import MosqueSidebar from './pages/common/MosqueSidebar.vue'
-// import ExecutiveSidebar from './pages/common/ExecutiveSidebar.vue'
+import ManagerSidebar from './pages/common/Sidebar/ManagerSidebar.vue'
+import MosqueSidebar from './pages/common/Sidebar/MosqueSidebar.vue'
+import ExecutiveSidebar from './pages/common/Sidebar/ExecutiveSidebar.vue'
+
 
 const isSidebarOpen = ref(true)
 const toggleSidebar = () => {

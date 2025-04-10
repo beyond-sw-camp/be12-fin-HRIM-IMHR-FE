@@ -30,7 +30,7 @@
           <th class="py-3">상태</th>
           <th>주제</th>
           <th>내용</th>
-          <th>삭제</th>
+          <th v-if="userRole !== 'manager'">삭제</th>
         </tr>
         </thead>
         <tbody>
@@ -59,7 +59,7 @@
             <td>{{ activity.content }}</td>
           </router-link>
 
-          <td>
+          <td v-if="userRole !== 'manager'">
             <button
                 class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
             >
@@ -105,7 +105,7 @@
     </div>
 
     <!-- ➕ 활동 추가 -->
-    <div class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto">
+    <div class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="userRole !== 'manager'">
       <h2 class="text-lg font-semibold text-slate-800 mb-4">활동 추가</h2>
       <div class="flex flex-col md:flex-row gap-4">
         <input
@@ -180,4 +180,7 @@ const newActivity = ref({content: '', topic: '', file: null})
 const handleFileUpload = (e) => {
   newActivity.value.file = e.target.files[0]
 }
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

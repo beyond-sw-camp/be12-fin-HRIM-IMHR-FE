@@ -6,13 +6,12 @@ const props = defineProps({
 const menuItems = [
   { path: "/partner/1", label: "기업 ESG 현황" },
   { path: "/dashboard/1", label: "부서 ESG 현황" },
-  { path: "/education/1", label: "ESG 교육" },
-  { path: "/activity/1", label: "ESG 활동" },
-  { path: "/admin/campaign-list/1", label: "ESG 사내 캠페인" },
+  { path: "/education/1", label: "ESG 교육 활동" },
+  { path: "/activity/1", label: "ESG 기타 활동" },
+  { path: "/admin/campaign-list/1", label: "ESG 사내 캠페인 활동" },
   { path: "/productList/1", label: "친환경 제품" },
   { path: "/reportsList/1", label: "사원 리포트" },
   { path: "/partnerList/1", label: "협력사" },
-  // { path: "/reports", label: "인사 리포트 관리" },
   { path: "/admin/user-search/1", label: "피드백" },
   { path: "/calendar/1", label: "캘린더" },
 ];

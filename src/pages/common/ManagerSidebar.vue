@@ -6,7 +6,7 @@ const props = defineProps({
 const menuItems = [
   { path: "/partner/1", label: "기업 ESG 현황" },
   // { path: '/dashboard', label: '부서서 ESG 현황' }, ???
-  { path: "/education/1", label: "ESG 교육 활동 관리" },
+  { path: "/educationList/1", label: "ESG 교육 활동 관리" },
   { path: "/activity/1", label: "ESG 기타 활동 관리" },
   { path: "/admin/campaign-list/1", label: "ESG 사내 캠페인 관리" },
   { path: "/productList/1", label: "친환경 제품 관리" },

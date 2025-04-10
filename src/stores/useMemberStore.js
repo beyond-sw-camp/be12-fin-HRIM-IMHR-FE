@@ -11,12 +11,12 @@ export const useMemberStore = defineStore('member', {
         storage: sessionStorage,
     },
     actions: {
-        async login(user) {
-            // const response = await axios.post("/api/user/login", {userId:user.id, password:user.pw});
-            // if(response.status == 200) {
-            //     this.isLogin = true;
-            // }
-            // return response;
+        async login(form) {
+            const response = await axios.post("/api/member/login", form);
+            if(response.status == 200) {
+                this.isLogin = true;
+            }
+            return response;
         },
         async companySignup(formData) {
             const response = await axios.post("/api/member/signup/company", formData, {

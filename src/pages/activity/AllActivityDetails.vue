@@ -1,6 +1,10 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from "vue-router";
+
 const router = useRouter();
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'`
 </script>
 
 <template>
@@ -50,7 +54,7 @@ const router = useRouter();
       </div>
 
       <!-- 버튼 -->
-      <div class="flex justify-end gap-3 pt-4">
+      <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
         <button
           class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
         >
@@ -63,6 +67,15 @@ const router = useRouter();
           반려
         </button>
       </div>
+
+      <div class="flex justify-end gap-3 pt-4" v-if="userRole !== 'manager'">
+        <button
+          class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
+        >
+          삭제
+        </button>
+      </div>
+
     </div>
   </div>
 </template>

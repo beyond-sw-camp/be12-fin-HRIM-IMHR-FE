@@ -1,6 +1,6 @@
 <template>
   <div class="fixed inset-0 flex items-center justify-center z-40 bg-black/30">
-    <div class="bg-white rounded-xl p-6 w-[400px] shadow-xl relative">
+    <div class="bg-slate-300 rounded-xl p-6 w-[400px] shadow-xl relative">
       <button @click="$emit('close')" class="absolute top-3 right-3">
         <X class="w-5 h-5 text-gray-500 hover:text-red-500" />
       </button>
@@ -9,7 +9,7 @@
 
       <div class="flex justify-end space-x-2">
         <button
-          class="bg-gray-300 text-gray-700 px-4 py-1 rounded"
+          class="bg-white text-gray-700 px-4 py-1 rounded"
           @click="$emit('close')"
         >
           닫기
@@ -36,5 +36,6 @@ const goToLink = () => {
   if (props.notification.link) {
     window.location.href = props.notification.link
   }
+  showNotiPopup.value = false;
 }
 </script>

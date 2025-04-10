@@ -14,7 +14,7 @@ const menuItems = [
   // { path: "/reports", label: "인사 리포트 관리" },
   { path: "/admin/user-search/1", label: "사원 관리" },
   { path: "/calendar/1", label: "캘린더 관리" },
-  { path: "/setting/1", label: "부서 설정" },
+  { path: "/departmentSetting/1", label: "부서 설정" },
   { path: "/feedbackForm/1", label: "피드백 설정" },
 ];
 </script>

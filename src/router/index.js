@@ -14,7 +14,7 @@ import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
 import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
 import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
 import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
-import Setting from '../pages/admin/Setting.vue'
+import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 
 // 활동
@@ -202,11 +202,11 @@ const routes = [
     name: 'partner',
     component: PartnerDashboardView
   },
-  // 회사 ESG 갱신 주기 설정
+  // 부서 주기 설정
   {
-    path: '/setting/1',
-    name: 'setting',
-    component: Setting
+    path: '/departmentSetting/1',
+    name: 'DepartmentSetting',
+    component: DepartmentSetting
   },
   // 피드백 양식 관리
   {

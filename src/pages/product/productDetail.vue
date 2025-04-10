@@ -59,7 +59,7 @@
     </div>
 
     <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
-      <router-link to="/productRegist"
+      <router-link :to="{ path: '/productRegist', query: { mode: 'edit' } }"
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
       >
         수정

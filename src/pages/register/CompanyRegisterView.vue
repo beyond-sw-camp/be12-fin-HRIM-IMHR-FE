@@ -1,25 +1,57 @@
 <script setup>
-import { ref } from 'vue'
-import LogoSection from '../common/LogoSection.vue'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '../../stores/useMemberStore';
+import LogoSection from '../common/LogoSection.vue';
+
+const memberStore = useMemberStore();
+const router = useRouter();
 
 const form = ref({
   name: '',
-  userId: '',
+  memberId: '',
   password: '',
   confirmPassword: '',
   companyName: '',
-  businessNumber: ''
+  registrationNumber: ''
 })
+
+const file = ref(null);
 
 const isModalOpen = ref(false)
 
-const submit = () => {
+// 파일 변경 핸들러
+const handleFileChange = (event) => {
+  file.value = event.target.files[0]
+  if (file) {
+    console.log('선택한 파일:', file)
+  }
+}
+
+const fileInputRef = ref(null) // 숨겨진 input을 참조
+
+const triggerFileInput = () => {
+  fileInputRef.value?.click()
+}
+
+const submit = async () => {
   if (form.value.password !== form.value.confirmPassword) {
     alert('비밀번호가 일치하지 않습니다.')
     return
   }
   console.log('기업 회원가입:', form.value)
-  alert('회원가입이 완료되었습니다!')
+  const formData = new FormData();
+  formData.append("dto", new Blob([JSON.stringify(form.value)], { type: "application/json" }));
+  if (file.value) {
+    formData.append("file", file.value);
+  }
+  console.log(formData);
+  const response = await memberStore.companySignup(formData);
+  console.log(response);
+  if(response.data.isSuccess){
+    alert('회원가입이 완료되었습니다!');
+    router.push("/login");
+  }
 }
 </script>
 
@@ -34,11 +66,11 @@ const submit = () => {
 
         <form @submit.prevent="submit" class="space-y-3">
           <input v-model="form.name" type="text" placeholder="이름" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
-          <input v-model="form.userId" type="text" placeholder="아이디" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.memberId" type="text" placeholder="아이디" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
           <input v-model="form.password" type="password" placeholder="비밀번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
           <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
-          <input v-model="form.companyName" type="text" placeholder="회사명" class="input" />
-          <input v-model="form.businessNumber" type="text" placeholder="사업자 등록 번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.companyName" type="text" placeholder="회사명" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.registrationNumber" type="text" placeholder="사업자 등록 번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
 
           <!-- 사업자 등록 버튼 -->
           <button type="button"
@@ -74,12 +106,25 @@ const submit = () => {
         <img src="/sample-doc-fail.png" alt="불량 증명서" class="w-24 h-32 object-contain" />
       </div>
 
-      <!-- 파일 선택 -->
-      <button class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition font-semibold">
+      <!-- 파일 업로드 input (숨김 처리) -->
+      <input ref="fileInputRef"
+             type="file"
+             accept="image/*,application/pdf"
+             class="hidden"
+             @change="handleFileChange" />
+
+      <!-- 버튼으로 input 트리거 -->
+      <button @click="triggerFileInput"
+              class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition font-semibold">
         파일 선택
       </button>
 
-      <button class="mt-3 w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition font-semibold">
+      <!-- 파일명 표시 -->
+      <p v-if="file" class="text-sm text-center mt-2 text-slate-600">
+        선택된 파일: {{ file.name }}
+      </p>
+
+      <button @click="isModalOpen = false" class="mt-3 w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition font-semibold">
         확인
       </button>
 

@@ -12,8 +12,20 @@ const toggleSidebar = () => {
 }
 
 const route = useRoute()
-
 const hideLayout = computed(() => route.meta?.hideLayout === true)
+
+const role = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+
+const sidebarComponent = computed(() => {
+  switch (role.value) {
+    case 'manager':
+      return ManagerSidebar
+    case 'executive':
+      return ExecutiveSidebar
+    case 'mosque':
+      return MosqueSidebar
+  }
+})
 </script>
 
 <template>
@@ -22,7 +34,11 @@ const hideLayout = computed(() => route.meta?.hideLayout === true)
 
     <div class="flex" :class="{ 'pt-16': !hideLayout }">
  
-      <ManagerSidebar v-if="!hideLayout" :isOpen="isSidebarOpen" />
+      <component
+        v-if="!hideLayout"
+        :is="sidebarComponent"
+        :isOpen="isSidebarOpen"
+      />
 
       <main
         class="flex-1 min-h-screen transition-all duration-300"

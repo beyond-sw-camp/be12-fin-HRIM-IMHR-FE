@@ -18,6 +18,20 @@ export const useMemberStore = defineStore('member', {
             // }
             // return response;
         },
+        async companySignup(formData) {
+            const response = await axios.post("/api/member/signup/company", formData, {
+                headers: {
+                    "Content-Type" : "multipart/form-data"
+                }
+            }
+                // {
+                //     memberId:member.userid, name:member.name, email:member.email, 
+                //     password:member.password, companyName: member.companyName,
+                //     registrationNumber: member.registrationNumber
+                // }
+            );
+            return response;
+        },
         async fetchMember() {
             // const response = await axios.post("/api/user/info")
             // this.userInfo = response.data.data;

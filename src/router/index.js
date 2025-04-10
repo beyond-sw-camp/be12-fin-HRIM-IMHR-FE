@@ -14,7 +14,7 @@ import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
 import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
 import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
 import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
-import SettingView from '../pages/admin/Setting.vue'
+import Setting from '../pages/admin/Setting.vue'
 
 
 // 활동
@@ -29,7 +29,7 @@ import ReportDetailView from '../pages/report/reportDetail.vue'
 
 // 제품
 import ProductListView from '../pages/product/productList.vue'
-import ProductDetailView from '../pages/product/ProductDetail.vue'
+import ProductDetailView from '../pages/product/productDetail.vue'
 import ProductRegistView from '../pages/product/ProductRegist.vue'
 
 // 교육
@@ -113,7 +113,7 @@ const routes = [
     component: AdminUserApprovalView
   },
   {
-    path: '/admin/user-search',
+    path: '/admin/user-search/1',
     name: 'adminUserSearch',
     component: AdminUserSearchView
   },
@@ -125,7 +125,7 @@ const routes = [
 
   // 활동
   {
-    path: '/activity',
+    path: '/activity/1',
     name: 'ActivityList',
     component: ActivityListView
   },
@@ -135,7 +135,7 @@ const routes = [
     component: AllActivityDetails
   },
   {
-    path: '/admin/campaign-list',
+    path: '/admin/campaign-list/1',
     name: 'ActivityCampaignList',
     component: ActivityCampaignListView
   },
@@ -158,33 +158,33 @@ const routes = [
   },
   // 제품
   {
-    path: '/products',
+    path: '/productList/1',
     name: 'productList',
     component: ProductListView
   },
   {
-    path: '/products/:id',
+    path: '/products/1',
     name: 'productDetail',
     component: ProductDetailView
   },
 
   // 교육
   {
-    path: '/education',
+    path: '/education/1',
     name: 'esgEducation',
     component: ESGEducationListpage
   },
 
   // 캘린더
   {
-    path: '/calendar',
+    path: '/calendar/1',
     name: 'calendar',
     component: Calendar
   },
 
   // 파트너사
   {
-    path: '/partnerList',
+    path: '/partnerList/1',
     name: 'partnerList',
     component: PartnerListView
   },
@@ -203,13 +203,13 @@ const routes = [
   },
   // 회사 ESG 갱신 주기 설정
   {
-    path: '/setting/:idx',
+    path: '/setting/1',
     name: 'setting',
-    component: SettingView
+    component: Setting
   },
   // 피드백 양식 관리
   {
-    path: '/feedbackForm/:idx',
+    path: '/feedbackForm/1',
     name: 'feedbackForm',
     component: FeedbackFormView
   },

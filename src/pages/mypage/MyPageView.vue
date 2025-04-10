@@ -10,6 +10,7 @@ const user = ref({
   name: '홍길동',
   email: 'test_id@gmail.com',
   company: '삼성',
+  department: '회계',
 })
 
 const activities = ref([
@@ -38,6 +39,10 @@ const goToActivityDetail = () => router.push('/activity/all')
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) currentPage.value = page
 }
+
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <template>
@@ -57,6 +62,7 @@ const goToPage = (page) => {
         <div class="text-lg font-semibold">{{ user.name }}</div>
         <div class="text-sm text-gray-600">{{ user.email }}</div>
         <div class="text-sm text-gray-400">{{ user.company }}</div>
+        <div class="text-sm text-gray-400" v-if="userRole !== 'manager'">{{ user.department }}</div>
       </div>
 
       <!-- 버튼 -->
@@ -76,7 +82,7 @@ const goToPage = (page) => {
     </aside>
 
     <!-- ✅ 우측 본문 -->
-    <main class="flex-1 p-10 overflow-auto">
+    <main class="flex-1 p-10 overflow-auto" v-if="userRole !== 'manager'">
       <h3 class="text-2xl font-bold text-slate-800 mb-6">활동 내역</h3>
 
       <!-- 활동 테이블 -->

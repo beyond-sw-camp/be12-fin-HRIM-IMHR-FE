@@ -13,7 +13,7 @@ const form = ref({
 });
 
 const goToFindId = () => router.push("/find-id");
-const goToResetPassword = () => router.push("/change-password"); // ✅ 수정된 경로
+const goToResetPassword = () => router.push("/reset-password");
 const goToCompanyRegister = () => router.push("/register/company");
 const goToEmployeeRegister = () => router.push("/register/employee");
 

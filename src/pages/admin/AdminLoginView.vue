@@ -1,13 +1,34 @@
 <script setup>
+import { ref } from 'vue';
 import { useRouter } from "vue-router";
+import { useMemberStore } from '../../stores/useMemberStore';
 import LogoSection from "../common/LogoSection.vue";
 
+const memberStore = useMemberStore();
 const router = useRouter();
+const form = ref({
+  memberId: '',
+  password: '',
+  way: '',
+});
 
 const goToFindId = () => router.push("/find-id");
 const goToResetPassword = () => router.push("/change-password"); // ✅ 수정된 경로
 const goToCompanyRegister = () => router.push("/register/company");
 const goToEmployeeRegister = () => router.push("/register/employee");
+
+const login = async () => {
+  console.log("login clicked")
+  const response = await memberStore.login(form.value);
+  console.log(response);
+  if (response.status == 200) {
+    router.push("/dashboard")
+  } else {
+    alert("계정이 존재하지 않거나 비밀번호가 틀렸습니다.")
+  }
+}
+
+
 </script>
 
 <template>
@@ -22,15 +43,17 @@ const goToEmployeeRegister = () => router.push("/register/employee");
           IMHR에 오신 걸 환영합니다.
         </h2>
 
-        <form>
-          <label class="block mb-2 text-sm text-gray-700">이메일</label>
+        <form @submit.prevent="login">
+          <label class="block mb-2 text-sm text-gray-700">ID</label>
           <input
-            type="email"
+            v-model="form.memberId"
+            type="text"
             class="w-full mb-4 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-slate-500"
           />
 
           <label class="block mb-2 text-sm text-gray-700">비밀번호</label>
           <input
+            v-model="form.password"
             type="password"
             class="w-full mb-4 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-slate-500"
           />
@@ -41,26 +64,26 @@ const goToEmployeeRegister = () => router.push("/register/employee");
               <input
                 type="radio"
                 name="role"
-                value="admin"
+                value="0"
                 checked
                 class="mr-1"
+                v-model="form.way"
               />
               관리자
             </label>
             <label class="flex items-center">
-              <input type="radio" name="role" value="employee" class="mr-1" />
+              <input type="radio" name="role" value="1" class="mr-1" v-model="form.way"/>
               임직원
             </label>
           </div>
 
-          <router-link to="/dashboard">
-            <button
-              type="submit"
-              class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition"
-            >
-              로그인
-            </button>
-          </router-link>
+          
+          <button
+            type="submit"
+            class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition"
+          >
+            로그인
+          </button>
           
         </form>
 

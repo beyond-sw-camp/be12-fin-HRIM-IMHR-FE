@@ -20,6 +20,7 @@
     <button
       @click="$emit('next')"
       class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-700 text-white"
+      v-if="userRole === 'manager'"
     >
       <ChevronRight class="w-5 h-5" />
     </button>
@@ -48,4 +49,7 @@ function toggleCategory(name) {
     selectedCategories.value.splice(i, 1);
   }
 }
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

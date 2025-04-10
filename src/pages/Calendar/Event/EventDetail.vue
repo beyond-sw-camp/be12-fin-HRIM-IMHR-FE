@@ -33,6 +33,7 @@
       <button
           @click="$emit('add-event', date)"
           class="bg-slate-600 text-white mt-3 px-2 py-1 rounded-lg hover:bg-slate-800"
+          v-if="userRole === 'manager'"
         >
           + 일정 추가
       </button>
@@ -41,6 +42,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { X } from "lucide-vue-next";
 
 defineProps({
@@ -56,4 +58,7 @@ defineProps({
 });
 
 defineEmits(["close"]);
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

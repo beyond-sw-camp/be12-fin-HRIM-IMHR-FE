@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { Search } from "lucide-vue-next";
 
 const searchQuery = ref('')
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
 </script>
 
 <template>
@@ -38,7 +39,7 @@ const searchQuery = ref('')
           <th class="p-3 border">상태</th>
           <th class="p-3 border">내용</th>
           <th class="p-3 border">날짜</th>
-          <th class="p-3 border">삭제</th>
+          <th class="p-3 border"  v-if="userRole !== 'manager'">삭제</th>
         </tr>
         </thead>
         <tbody>
@@ -52,7 +53,7 @@ const searchQuery = ref('')
           </router-link>
           
           <td class="p-3">2025.02.12</td>
-          <td class="p-3">
+          <td class="p-3"  v-if="userRole !== 'manager'">
             <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
               삭제
             </button>
@@ -68,7 +69,7 @@ const searchQuery = ref('')
           </router-link>
 
           <td class="p-3">2025.02.15</td>
-          <td class="p-3">
+          <td class="p-3" v-if="userRole !== 'manager'">
             <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
               삭제
             </button>
@@ -85,7 +86,7 @@ const searchQuery = ref('')
           </router-link>
 
           <td class="p-3">2025.02.18</td>
-          <td class="p-3">
+          <td class="p-3" v-if="userRole !== 'manager'">
             <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
               삭제
             </button>
@@ -96,14 +97,14 @@ const searchQuery = ref('')
     </div>
 
     <!-- 📄 페이지네이션 -->
-    <div class="mt-8 flex justify-center space-x-2 text-sm">
+    <div class="mt-8 flex justify-center space-x-2 text-sm" >
       <button class="bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-900">← 이전</button>
       <button class="bg-slate-800 text-white px-3 py-1 rounded font-bold">1</button>
       <button class="bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-900">다음 →</button>
     </div>
 
     <!-- ➕ 활동 추가 -->
-    <div class="mt-12 bg-white p-6 rounded-md shadow-md space-y-4 max-w-5xl mx-auto">
+    <div class="mt-12 bg-white p-6 rounded-md shadow-md space-y-4 max-w-5xl mx-auto"  v-if="userRole !== 'manager'">
       <h2 class="text-lg font-semibold text-slate-800">활동 추가</h2>
       <div class="flex flex-col md:flex-row gap-4">
         <input

@@ -64,19 +64,19 @@
           <div style="display: flex; gap: 10px;">
             <div>🥇</div>
             <div>홍길동</div>
-            <div>코멘트 갯수 :</div>
+            <div>코멘트 개수 :</div>
             <div>100</div>
           </div>
           <div class="flex gap-2.5">
             <div>🥈</div>
             <div>임꺽정</div>
-            <div>코멘트 갯수 :</div>
+            <div>코멘트 개수 :</div>
             <div>99</div>
           </div>
           <div class="flex gap-2.5">
             <div>🥉</div>
             <div>너구리</div>
-            <div>코멘트 갯수 :</div>
+            <div>코멘트 개수 :</div>
             <div>98</div>
           </div>
         </div>

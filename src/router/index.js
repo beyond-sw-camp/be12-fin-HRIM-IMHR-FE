@@ -12,6 +12,7 @@ import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
 // import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
+import PermissionSetting from '../pages/Mosque/PermissionSetting.vue';
 import MosqueSearch from '../pages/Mosque/MosqueSearch.vue';
 import MosqueDetail from '../pages/Mosque/MosqueDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
@@ -129,6 +130,12 @@ const routes = [
     path: '/mosqueDetail/:id',
     name: 'mosqueDetail',
     component: MosqueDetail,
+    props: true
+  },
+  {
+    path: '/permissionSetting/:id',
+    name: 'permissionSetting',
+    component: PermissionSetting,
     props: true
   },
 

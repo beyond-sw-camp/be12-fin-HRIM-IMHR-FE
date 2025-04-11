@@ -1,93 +1,84 @@
 <template>
   <div class="flex min-h-screen">
-
-    <!-- 🌞 메인 영역 -->
-    <main class="flex-1 bg-gray-100 p-6 md:p-10">
-
-      <!-- 프로필 카드 -->
-      <div class="bg-white shadow rounded-lg p-6 flex flex-col md:flex-row justify-between gap-8">
-        <!-- 왼쪽: 프로필 정보 -->
-        <div class="flex-1 space-y-4">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800">{{ user.name }}</h3>
-            <p class="text-gray-500">{{ user.email }}</p>
+    <!-- 본문 -->
+    <main class="flex-1 bg-gray-50">
+      <!-- 내용 -->
+      <section
+        class="flex flex-col items-center justify-center p-6 min-h-[calc(100vh-72px)]"
+      >
+        <div
+          class="w-full max-w-md border border-blue-200 rounded-xl bg-white p-8 shadow-md"
+        >
+          <h2 class="text-xl font-semibold mb-6 text-center text-gray-700">
+            회원 상세 정보
+          </h2>
+          <div class="space-y-4 text-gray-700 text-base">
+            <div><strong>이름 :</strong> {{ user.name }}</div>
+            <div><strong>아이디 :</strong> {{ user.id }}</div>
+            <div><strong>이메일 :</strong> {{ user.email }}</div>
+            <div><strong>회사 코드 :</strong> {{ user.companyCode }}</div>
           </div>
-          <div>
-            <label class="block text-sm mb-1 text-gray-700">부서 선택</label>
-            <select v-model="user.department" class="w-full border px-4 py-2 rounded">
-              <option disabled value="">부서를 선택하세요</option>
-              <option v-for="dept in departments" :key="dept">{{ dept }}</option>
-            </select>
-          </div>
-          <p class="text-sm text-gray-400 mt-2">등록일: {{ user.registeredAt }}</p>
         </div>
 
-        <!-- 오른쪽: 권한 설정 -->
-        <div class="flex-1">
-          <h4 class="font-semibold mb-3">접근 권한</h4>
-          <div class="grid grid-cols-2 gap-2">
-            <label
-              v-for="permission in permissions"
-              :key="permission"
-              class="flex items-center space-x-2 text-sm"
-            >
-              <input
-                type="checkbox"
-                v-model="user.permissions"
-                :value="permission"
-                class="accent-blue-500"
-              />
-              <span>{{ permission }}</span>
-            </label>
-          </div>
-        </div>
-      </div>
+        <div class="mt-6 flex flex-col sm:flex-row gap-4" v-if="user.status !== '승인 반려'">
+          <button
+            class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            @click="approveUser"
+          >
+            승인
+          </button>
 
-      <!-- 버튼 -->
-      <div class="mt-8 flex flex-col sm:flex-row justify-end gap-4">
-        <button
-          @click="save"
-          class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-        >
-          저장
-        </button>
-        <button
-          @click="terminate"
-          class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-        >
-          탈퇴 처리
-        </button>
-      </div>
+          <button
+            class="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+            @click="rejectUser"
+          >
+            반려(탈퇴)
+          </button>
+        </div>
+      </section>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useRoute, useRouter } from "vue-router";
+import { ref } from "vue";
 
-const menus = ['회원관리', 'ESG 성과 등록', 'E56 성과 분석', '공급망진단', '리포트 관리', '처교실', '시스템러']
+const route = useRoute();
+
+const menus = [
+  "회사 정보",
+  "ESG 지표 관리",
+  "ESG 성과 등록",
+  "ESG 성과 분석",
+  "공급망진단",
+  "리포트 관리",
+  "처교실",
+  "시스템러",
+];
 
 const user = ref({
-  name: '홍길동',
-  email: 'admin@example.com',
-  department: '',
-  registeredAt: '2024.03.01',
-  permissions: [],
-})
-
-const departments = ['인사팀', '재무팀', 'ESG팀', '기획팀']
-
-const permissions = ['임원 권한', '사원 권한', '관리자 권한', '슈퍼 관리자 권한']
-
-const save = () => {
-  alert('✅ 권한 저장 완료!')
-  console.log('✔️ 선택된 권한:', user.value.permissions)
+  name: route.query.name,
+  id: route.query.id,
+  email: route.query.email,
+  companyCode: route.query.companyCode,
+  status: route.query.status,
 }
+);
 
-const terminate = () => {
-  const confirmed = confirm('정말 탈퇴 처리하시겠습니까?')
-  if (confirmed) {
-    alert('❌ 탈퇴 처리 완료')
+console.log(user.status);
+
+const approveUser = () => {
+  alert("✅ 회원 승인 처리 완료!");
+  user.value.status = "승인";
+};
+
+const rejectUser = () => {
+  const confirmDelete = confirm("정말 이 사용자를 삭제하시겠습니까?");
+  if (confirmDelete) {
+    alert("❌ 회원 삭제 처리 완료!");
+    // 여기에서 실제 삭제 API 호출 또는 로직 구현
+    router.push("/admin/user-search"); // 목록 페이지로 이동
   }
-}
+};
 </script>

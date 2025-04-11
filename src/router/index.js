@@ -39,7 +39,7 @@ import ESGEducationListpage from '../pages/ESG/ESGEducationListpage.vue';
 import Calendar from '../pages/Calendar/Calendar.vue';
 
 import DashboardView from '../pages/dashboard/Dashboard.vue';
-import PartnerDashboardView from '../pages/dashboard/PartnerDashboard.vue';
+import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 마이페이지
@@ -60,7 +60,20 @@ import MyPageView from '../pages/mypage/MyPageView.vue';
 // }
 
 const routes = [
-  { path: '/', redirect: '/dashboard' },
+  {
+    path: '/',
+    name: 'homeRedirect',
+    beforeEnter: (to, from, next) => {
+      const companyId = 1;
+      // getUserCompanyIdSomehow(); // 예: store 또는 localStorage 등 
+      if (companyId) {
+        next(`/partner/${companyId}`);
+      } else {
+        next(`/partner/${companyId}`)
+        // next('/login'); // 로그인 안됐으면 로그인으로
+      }
+    }
+  },
   {
     path: '/dashboard/1',
     name: 'dashboard',
@@ -199,8 +212,9 @@ const routes = [
   // 파트너 회사 대시보드
   {
     path: '/partner/1',
-    name: 'partner',
-    component: PartnerDashboardView
+    name: 'partnerDashboard',
+    component: PartnerDashboard,
+    props: true
   },
   // 부서 주기 설정
   {

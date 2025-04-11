@@ -217,7 +217,7 @@ const routes = [
     name: 'feedbackForm',
     component: FeedbackForm,
   },
-  //피드백 상세 보기
+  //피드백 작성
   {
     path: '/feedback/:id',
     name: 'feedbackDetail',

@@ -85,7 +85,7 @@
       <h2 class="text-lg font-semibold text-slate-800 mb-4">활동 추가</h2>
 
       <div class="flex flex-col md:flex-row gap-4 mb-2">
-        <input v-model="newActivity.content" placeholder="내용 입력" name="description"
+        <input placeholder="제목 입력" name="title"
           class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500" />
         <select v-model="newActivity.topic"
           class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500">
@@ -93,7 +93,10 @@
           <option>봉사</option>
           <option>기부</option>
         </select>
+        
       </div>
+      
+      
 
       <div v-if="previewImage" class="relative inline-block my-2">
         <!-- 닫기 버튼 -->
@@ -112,13 +115,18 @@
           class="border border-gray-300 rounded-md px-4 py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
         <input type="file" ref="fileInput" accept="image/jpg, image/jpeg, image/png" name="file"
           @change="handleFileUpload" class="border border-gray-300 rounded-md px-4 py-2" />
-        <button type="button" @click="submit"
+        
+      </div>
+
+      <div class="my-2">
+        <input placeholder="내용 입력" name="description"
+        class="w-full h-[100px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500" />
+      </div>
+
+      <button type="button" @click="submit"
           class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition ml-auto w-[123px]">
           승인 요청
         </button>
-      </div>
-
-
     </form>
 
   </div>
@@ -144,9 +152,9 @@ const perPage = 5
 //   { status: '승인', topic: '기부', content: '일시 기부', userId: 'guest32' }
 // ])
 
-// const totalPages = computed(() =>
-//   Math.ceil(filteredActivities.value.length / perPage)
-// )
+const totalPages = computed(() =>
+  Math.ceil(activitySore.activityList.length / perPage)
+)
 
 // const filteredActivities = computed(() => {
 //   return activities.value.filter(
@@ -166,7 +174,7 @@ const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) currentPage.value = page
 }
 
-const newActivity = ref({ content: '', topic: '', file: null })
+const newActivity = ref({ topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {

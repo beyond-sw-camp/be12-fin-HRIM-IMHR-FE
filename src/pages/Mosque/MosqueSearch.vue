@@ -31,7 +31,7 @@
         <thead class="bg-slate-100 text-slate-700">
           <tr>
             <th class="py-3 border">순번</th>
-            <th class="py-3 border">상태</th>
+            <th class="py-3 border" v-if="userRole === 'manager'">상태</th>
             <th class="py-3 border">아이디</th>
             <th class="py-3 border">이름</th>
           </tr>
@@ -44,7 +44,7 @@
           >
             <td class="py-2 border">{{ user.order }}</td>
 
-            <td class="border">
+            <td class="border" v-if="userRole === 'manager'">
               <span
                 class="px-2 py-1 text-white text-xs font-semibold rounded"
                 :class="{
@@ -57,7 +57,7 @@
               </span>
             </td>
 
-            <td class="border">
+            <td class="border" v-if="userRole === 'manager'">
               <router-link
                 :to="{
                   path:
@@ -67,6 +67,12 @@
                   query: { status: user.status },
                 }"
               >
+                {{ user.id }}
+              </router-link>
+            </td>
+
+            <td class="border" v-if="userRole !== 'manager'">
+              <router-link to="/feddbackLeave/1">
                 {{ user.id }}
               </router-link>
             </td>
@@ -119,4 +125,7 @@ const filteredUsers = computed(() => {
 const searchUser = () => {
   console.log(`검색: ${searchText.value}`);
 };
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

@@ -22,6 +22,15 @@
       </button>
     </div>
 
+    <div class="flex justify-end max-w-4xl mx-auto" v-if="userRole === 'manager'">
+      <button
+        @click="registerModule = true"
+        class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
+      >
+        캠페인 추가
+      </button>
+    </div>
+
     <!-- 리스트 테이블 -->
     <div class="bg-white rounded-lg shadow overflow-hidden max-w-4xl mx-auto">
       <table class="min-w-full text-sm text-slate-800 text-center">
@@ -75,6 +84,9 @@ const filteredCampaigns = computed(() =>
 )
 
 const goToDetail = (item) => {
-  router.push({ name: 'ActivityCampaignDetail', query: { title: item.title } })
+  router.push({ path: '/campaigndetail/1', query: { title: item.title } })
 }
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

@@ -6,9 +6,9 @@ const props = defineProps({
 const menuItems = [
   { path: "/partner/1", label: "기업 ESG 현황" },
   { path: "/educationList/1", label: "ESG 교육 활동" },
-  { path: "/activity/1", label: "ESG 기타 활동" },
-  { path: "/admin/campaign-list/1", label: "ESG 사내 캠페인 활동" },
-  { path: "/admin/user-search/1", label: "피드백" },
+  { path: "/activityList/1", label: "ESG 기타 활동" },
+  { path: "/campaignlist/1", label: "ESG 사내 캠페인 활동" },
+  { path: "/mosqueSearch/1", label: "피드백" },
   { path: "/calendar/1", label: "캘린더" },
 ];
 </script>

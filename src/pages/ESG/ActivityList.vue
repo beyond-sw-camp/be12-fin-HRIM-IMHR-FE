@@ -21,13 +21,14 @@
         <thead class="bg-slate-100 border-b">
           <tr>
             <th class="py-3">상태</th>
+            <th>유저</th>
             <th>주제</th>
             <th>내용</th>
             <th v-if="userRole !== 'manager'">삭제</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(activity, index) in pagedActivities" :key="index" class="border-b hover:bg-slate-50 transition">
+          <tr v-for="activity in activitySore.activityList" :key="activity.activityIdx" class="border-b hover:bg-slate-50 transition">
 
             <td class="py-2">
               <span class="text-white text-xs px-3 py-1 rounded-md inline-block" :class="{
@@ -39,10 +40,11 @@
               </span>
             </td>
 
-            <td>{{ activity.topic }}</td>
+            <td>{{activity.memberName}} ({{ activity.memberId }})</td> 
 
-            <router-link to="/activeDetails/1">
-              <td>{{ activity.content }}</td>
+            <td>{{ activity.topic }}</td>
+            <router-link :to="`/activeDetails/${activity.activityIdx}`">
+              <td>{{ activity.description }}</td>
             </router-link>
 
             <td v-if="userRole !== 'manager'">
@@ -123,7 +125,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed,onMounted } from 'vue'
 import { Search } from "lucide-vue-next";
 import { useActivityStore } from '../../stores/useActivityStore';
 
@@ -132,39 +134,45 @@ const search = ref('')
 const currentPage = ref(1)
 const perPage = 5
 
-const activities = ref([
-  { status: '대기 중', topic: '봉사', content: '지역 봉사 활동' },
-  { status: '대기 중', topic: '기부', content: '재난기부' },
-  { status: '승인 반려', topic: '봉사', content: '캄보디아 봉사' },
-  { status: '승인', topic: '봉사', content: '민관 협력 국가재난 지원 봉사' },
-  { status: '승인', topic: '기부', content: '정기 기부' },
-  { status: '승인', topic: '기부', content: '일시 기부' }
-])
+// const activities = 
+// ref([
+// { status: '대기 중', topic: '봉사', content: '지역 봉사 활동', userId: 'user123' },
+//   { status: '대기 중', topic: '기부', content: '재난기부', userId: 'user456' },
+//   { status: '승인 반려', topic: '봉사', content: '캄보디아 봉사', userId: 'user789' },
+//   { status: '승인', topic: '봉사', content: '민관 협력 국가재난 지원 봉사', userId: 'admin01' },
+//   { status: '승인', topic: '기부', content: '정기 기부', userId: 'donor77' },
+//   { status: '승인', topic: '기부', content: '일시 기부', userId: 'guest32' }
+// ])
 
-const totalPages = computed(() =>
-  Math.ceil(filteredActivities.value.length / perPage)
-)
+// const totalPages = computed(() =>
+//   Math.ceil(filteredActivities.value.length / perPage)
+// )
 
-const filteredActivities = computed(() => {
-  return activities.value.filter(
-    a =>
-      a.content.includes(search.value) ||
-      a.topic.includes(search.value) ||
-      a.status.includes(search.value)
-  )
-})
+// const filteredActivities = computed(() => {
+//   return activities.value.filter(
+//     a =>
+//       a.content.includes(search.value) ||
+//       a.topic.includes(search.value) ||
+//       a.status.includes(search.value)
+//   )
+// })
 
-const pagedActivities = computed(() => {
-  const start = (currentPage.value - 1) * perPage
-  return filteredActivities.value.slice(start, start + perPage)
-})
+// const pagedActivities = computed(() => {
+//   const start = (currentPage.value - 1) * perPage
+//   return filteredActivities.value.slice(start, start + perPage)
+// })
 
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) currentPage.value = page
-}
+// const goToPage = (page) => {
+//   if (page >= 1 && page <= totalPages.value) currentPage.value = page
+// }
 
 const newActivity = ref({ content: '', topic: '', file: null })
 
+// 리스트 관련
+onMounted(async () => {
+  const response = await activitySore.list();
+  // 여기에 후속 처리 코드도 작성 가능
+})
 
 
 // 이미지 관련

@@ -128,7 +128,7 @@ const routes = [
 
   // 활동
   {
-    path: '/activityList/1',
+    path: '/activityList',
     name: 'ActivityList',
     component: ActivityList
   },

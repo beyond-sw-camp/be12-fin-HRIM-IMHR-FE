@@ -1,14 +1,14 @@
 import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 // 로그인 & 인증
-import AdminLoginView from '../pages/admin/AdminLoginView.vue'
+import Login from '../pages/member/Login.vue';
 import FindIdView from '../pages/auth/FindIdView.vue'
 import ResetPasswordView from '../pages/auth/ResetPasswordView.vue'
 import ChangePasswordView from '../pages/auth/ChangePasswordView.vue'
 
 // 회원가입
-import CompanyRegisterView from '../pages/register/CompanyRegisterView.vue'
-import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
+import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
+import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
 import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
@@ -82,8 +82,8 @@ const routes = [
   // 로그인 & 인증 (레이아웃 없이)
   {
     path: '/login',
-    name: 'adminLogin',
-    component: AdminLoginView,
+    name: 'login',
+    component: Login,
     meta: { hideLayout: true }
   },
   {

@@ -46,14 +46,14 @@
             v-model="question.subItems[oIndex]"
             placeholder="보기 항목 입력"
           />
-          <button class="bg-red-500 text-white px-3 py-1 rounded" @click="removeOption(qIndex, oIndex)">삭제</button>
+          <button class="bg-red-500 w-20 text-white px-3 py-1 rounded" @click="removeOption(qIndex, oIndex)">삭제</button>
         </div>
-        <button class="bg-green-500 text-white px-3 py-1 rounded" @click="addOption(qIndex)">보기 항목 추가</button>
+        <button class="bg-green-500 h-10 text-white px-3 py-1 rounded" @click="addOption(qIndex)">보기 항목 추가</button>
       </div>
 
       <!-- 질문 삭제 -->
       <div class="flex justify-end">
-        <button class="bg-red-500 text-white px-4 py-1 rounded" @click="removeQuestion(qIndex)">질문 삭제</button>
+        <button class="bg-red-500 h-10 text-white px-4 py-1 rounded" @click="removeQuestion(qIndex)">질문 삭제</button>
       </div>
     </div>
 

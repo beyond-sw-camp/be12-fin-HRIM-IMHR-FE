@@ -59,7 +59,7 @@
 
             <td class="border">
               <router-link
-                :to="{ path: `/admin/user_approval/${user.id}`, query: {status: user.status}}"
+                :to="{ path: `/mosqueDetail/${user.id}`, query: {status: user.status}}"
               >
                 {{ user.id }}
               </router-link>

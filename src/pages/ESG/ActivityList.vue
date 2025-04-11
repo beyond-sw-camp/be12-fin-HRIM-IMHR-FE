@@ -119,8 +119,7 @@
       </div>
 
       <div class="my-2">
-        <input placeholder="내용 입력" name="description"
-        class="w-full h-[100px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500" />
+        <textarea placeholder="내용 입력" name="description" class="w-full h-[100px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"></textarea>
       </div>
 
       <button type="button" @click="submit"

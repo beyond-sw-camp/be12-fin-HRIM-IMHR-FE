@@ -4,7 +4,7 @@ import axios from 'axios';
 export const useActivityStore = defineStore('activity', {
     state: () => (
         {
-            
+            activityList:[],
         }),
 
     actions: {
@@ -15,6 +15,11 @@ export const useActivityStore = defineStore('activity', {
                 }
             });
             return response;
-        }
+        },
+        
+        async list(){
+            const response = await axios("/api/activity/myactivity")
+            this.activityList=response.data.data;
+        },
     },
 });

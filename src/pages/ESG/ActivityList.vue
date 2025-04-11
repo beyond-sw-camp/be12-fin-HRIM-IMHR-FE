@@ -170,7 +170,7 @@ const newActivity = ref({ content: '', topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {
-  const response = await activitySore.list((currentPage.value-1), postsPerPage);
+  const response = await activitySore.list((currentPage.value-1), perPage);
   // 여기에 후속 처리 코드도 작성 가능
 })
 

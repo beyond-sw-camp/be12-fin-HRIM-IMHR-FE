@@ -42,23 +42,11 @@ import DashboardView from '../pages/dashboard/Dashboard.vue';
 import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
 
-// 마이페이지
-import FeedbackFormView from '../pages/feedback/FeedbackForm.vue';
-
 // 피드백
+import FeedbackForm from '../pages/feedback/FeedbackDetail.vue';
+import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
+
 import MyPageView from '../pages/mypage/MyPageView.vue';
-
-
-// const checkLogin = async (from, to, next) => {
-//   const memberStore = useMemberStore();
-//   // await memberStore.loginCheck();
-//   if(memberStore.isLogin) {
-//     return next();
-//   }
-
-//   next("/login");
-// }
-
 const routes = [
   {
     path: '/',
@@ -227,8 +215,16 @@ const routes = [
   {
     path: '/feedbackForm/1',
     name: 'feedbackForm',
-    component: FeedbackFormView
+    component: FeedbackForm,
   },
+  //피드백 상세 보기
+  {
+    path: '/feedback/:id',
+    name: 'feedbackDetail',
+    component: FeedbackDetail,
+    props: true
+  },
+
   // 친환경 제품 등록
   {
     path: '/productRegist',

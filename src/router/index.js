@@ -14,6 +14,7 @@ import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
 import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
 import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
+import MosqueDetail from '../pages/member/MosqueDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 
@@ -132,9 +133,9 @@ const routes = [
     component: AdminUserSearchView
   },
   {
-    path: '/admin/user-permission',
-    name: 'adminUserPermission',
-    component: AdminPermissionTransferView
+    path: 'mosqueDetail/1',
+    name: 'mosqueDetail',
+    component: MosqueDetail
   },
 
   // 활동

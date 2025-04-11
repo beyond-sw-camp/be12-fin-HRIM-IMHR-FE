@@ -14,8 +14,8 @@ const form = ref({
 
 const goToFindId = () => router.push("/find-id");
 const goToResetPassword = () => router.push("/reset-password");
-const goToCompanyRegister = () => router.push("/register/company");
-const goToEmployeeRegister = () => router.push("/register/employee");
+const goToCompanyRegister = () => router.push("/companySignup");
+const goToEmployeeRegister = () => router.push("/employeeSignup");
 
 const login = async () => {
   console.log("login clicked")

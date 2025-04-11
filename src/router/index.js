@@ -107,13 +107,13 @@ const routes = [
 
   // 회원가입 (레이아웃 없이)
   {
-    path: '/register/company',
+    path: '/companySignup',
     name: 'companyRegister',
     component: CompanyRegisterView,
     meta: { hideLayout: true }
   },
   {
-    path: '/register/employee',
+    path: '/employeeSignup',
     name: 'employeeRegister',
     component: EmployeeRegisterView,
     meta: { hideLayout: true }

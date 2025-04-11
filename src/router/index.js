@@ -33,7 +33,7 @@ import ProductDetailView from '../pages/product/productDetail.vue'
 import ProductRegistView from '../pages/product/ProductRegist.vue'
 
 // 교육
-import ESGEducationListpage from '../pages/ESG/ESGEducationListpage.vue';
+import EducationList from '../pages/esg/EducationList.vue'
 
 // 캘린더
 import Calendar from '../pages/Calendar/Calendar.vue';
@@ -186,8 +186,8 @@ const routes = [
   // 교육
   {
     path: '/educationList/1',
-    name: 'eSGEducationListpage',
-    component: ESGEducationListpage
+    name: 'EducationList',
+    component: EducationList
   },
 
   // 캘린더

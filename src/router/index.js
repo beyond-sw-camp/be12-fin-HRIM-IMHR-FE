@@ -19,9 +19,9 @@ import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 // 활동
 import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
-import ActivityListView from '../pages/esg/ActivityListView.vue'
-import ActivityCampaignListView from '../pages/esg/ActivityCampaignListView.vue'
-import ActivityCampaignDetailView from '../pages/esg/ActivityCampaignDetailView.vue';
+import ActivityList from '../pages/esg/ActivityList.vue'
+import CampaignList from '../pages/esg/CampaignList.vue'
+import CampaignDetail from '../pages/esg/CampaignDetail.vue';
 
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'
@@ -140,9 +140,9 @@ const routes = [
 
   // 활동
   {
-    path: '/activity/1',
+    path: '/activityList/1',
     name: 'ActivityList',
-    component: ActivityListView
+    component: ActivityList
   },
   {
     path: '/activeDetails/1',
@@ -150,14 +150,14 @@ const routes = [
     component: AllActivityDetails
   },
   {
-    path: '/admin/campaign-list/1',
-    name: 'ActivityCampaignList',
-    component: ActivityCampaignListView
+    path: '/campaignlist/1',
+    name: 'activityCampaignList',
+    component: CampaignList
   },
   {
-    path: '/admin/campaign-detail',
-    name: 'ActivityCampaignDetail',
-    component: ActivityCampaignDetailView
+    path: '/campaigndetail/1',
+    name: 'activityCampaignDetail',
+    component: CampaignDetail
   },
 
   // 보고서

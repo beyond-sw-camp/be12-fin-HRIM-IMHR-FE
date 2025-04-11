@@ -40,7 +40,7 @@
               </span>
             </td>
 
-            <td>{{activity.memberName}} ({{ activity.memberId }})</td> 
+            <td>{{activity.memberName}} ({{ activity.memberId }})</td>
 
             <td>{{ activity.topic }}</td>
             <router-link :to="`/activeDetails/${activity.activityIdx}`">
@@ -157,20 +157,20 @@ const perPage = 5
 //   )
 // })
 
-// const pagedActivities = computed(() => {
-//   const start = (currentPage.value - 1) * perPage
-//   return filteredActivities.value.slice(start, start + perPage)
-// })
+const pagedActivities = computed(() => {
+  const start = (currentPage.value - 1) * perPage
+  return filteredActivities.value.slice(start, start + perPage)
+})
 
-// const goToPage = (page) => {
-//   if (page >= 1 && page <= totalPages.value) currentPage.value = page
-// }
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) currentPage.value = page
+}
 
 const newActivity = ref({ content: '', topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {
-  const response = await activitySore.list();
+  const response = await activitySore.list((currentPage.value-1), postsPerPage);
   // 여기에 후속 처리 코드도 작성 가능
 })
 

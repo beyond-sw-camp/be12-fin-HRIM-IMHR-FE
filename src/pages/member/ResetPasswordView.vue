@@ -39,7 +39,7 @@ const submit = () => {
         <div class="mt-4 text-center text-sm text-slate-400">
           <router-link to="/login" class="hover:underline">로그인</router-link>
           &nbsp;|&nbsp;
-          <router-link to="/find-id" class="hover:underline">아이디 찾기</router-link>
+          <router-link to="/findId" class="hover:underline">아이디 찾기</router-link>
         </div>
       </div>
     </div>

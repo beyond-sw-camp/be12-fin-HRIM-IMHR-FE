@@ -36,7 +36,7 @@ const submit = () => {
         <div class="mt-4 text-center text-sm text-slate-400">
           <router-link to="/login" class="hover:underline">로그인</router-link>
           &nbsp;|&nbsp;
-          <router-link to="/reset-password" class="hover:underline">비밀번호 재설정</router-link>
+          <router-link to="/resetpassword" class="hover:underline">비밀번호 재설정</router-link>
         </div>
       </div>
     </div>

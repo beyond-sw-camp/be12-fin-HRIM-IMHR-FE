@@ -11,7 +11,6 @@ import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-// import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
 import PermissionSetting from '../pages/Mosque/PermissionSetting.vue';
 import MosqueSearch from '../pages/Mosque/MosqueSearch.vue';
 import MosqueDetail from '../pages/Mosque/MosqueDetail.vue';
@@ -19,10 +18,10 @@ import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 
 // 활동
-import ActivityListView from '../pages/activity/ActivityListView.vue';
-import AllActivityDetails from '../pages/activity/AllActivityDetails.vue'
-import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
-import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
+import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
+import ActivityListView from '../pages/esg/ActivityListView.vue'
+import ActivityCampaignListView from '../pages/esg/ActivityCampaignListView.vue'
+import ActivityCampaignDetailView from '../pages/esg/ActivityCampaignDetailView.vue';
 
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'

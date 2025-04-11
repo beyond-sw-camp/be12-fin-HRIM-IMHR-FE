@@ -59,7 +59,13 @@
 
             <td class="border">
               <router-link
-                :to="{ path: `/mosqueDetail/${user.id}`, query: {status: user.status}}"
+                :to="{
+                  path:
+                    user.status === '대기 중'
+                      ? `/permissionSetting/${user.id}`
+                      : `/mosqueDetail/${user.id}`,
+                  query: { status: user.status },
+                }"
               >
                 {{ user.id }}
               </router-link>

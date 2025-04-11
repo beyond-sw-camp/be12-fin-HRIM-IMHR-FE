@@ -12,8 +12,8 @@ import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
 // import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
-import MosqueSearch from '../pages/esg/MosqueSearch.vue';
-import MosqueDetail from '../pages/ESG/MosqueDetail.vue';
+import MosqueSearch from '../pages/Mosque/MosqueSearch.vue';
+import MosqueDetail from '../pages/Mosque/MosqueDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 

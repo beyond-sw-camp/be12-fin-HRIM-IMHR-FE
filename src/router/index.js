@@ -2,18 +2,18 @@ import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 // 로그인 & 인증
 import Login from '../pages/member/Login.vue';
-import FindIdView from '../pages/auth/FindIdView.vue'
-import ResetPasswordView from '../pages/auth/ResetPasswordView.vue'
-import ChangePasswordView from '../pages/auth/ChangePasswordView.vue'
+import FindIdView from '../pages/member/FindIdView.vue'
+import ResetPasswordView from '../pages/member/ResetPasswordView.vue'
+import ChangePasswordView from '../pages/member/ChangePasswordView.vue'
 
 // 회원가입
 import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-import PermissionSetting from '../pages/Mosque/PermissionSetting.vue';
-import MosqueSearch from '../pages/Mosque/MosqueSearch.vue';
-import MosqueDetail from '../pages/Mosque/MosqueDetail.vue';
+import PermissionSetting from '../pages/mosque/PermissionSetting.vue';
+import MosqueSearch from '../pages/mosque/MosqueSearch.vue';
+import MosqueDetail from '../pages/mosque/MosqueDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 
@@ -87,19 +87,19 @@ const routes = [
     meta: { hideLayout: true }
   },
   {
-    path: '/find-id',
+    path: '/findId',
     name: 'findId',
     component: FindIdView,
     meta: { hideLayout: true }
   },
   {
-    path: '/reset-password',
+    path: '/resetPassword',
     name: 'resetPassword',
     component: ResetPasswordView,
     meta: { hideLayout: true }
   },
   {
-    path: '/change-password',
+    path: '/changePassword',
     name: 'changePassword',
     component: ChangePasswordView,
     meta: { hideLayout: true }

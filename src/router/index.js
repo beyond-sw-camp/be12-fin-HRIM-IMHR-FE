@@ -23,6 +23,9 @@ import ActivityList from '../pages/esg/ActivityList.vue'
 import CampaignList from '../pages/esg/CampaignList.vue'
 import CampaignDetail from '../pages/esg/CampaignDetail.vue';
 
+// 교육
+import EducationList from '../pages/esg/EducationList.vue'
+
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'
 import ReportDetailView from '../pages/report/reportDetail.vue'
@@ -31,9 +34,6 @@ import ReportDetailView from '../pages/report/reportDetail.vue'
 import ProductListView from '../pages/product/productList.vue'
 import ProductDetailView from '../pages/product/productDetail.vue'
 import ProductRegistView from '../pages/product/ProductRegist.vue'
-
-// 교육
-import EducationList from '../pages/esg/EducationList.vue'
 
 // 캘린더
 import Calendar from '../pages/Calendar/Calendar.vue';

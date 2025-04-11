@@ -11,10 +11,9 @@ import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
-import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
-import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
-import MosqueDetail from '../pages/member/MosqueDetail.vue';
+// import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
+import MosqueSearch from '../pages/esg/MosqueSearch.vue';
+import MosqueDetail from '../pages/ESG/MosqueDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 
@@ -122,20 +121,15 @@ const routes = [
 
   // 관리자
   {
-    path: '/admin/user_approval/:id',
-    name: 'user_approval',
-    component: AdminUserApprovalView,
-    props: true
+    path: '/mosqueSearch/1',
+    name: 'mosqueSearch',
+    component: MosqueSearch
   },
   {
-    path: '/admin/user-search/1',
-    name: 'adminUserSearch',
-    component: AdminUserSearchView
-  },
-  {
-    path: 'mosqueDetail/1',
+    path: '/mosqueDetail/:id',
     name: 'mosqueDetail',
-    component: MosqueDetail
+    component: MosqueDetail,
+    props: true
   },
 
   // 활동

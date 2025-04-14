@@ -15,6 +15,19 @@ onMounted(async () => {
   console.log(detail.value)
 })
 
+// 승인
+const agree=async()=>{
+  activitySore.agree(idx);
+  window.location.reload();
+}
+
+// 반려
+const oppose=async()=>{
+  activitySore.oppose(idx);
+  // window.location.reload();
+}
+
+
 const router = useRouter();
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
 // manager executive mosque `'${{변수명}}'`
@@ -47,15 +60,13 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <div>
         <span class="font-semibold text-slate-700">첨부파일:</span>
         <div class="flex gap-4 mt-2">
-          <a href="#" class="text-blue-600 hover:underline text-sm"
+          <a :href="detail.fileUrl" class="text-blue-600 hover:underline text-sm"
             >
             <img class="w-[150px]" :src="detail.fileUrl" alt="활동 이미지" />
             
             </a
           >
-          <a href="#" class="text-blue-600 hover:underline text-sm"
-            >파일2.pdf</a
-          >
+
         </div>
       </div>
 
@@ -70,14 +81,14 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       </div>
 
       <!-- 버튼 -->
-      <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
-        <button
+      <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager' && detail.status==='PENDING'">
+        <button @click="agree"
           class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
         >
           승인
         </button>
 
-        <button
+        <button @click="oppose"
           class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
         >
           반려

@@ -31,5 +31,13 @@ export const useActivityStore = defineStore('activity', {
             return response.data.data;
         },
 
+        async agree(idx){
+            const response =await axios("/api/activity/ativityApproval/agree/"+idx);
+        },
+
+        async oppose(idx){
+            const response =await axios("/api/activity/ativityApproval/oppose/"+idx);
+        },
+
     },
 });

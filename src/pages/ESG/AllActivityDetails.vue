@@ -1,6 +1,19 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from "vue-router";
+import { ref,onMounted } from 'vue'
+import { useRouter,useRoute } from "vue-router";
+import { useActivityStore } from '../../stores/useActivityStore';
+
+const activitySore = useActivityStore()
+const route = useRoute();
+const idx = route.params.idx;
+
+const detail = ref({});
+
+onMounted(async () => {
+  console.log(idx);
+  detail.value=await activitySore.detail(idx);
+  console.log(detail.value)
+})
 
 const router = useRouter();
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
@@ -21,13 +34,13 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <!-- 게시자 -->
       <div>
         <span class="font-semibold text-slate-700">게시자:</span>
-        <span class="text-slate-600 ml-2">홍길동</span>
+        <span class="text-slate-600 ml-2">{{ detail.memberName }}</span>
       </div>
 
       <!-- 제목 -->
       <div>
         <span class="font-semibold text-slate-700">제목:</span>
-        <span class="text-slate-600 ml-2">ESG 교육 과정 안내</span>
+        <span class="text-slate-600 ml-2">{{ detail.title }}</span>
       </div>
 
       <!-- 첨부파일 -->
@@ -35,7 +48,10 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
         <span class="font-semibold text-slate-700">첨부파일:</span>
         <div class="flex gap-4 mt-2">
           <a href="#" class="text-blue-600 hover:underline text-sm"
-            >파일1.pdf</a
+            >
+            <img class="w-[150px]" :src="detail.fileUrl" alt="활동 이미지" />
+            
+            </a
           >
           <a href="#" class="text-blue-600 hover:underline text-sm"
             >파일2.pdf</a
@@ -49,7 +65,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
         <div
           class="mt-2 p-4 bg-white border border-slate-200 rounded-md text-slate-600 text-sm leading-relaxed"
         >
-          ESG 교육 과정의 세부 내용이 여기에 표시됩니다.
+          {{ detail.content }}
         </div>
       </div>
 

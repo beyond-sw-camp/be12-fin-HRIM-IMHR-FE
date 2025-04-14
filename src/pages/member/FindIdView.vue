@@ -11,9 +11,9 @@ const form = ref({
   way: '0',
 })
 
-const submit = () => {
+const submit = async () => {
   console.log('입력된 정보:', form.value)
-  const response = memberStore.findId(form)
+  const response = await memberStore.findId(form.value)
   if(response.data.isSuccess)
     alert('이메일 전송 완료!')
 }

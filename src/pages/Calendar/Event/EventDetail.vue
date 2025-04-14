@@ -1,5 +1,6 @@
 <script setup>
 import { X } from 'lucide-vue-next'
+import { ref } from 'vue';
 
 defineProps({
   visible: Boolean,
@@ -7,6 +8,9 @@ defineProps({
 })
 
 defineEmits(['close'])
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <template>
@@ -25,7 +29,7 @@ defineEmits(['close'])
         <div :style="{ color: event.color }"><span class="font-semibold">종료일:</span> {{ event.endDate }}</div>
       </div>
 
-      <div class="flex justify-end gap-2 mt-4">
+      <div class="flex justify-end gap-2 mt-4" v-if="userRole === 'manager'">
         <button @click="$emit('delete-event', event)" class="px-3 py-1 rounded bg-gray-300">
           삭제
         </button>

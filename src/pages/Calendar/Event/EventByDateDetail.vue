@@ -1,3 +1,25 @@
+<script setup>
+import { ref } from "vue";
+import { X } from "lucide-vue-next";
+
+defineProps({
+  visible: Boolean,
+  events: {
+    type: Array,
+    default: () => [],
+  },
+  date: {
+    type: String,
+    default: "",
+  },
+});
+
+defineEmits(["close"]);
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
+</script>
+
 <template>
   <div
     v-if="visible"
@@ -20,10 +42,8 @@
         class="mb-2 p-2 rounded border"
       >
         <div class="font-bold">{{ event.title }}</div>
+        <div class="text-lg text-slate-700">{{ event.content }}</div>
         <div class="text-sm text-gray-500">{{ event.time }}</div>
-        <div class="text-xs" :style="{ color: event.color }">
-          색상: {{ event.color }}
-        </div>
       </div>
 
       <div v-if="!events.length" class="text-gray-400 text-sm">
@@ -33,27 +53,10 @@
       <button
           @click="$emit('add-event', date)"
           class="bg-slate-600 text-white mt-3 px-2 py-1 rounded-lg hover:bg-slate-800"
+          v-if="userRole === 'manager'"
         >
           + 일정 추가
       </button>
     </div>
   </div>
 </template>
-
-<script setup>
-import { X } from "lucide-vue-next";
-
-defineProps({
-  visible: Boolean,
-  events: {
-    type: Array,
-    default: () => [],
-  },
-  date: {
-    type: String,
-    default: "",
-  },
-});
-
-defineEmits(["close"]);
-</script>

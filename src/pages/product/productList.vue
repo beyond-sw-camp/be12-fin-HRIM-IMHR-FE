@@ -70,7 +70,7 @@
     </div>
 
 
-    <router-link to="/productRegist" class="flex justify-end">
+    <router-link :to="{ path: '/productRegist', query: { mode: 'create' } }" class="flex justify-end" v-if="userRole === 'manager'">
       <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">등록</button>
     </router-link>
   </div>
@@ -103,8 +103,10 @@ const filteredProducts = computed(() => {
 const onSearch = () => {
   console.log("검색:", search.value);
 };
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <style scoped>
-/* Tailwind CSS 사용 중 - 별도 스타일 없음 */
 </style>

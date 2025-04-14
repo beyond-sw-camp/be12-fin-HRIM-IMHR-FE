@@ -55,7 +55,7 @@
           @click="terminate"
           class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
         >
-          탈퇴 처리
+          반려
         </button>
       </div>
     </main>

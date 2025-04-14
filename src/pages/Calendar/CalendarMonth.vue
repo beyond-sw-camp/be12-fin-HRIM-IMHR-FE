@@ -1,63 +1,3 @@
-<template>
-  <div class="bg-white mx-auto">
-    <div class="grid grid-cols-7 text-base font-bold overflow-hidden">
-      <div
-        v-for="(day, i) in ['일', '월', '화', '수', '목', '금', '토']"
-        :key="i"
-        class="text-center py-2 border border-neutral-200"
-        :class="{ 'text-red-500': i === 0, 'text-blue-500': i === 6 }"
-      >
-        {{ day }}
-      </div>
-    </div>
-
-    <!-- 날짜 셀 -->
-    <div class="grid grid-cols-7 border-neutral-200">
-      <!-- 날짜 셀 클릭 이벤트 추가 -->
-      <div
-        v-for="(date, index) in calendarDates"
-        :key="index"
-        class="h-32 border border-neutral-200 relative px-2 py-1 cursor-pointer"
-        :class="{
-          'bg-slate-100 text-whiet opacity-50': date.today,
-          'text-zinc-400': date.monthOffset !== 0,
-        }"
-        @click="$emit('date-click', date.fullDate)"
-      >
-        <!-- 날짜 (이벤트 2개 이상이면 동그라미 표시) -->
-
-        <div class="h-6">
-          <span
-            v-if="getEventsForDate(date.fullDate).length > 1"
-            class="inline-flex items-center justify-center w-6 h-6 text-sm font-bold text-zinc-800 bg-violet-100 rounded-full"
-          >
-            {{ date.day }}
-          </span>
-          <span v-else class="text-sm text-zinc-800">
-            {{ date.day }}
-          </span>
-        </div>
-
-        <!-- 이벤트 바 -->
-        <div
-          v-for="event in getEventsForDate(date.fullDate)"
-          :key="event.title + event.time"
-          class="mt-1"
-        >
-          <div
-            class="flex items-center min-w-0 h-6 px-1 rounded-md text-xs font-bold text-white truncate"
-            :style="{ backgroundColor: event.color }"
-          >
-            {{ event.title }} ({{ event.time }})
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { computed } from "vue";
 
@@ -122,3 +62,63 @@ function getEventsForDate(date) {
   return props.events.filter((e) => e.date === date);
 }
 </script>
+
+<template>
+  <div class="bg-white mx-auto">
+    <div class="grid grid-cols-7 text-base font-bold overflow-hidden">
+      <div
+        v-for="(day, i) in ['일', '월', '화', '수', '목', '금', '토']"
+        :key="i"
+        class="text-center py-2 border border-neutral-200"
+        :class="{ 'text-red-500': i === 0, 'text-blue-500': i === 6 }"
+      >
+        {{ day }}
+      </div>
+    </div>
+
+    <!-- 날짜 셀 -->
+    <div class="grid grid-cols-7 border-neutral-200">
+      <!-- 날짜 셀 클릭 이벤트 추가 -->
+      <div
+        v-for="(date, index) in calendarDates"
+        :key="index"
+        class="h-32 border border-neutral-200 relative px-2 py-1 cursor-pointer"
+        :class="{
+          'bg-slate-100 text-whiet opacity-50': date.today,
+          'text-zinc-400': date.monthOffset !== 0,
+        }"
+        @click="$emit('date-click', date.fullDate)"
+      >
+        <!-- 날짜 (이벤트 5개 이상이면 동그라미 표시) -->
+
+        <div class="h-6">
+          <span
+            v-if="getEventsForDate(date.fullDate).length > 4"
+            class="inline-flex items-center justify-center w-6 h-6 text-sm font-bold text-zinc-800 bg-violet-100 rounded-full"
+          >
+            {{ date.day }}
+          </span>
+          <span v-else class="text-sm text-zinc-800">
+            {{ date.day }}
+          </span>
+        </div>
+
+        <!-- 이벤트 바 -->
+        <div
+          v-for="event in getEventsForDate(date.fullDate)"
+          :key="event.title + event.time"
+          class="mt-1"
+        >
+          <div
+            class="flex items-center min-w-0 h-6 px-1 rounded-md text-xs font-bold text-white truncate"
+            :style="{ backgroundColor: event.color }"
+          >
+            {{ event.title }} ({{ event.time }})
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</template>

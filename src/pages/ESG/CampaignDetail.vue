@@ -55,7 +55,7 @@
       </table>
     </div>
 
-    <div class="flex justify-end gap-3 pt-4">
+    <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
       <button 
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
       >
@@ -92,4 +92,7 @@ const users = ref([
   { id: "test1", name: "test1" },
   { id: "test", name: "test" },
 ]);
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

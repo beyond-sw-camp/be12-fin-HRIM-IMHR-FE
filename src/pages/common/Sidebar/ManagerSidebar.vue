@@ -5,15 +5,16 @@ const props = defineProps({
 
 const menuItems = [
   { path: "/partner/1", label: "기업 ESG 현황" },
-  { path: "/dashboard/1", label: "부서 ESG 현황" },
-  { path: "/educationList/1", label: "ESG 교육 활동" },
-  { path: "/activity/1", label: "ESG 기타 활동" },
-  { path: "/admin/campaign-list/1", label: "ESG 사내 캠페인 활동" },
-  { path: "/productList/1", label: "친환경 제품" },
-  { path: "/reportsList/1", label: "사원 리포트" },
-  { path: "/partnerList/1", label: "협력사" },
-  { path: "/admin/user-search/1", label: "피드백" },
-  { path: "/calendar/1", label: "캘린더" },
+  // { path: '/dashboard', label: '부서서 ESG 현황' },
+  { path: "/educationList/1", label: "ESG 교육 활동 관리" },
+  { path: "/activityList/1", label: "ESG 기타 활동 관리" },
+  { path: "/campaignlist/1", label: "ESG 사내 캠페인 관리" },
+  { path: "/productList/1", label: "친환경 제품 관리" },
+  { path: "/partnerList/1", label: "협력사 관리" },
+  { path: "/mosqueSearch/1", label: "사원 관리" },
+  { path: "/calendar/1", label: "캘린더 관리" },
+  { path: "/departmentSetting/1", label: "부서 설정" },
+  { path: "/feedbackForm/1", label: "피드백 설정" },
 ];
 </script>
 

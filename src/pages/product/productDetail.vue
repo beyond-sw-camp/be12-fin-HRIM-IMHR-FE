@@ -58,8 +58,8 @@
       </div>
     </div>
 
-    <div class="flex justify-end gap-3 pt-4">
-      <router-link to="/productRegist"
+    <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
+      <router-link :to="{ path: '/productRegist', query: { mode: 'edit' } }"
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
       >
         수정
@@ -75,7 +75,10 @@
 </template>
 
 <script setup>
-// 필요 시 로직 추가 가능
+import { ref } from 'vue';
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <style scoped>

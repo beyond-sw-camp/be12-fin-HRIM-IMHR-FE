@@ -1,27 +1,30 @@
 import { createWebHistory, createRouter } from 'vue-router';
 // import { useMemberStore } from '../stores/useMemberStore';
 // 로그인 & 인증
-import AdminLoginView from '../pages/admin/AdminLoginView.vue'
-import FindIdView from '../pages/auth/FindIdView.vue'
-import ResetPasswordView from '../pages/auth/ResetPasswordView.vue'
-import ChangePasswordView from '../pages/auth/ChangePasswordView.vue'
+import Login from '../pages/member/Login.vue';
+import FindIdView from '../pages/member/FindIdView.vue'
+import ResetPasswordView from '../pages/member/ResetPasswordView.vue'
+import ChangePasswordView from '../pages/member/ChangePasswordView.vue'
 
 // 회원가입
-import CompanyRegisterView from '../pages/register/CompanyRegisterView.vue'
-import EmployeeRegisterView from '../pages/register/EmployeeRegisterView.vue'
+import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
+import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-import AdminUserApprovalView from '../pages/admin/AdminUserApprovalView.vue'
-import AdminUserSearchView from '../pages/admin/AdminUserSearchView.vue'
-import AdminPermissionTransferView from '../pages/admin/AdminPermissionTransferView.vue'
-import Setting from '../pages/admin/Setting.vue'
+import PermissionSetting from '../pages/mosque/PermissionSetting.vue';
+import MosqueSearch from '../pages/mosque/MosqueSearch.vue';
+import MosqueDetail from '../pages/mosque/MosqueDetail.vue';
+import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 
 // 활동
-import ActivityListView from '../pages/activity/ActivityListView.vue';
-import AllActivityDetails from '../pages/activity/AllActivityDetails.vue'
-import ActivityCampaignListView from '../pages/activity/ActivityCampaignListView.vue';
-import ActivityCampaignDetailView from '../pages/activity/ActivityCampaignDetailView.vue';
+import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
+import ActivityList from '../pages/esg/ActivityList.vue'
+import CampaignList from '../pages/esg/CampaignList.vue'
+import CampaignDetail from '../pages/esg/CampaignDetail.vue';
+
+// 교육
+import EducationList from '../pages/esg/EducationList.vue'
 
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'
@@ -32,35 +35,33 @@ import ProductListView from '../pages/product/productList.vue'
 import ProductDetailView from '../pages/product/productDetail.vue'
 import ProductRegistView from '../pages/product/ProductRegist.vue'
 
-// 교육
-import ESGEducationListpage from '../pages/ESG/ESGEducationListpage.vue';
-
 // 캘린더
 import Calendar from '../pages/Calendar/Calendar.vue';
 
 import DashboardView from '../pages/dashboard/Dashboard.vue';
-import PartnerDashboardView from '../pages/dashboard/PartnerDashboard.vue';
-import PartnerListView from '../pages/partner/PartnerList.vue';
-
-// 마이페이지
-import FeedbackFormView from '../pages/feedback/FeedbackForm.vue';
+import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
+import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 피드백
+import FeedbackForm from '../pages/feedback/FeedbackDetail.vue';
+import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
+
 import MyPageView from '../pages/mypage/MyPageView.vue';
-
-
-// const checkLogin = async (from, to, next) => {
-//   const memberStore = useMemberStore();
-//   // await memberStore.loginCheck();
-//   if(memberStore.isLogin) {
-//     return next();
-//   }
-
-//   next("/login");
-// }
-
 const routes = [
-  { path: '/', redirect: '/dashboard' },
+  {
+    path: '/',
+    name: 'homeRedirect',
+    beforeEnter: (to, from, next) => {
+      const companyId = 1;
+      // getUserCompanyIdSomehow(); // 예: store 또는 localStorage 등 
+      if (companyId) {
+        next(`/partner/${companyId}`);
+      } else {
+        next(`/partner/${companyId}`)
+        // next('/login'); // 로그인 안됐으면 로그인으로
+      }
+    }
+  },
   {
     path: '/dashboard/1',
     name: 'dashboard',
@@ -69,24 +70,24 @@ const routes = [
   // 로그인 & 인증 (레이아웃 없이)
   {
     path: '/login',
-    name: 'adminLogin',
-    component: AdminLoginView,
+    name: 'login',
+    component: Login,
     meta: { hideLayout: true }
   },
   {
-    path: '/find-id',
+    path: '/findId',
     name: 'findId',
     component: FindIdView,
     meta: { hideLayout: true }
   },
   {
-    path: '/reset-password',
+    path: '/resetPassword',
     name: 'resetPassword',
     component: ResetPasswordView,
     meta: { hideLayout: true }
   },
   {
-    path: '/change-password',
+    path: '/changePassword',
     name: 'changePassword',
     component: ChangePasswordView,
     meta: { hideLayout: true }
@@ -94,13 +95,13 @@ const routes = [
 
   // 회원가입 (레이아웃 없이)
   {
-    path: '/register/company',
+    path: '/companySignup',
     name: 'companyRegister',
     component: CompanyRegisterView,
     meta: { hideLayout: true }
   },
   {
-    path: '/register/employee',
+    path: '/employeeSignup',
     name: 'employeeRegister',
     component: EmployeeRegisterView,
     meta: { hideLayout: true }
@@ -108,26 +109,28 @@ const routes = [
 
   // 관리자
   {
-    path: '/admin/user-approval',
-    name: 'adminUserApproval',
-    component: AdminUserApprovalView
+    path: '/mosqueSearch/1',
+    name: 'mosqueSearch',
+    component: MosqueSearch
   },
   {
-    path: '/admin/user-search/1',
-    name: 'adminUserSearch',
-    component: AdminUserSearchView
+    path: '/mosqueDetail/:id',
+    name: 'mosqueDetail',
+    component: MosqueDetail,
+    props: true
   },
   {
-    path: '/admin/user-permission',
-    name: 'adminUserPermission',
-    component: AdminPermissionTransferView
+    path: '/permissionSetting/:id',
+    name: 'permissionSetting',
+    component: PermissionSetting,
+    props: true
   },
 
   // 활동
   {
-    path: '/activity/1',
+    path: '/activityList',
     name: 'ActivityList',
-    component: ActivityListView
+    component: ActivityList
   },
   {
     path: '/activeDetails/1',
@@ -135,14 +138,14 @@ const routes = [
     component: AllActivityDetails
   },
   {
-    path: '/admin/campaign-list/1',
-    name: 'ActivityCampaignList',
-    component: ActivityCampaignListView
+    path: '/campaignlist/1',
+    name: 'activityCampaignList',
+    component: CampaignList
   },
   {
-    path: '/admin/campaign-detail',
-    name: 'ActivityCampaignDetail',
-    component: ActivityCampaignDetailView
+    path: '/campaigndetail/1',
+    name: 'activityCampaignDetail',
+    component: CampaignDetail
   },
 
   // 보고서
@@ -171,8 +174,8 @@ const routes = [
   // 교육
   {
     path: '/educationList/1',
-    name: 'eSGEducationListpage',
-    component: ESGEducationListpage
+    name: 'EducationList',
+    component: EducationList
   },
 
   // 캘린더
@@ -198,21 +201,30 @@ const routes = [
   // 파트너 회사 대시보드
   {
     path: '/partner/1',
-    name: 'partner',
-    component: PartnerDashboardView
+    name: 'partnerDashboard',
+    component: PartnerDashboard,
+    props: true
   },
-  // 회사 ESG 갱신 주기 설정
+  // 부서 주기 설정
   {
-    path: '/setting/1',
-    name: 'setting',
-    component: Setting
+    path: '/departmentSetting/1',
+    name: 'DepartmentSetting',
+    component: DepartmentSetting
   },
   // 피드백 양식 관리
   {
     path: '/feedbackForm/1',
     name: 'feedbackForm',
-    component: FeedbackFormView
+    component: FeedbackForm,
   },
+  //피드백 작성
+  {
+    path: '/feedback/:id',
+    name: 'feedbackDetail',
+    component: FeedbackDetail,
+    props: true
+  },
+
   // 친환경 제품 등록
   {
     path: '/productRegist',

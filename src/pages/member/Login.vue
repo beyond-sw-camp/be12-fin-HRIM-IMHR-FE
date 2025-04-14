@@ -12,17 +12,17 @@ const form = ref({
   way: '',
 });
 
-const goToFindId = () => router.push("/find-id");
-const goToResetPassword = () => router.push("/change-password"); // ✅ 수정된 경로
-const goToCompanyRegister = () => router.push("/register/company");
-const goToEmployeeRegister = () => router.push("/register/employee");
+const goToFindId = () => router.push("/findId");
+const goToResetPassword = () => router.push("/resetPassword");
+const goToCompanyRegister = () => router.push("/companySignup");
+const goToEmployeeRegister = () => router.push("/employeeSignup");
 
 const login = async () => {
   console.log("login clicked")
   const response = await memberStore.login(form.value);
   console.log(response);
   if (response.status == 200) {
-    router.push("/dashboard")
+    router.push("/")
   } else {
     alert("계정이 존재하지 않거나 비밀번호가 틀렸습니다.")
   }

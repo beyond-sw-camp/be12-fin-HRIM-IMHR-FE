@@ -10,6 +10,7 @@ const user = ref({
   name: '홍길동',
   email: 'test_id@gmail.com',
   company: '삼성',
+  department: '회계',
 })
 
 const activities = ref([
@@ -38,10 +39,14 @@ const goToActivityDetail = () => router.push('/activity/all')
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) currentPage.value = page
 }
+
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <template>
-  <div class="flex h-screen bg-gray-50 text-slate-800">
+  <div class="flex h-screen bg-gray-50 text-slate-800" v-if="userRole !== 'manager'">
     <!-- ✅ 좌측 유저 영역 -->
     <aside class="w-72 bg-white border-r border-gray-200 p-6 flex flex-col items-center">
       <h2 class="text-xl font-bold mb-6">마이페이지</h2>
@@ -57,6 +62,7 @@ const goToPage = (page) => {
         <div class="text-lg font-semibold">{{ user.name }}</div>
         <div class="text-sm text-gray-600">{{ user.email }}</div>
         <div class="text-sm text-gray-400">{{ user.company }}</div>
+        <div class="text-sm text-gray-400">{{ user.department }}</div>
       </div>
 
       <!-- 버튼 -->
@@ -133,5 +139,39 @@ const goToPage = (page) => {
         </button>
       </div>
     </main>
+  </div>
+
+  <div v-if="userRole === 'manager'">
+    <aside class="w-72 bg-white p-6 flex flex-col items-center">
+      <h2 class="text-4xl font-bold mb-6">마이페이지</h2>
+
+      <!-- 유저 아바타 -->
+      <div
+          class="w-20 h-20 rounded-full bg-yellow-400 text-white text-xl font-bold flex items-center justify-center mb-4">
+        홈
+      </div>
+
+      <!-- 유저 정보 -->
+      <div class="text-center mb-6 space-y-1">
+        <div class="text-lg font-semibold">{{ user.name }}</div>
+        <div class="text-sm text-gray-600">{{ user.email }}</div>
+        <div class="text-sm text-gray-400">{{ user.company }}</div>
+      </div>
+
+      <!-- 버튼 -->
+      <button
+          @click="goToChangePassword"
+          class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 text-sm font-semibold mb-3 transition"
+      >
+        비밀번호 재설정
+      </button>
+
+      <button
+          @click="logout"
+          class="text-sm text-slate-700 hover:underline transition"
+      >
+        ⎋ 로그아웃
+      </button>
+    </aside>
   </div>
 </template>

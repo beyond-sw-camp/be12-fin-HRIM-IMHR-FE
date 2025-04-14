@@ -2,13 +2,12 @@
 import { defineEmits } from 'vue'
 import { useMemberStore } from '../../stores/useMemberStore'
 import { useRouter } from 'vue-router'
-import { Menu  } from 'lucide-vue-next'
-import { Bell } from 'lucide-vue-next'
+import { Menu, Bell } from 'lucide-vue-next'
 
-const emit = defineEmits(['toggle-sidebar'])
 const memberStore = useMemberStore();
+const emit = defineEmits(['toggle-sidebar', 'toggle-noti']);
 
-const router = useRouter()
+const router = useRouter();
 
 const handleLogout = async () => {
   await memberStore.logout();
@@ -19,28 +18,37 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <header class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-50">
+  <header
+    class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-20"
+  >
     <div class="flex items-center gap-3">
-      <router-link to="/" class="text-slate-800 font-bold text-2xl md:text-5xl ml-2 mb-1">IMHR</router-link>
+      <router-link
+        to="/"
+        class="text-slate-800 font-bold text-2xl md:text-5xl ml-2 mb-1"
+        >IMHR</router-link
+      >
 
       <button
         @click="emit('toggle-sidebar')"
         class="p-3 rounded hover:bg-slate-100 transition"
         aria-label="사이드바 열기"
       >
-        <Menu class="w-11 h-11 text-slate-800 mt-0.5"/>
+        <Menu class="w-11 h-11 text-slate-800 mt-0.5" />
       </button>
     </div>
 
     <!-- 🔹 오른쪽 사용자 영역 -->
     <div class="flex items-center gap-4 ml-auto mr-2 mb-1">
-      <router-link to="/mypage" class="text-slate-700 text-base md:text-3xl font-medium hover:underline mr-2 font-semibold">
+      <router-link
+        to="/mypage"
+        class="text-slate-700 text-base md:text-3xl font-medium hover:underline mr-2 font-semibold"
+      >
         홍길동
       </router-link>
 
-      <router-link to="/notifications" class="mr-2">
-        <Bell class="w-7 h-7 text-slate-800 hover:opacity-80 transition"/>
-      </router-link>
+      <button @click="$emit('toggle-noti')" class="relative">
+        <Bell class="w-7 h-7 text-slate-800 hover:opacity-80 transition" />
+      </button>
 
       <!-- 로그아웃 버튼 -->
       <button

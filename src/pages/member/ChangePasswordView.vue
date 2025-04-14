@@ -1,20 +1,35 @@
 <script setup>
 import { ref } from 'vue'
 import LogoSection from '../common/LogoSection.vue'
+import { useMemberStore } from '../../stores/useMemberStore'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+const memberStore = useMemberStore()
 
 const form = ref({
-  password: '',
-  confirmPassword: ''
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+  uuid: route.params.uuid
 })
 
-const changePassword = () => {
-  if (form.value.password !== form.value.confirmPassword) {
+const uuid_present = ref(true);
+if(form.value.uuid == null) uuid_present.value = false;
+
+const changePassword = async () => {
+  if (form.value.newPassword !== form.value.confirmPassword) {
     alert('비밀번호가 일치하지 않습니다.')
     return
   }
 
   console.log('비밀번호 변경:', form.value.password)
-  alert('비밀번호가 성공적으로 변경되었습니다.')
+  const response = await memberStore.changePW(form.value)
+  if(response.data.isSuccess) {
+    alert('비밀번호가 성공적으로 변경되었습니다.')
+    router.push("/login")
+  }
 }
 </script>
 
@@ -29,9 +44,14 @@ const changePassword = () => {
         <h2 class="text-xl font-semibold text-center mb-6">비밀번호 재설정</h2>
 
         <form @submit.prevent="changePassword" class="space-y-4">
+          <div v-if="!uuid_present">
+            <label class="text-sm text-gray-700 block mb-1">이전 비밀번호</label>
+            <input v-model="form.oldPassword" type="password" placeholder="이전 비밀번호"
+                   class="input" />
+          </div>
           <div>
             <label class="text-sm text-gray-700 block mb-1">새 비밀번호</label>
-            <input v-model="form.password" type="password" placeholder="새로운 비밀번호"
+            <input v-model="form.newPassword" type="password" placeholder="새로운 비밀번호"
                    class="input" />
             <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인"
                    class="input mt-2" />

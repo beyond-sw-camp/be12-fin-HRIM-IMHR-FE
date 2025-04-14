@@ -92,6 +92,12 @@ const routes = [
     component: ChangePasswordView,
     meta: { hideLayout: true }
   },
+  {
+    path: '/changePassword/:uuid',
+    name: 'changePasswordUuid',
+    component: ChangePasswordView,
+    meta: { hideLayout: true }
+  },
 
   // 회원가입 (레이아웃 없이)
   {

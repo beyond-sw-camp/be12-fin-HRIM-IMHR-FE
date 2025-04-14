@@ -10,6 +10,7 @@ const router = useRouter();
 const form = ref({
   name: '',
   memberId: '',
+  email: '',
   password: '',
   confirmPassword: '',
   companyName: '',
@@ -65,9 +66,10 @@ const submit = async () => {
         <h2 class="text-xl font-semibold text-center mb-6">관리자 회원 가입</h2>
 
         <form @submit.prevent="submit" class="space-y-3">
-          <input v-model="form.name" type="text" placeholder="이름" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
-          <input v-model="form.memberId" type="text" placeholder="아이디" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
-          <input v-model="form.password" type="password" placeholder="비밀번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.name" type="text" placeholder="초기 관리자 이름" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.memberId" type="text" placeholder="초기 관리자 아이디" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.email" type="email" placeholder="초기 관리자 이메일" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
+          <input v-model="form.password" type="password" placeholder="초기 관리자 비밀번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
           <input v-model="form.confirmPassword" type="password" placeholder="비밀번호 확인" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
           <input v-model="form.companyName" type="text" placeholder="회사명" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />
           <input v-model="form.registrationNumber" type="text" placeholder="사업자 등록 번호" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-slate-500" />

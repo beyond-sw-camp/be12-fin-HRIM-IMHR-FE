@@ -1,15 +1,21 @@
 <script setup>
 import { ref } from 'vue'
 import LogoSection from '../common/LogoSection.vue'
+import { useMemberStore } from '../../stores/useMemberStore'
+
+const memberStore = useMemberStore();
 
 const form = ref({
   name: '',
-  email: ''
+  email: '',
+  way: '0',
 })
 
 const submit = () => {
   console.log('입력된 정보:', form.value)
-  alert('이메일 인증 요청 전송 완료!')
+  const response = memberStore.findId(form)
+  if(response.data.isSuccess)
+    alert('이메일 전송 완료!')
 }
 </script>
 
@@ -26,10 +32,26 @@ const submit = () => {
         <form @submit.prevent="submit" class="space-y-4">
           <input v-model="form.name" type="text" placeholder="이름" class="input" />
           <input v-model="form.email" type="email" placeholder="이메일" class="input" />
-
+          <div class="flex items-center space-x-4 mb-4 text-sm text-gray-700">
+            <label class="flex items-center">
+              <input
+                type="radio"
+                name="role"
+                value="0"
+                checked
+                class="mr-1"
+                v-model="form.way"
+              />
+              관리자
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="role" value="1" class="mr-1" v-model="form.way"/>
+              임직원
+            </label>
+          </div>
           <button type="submit"
                   class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition">
-            이메일 인증 요청
+            이메일 전송 요청
           </button>
         </form>
 

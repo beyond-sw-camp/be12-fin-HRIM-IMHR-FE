@@ -10,10 +10,15 @@ const emit = defineEmits(['toggle-sidebar', 'toggle-noti']);
 const router = useRouter();
 
 const handleLogout = async () => {
-  await memberStore.logout();
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('userInfo')
-  router.push('/login')
+  try{
+    await memberStore.logout();
+  } catch(e) {
+    console.log(e)
+  } finally{
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('userInfo')
+    router.push('/login')
+  }  
 }
 </script>
 

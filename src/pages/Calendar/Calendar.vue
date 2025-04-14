@@ -3,7 +3,8 @@ import { ref } from "vue";
 import CalendarHeader from "./CalendarHeader.vue";
 import CalendarMonth from "./CalendarMonth.vue";
 import AddEvent from "./Event/AddEvent.vue";
-import EventDetail from "./Event/EventByDateDetail.vue";
+import EventByDateDetail from "./Event/EventByDateDetail.vue";
+import EventDetail from "./Event/EventDetail.vue";
 
 const today = new Date();
 const year = ref(today.getFullYear());
@@ -14,6 +15,13 @@ const showAddModal = ref(false);
 const showDetailModal = ref(false);
 const selectedDate = ref(null);
 const selectedEvents = ref([]);
+const selectedEvent = ref(null);
+const showEventInfoModal = ref(false);
+
+function handleEventClick(event) {
+  selectedEvent.value = event;
+  showEventInfoModal.value = true;
+}
 
 function handleDateClick(date) {
   const foundEvents = events.value.filter((e) => {
@@ -50,19 +58,19 @@ function handleAddEvent(event) {
   events.value.push(...newEvents);
 
   if (selectedDate.value) {
-  const dateObj = new Date(selectedDate.value)
-  selectedEvents.value = events.value.filter((e) => {
-    const start = new Date(e.startDate)
-    const end = new Date(e.endDate)
-    return dateObj >= start && dateObj <= end
-  })
-}
+    const dateObj = new Date(selectedDate.value);
+    selectedEvents.value = events.value.filter((e) => {
+      const start = new Date(e.startDate);
+      const end = new Date(e.endDate);
+      return dateObj >= start && dateObj <= end;
+    });
+  }
 }
 
 function openAddEvent(date = null) {
   // date가 없으면 오늘 날짜로
-  selectedDate.value = date || new Date().toISOString().split("T")[0]
-  showAddModal.value = true
+  selectedDate.value = date || new Date().toISOString().split("T")[0];
+  showAddModal.value = true;
 }
 
 function prevMonth() {
@@ -112,12 +120,19 @@ function nextMonth() {
       @save="handleAddEvent"
     />
 
-    <EventDetail
+    <EventByDateDetail
       :visible="showDetailModal"
       :date="selectedDate"
       :events="events.filter((e) => e.date === selectedDate)"
       @close="showDetailModal = false"
       @add-event="openAddEvent"
+      @event-click="handleEventClick"
+    />
+
+    <EventDetail
+      :visible="showEventInfoModal"
+      :event="selectedEvent"
+      @close="showEventInfoModal = false"
     />
   </div>
 </template>

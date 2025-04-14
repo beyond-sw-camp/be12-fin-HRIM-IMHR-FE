@@ -40,6 +40,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
         v-for="event in events"
         :key="event.title + event.time"
         class="mb-2 p-2 rounded border"
+        @click="$emit('event-click', event)"
       >
         <div class="font-bold">{{ event.title }}</div>
         <div class="text-lg text-slate-700">{{ event.content }}</div>

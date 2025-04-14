@@ -18,7 +18,7 @@ const route = useRoute();
 const hideLayout = computed(() => route.meta?.hideLayout === true);
 
 const role = ref(
-  JSON.parse(localStorage.getItem("userInfo"))?.role || "executive"
+  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
 );
 
 const sidebarComponent = computed(() => {

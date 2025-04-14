@@ -7,12 +7,13 @@ const emit = defineEmits(['close', 'save'])
 const props = defineProps({
   visible: Boolean,
   date: String,
+  event: Object,
 })
 
 const initialForm = {
   title: '',
   time: '',
-  contetnt: '',
+  content: '',
   startDate: '',
   endDate: '',
   color: '#f87171',
@@ -20,7 +21,7 @@ const initialForm = {
 
 const form = ref({ ...initialForm })
 
-function resetForm() {
+const resetForm = () => {
   form.value = {
     ...initialForm,
     startDate: props.date || '',
@@ -30,15 +31,26 @@ function resetForm() {
 
 watch(() => props.visible, (newVal) => {
   if (newVal) {
-    resetForm()
-  }
-})
+      form.value = {
+        title: props.event?.title || '',
+        time: props.event?.time || '',
+        content: props.event?.content || '',
+        color: props.event?.color || '#f87171',
+        startDate: props.event?.startDate || props.date || '',
+        endDate: props.event?.endDate || props.date || '',
+      }
+    } else {
+      resetForm()
+    }
+  },
+  { immediate: true }
+);
 
 const colorOptions = [
   '#f87171', '#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#a3a3a3', '#64748b', '#000000',
 ]
 
-function submitEvent() {
+function save() {
   if (!form.value.title || !form.value.startDate || !form.value.endDate) return
   emit('save', { ...form.value })
   emit('close')
@@ -54,7 +66,7 @@ function submitEvent() {
         <X class="w-5 h-5" />
       </button>
 
-      <h2 class="text-lg font-bold mb-3">일정 추가</h2>
+      <h2 class="text-lg font-bold mb-3">{{ props.event ? '일정 수정' : '일정 추가' }}</h2>
 
       <div class="space-y-3">
         <input v-model="form.title" placeholder="제목" class="w-full border px-2 py-1 rounded" />
@@ -78,7 +90,9 @@ function submitEvent() {
 
       <div class="flex justify-end gap-2 mt-4">
         <button @click="$emit('close')" class="px-3 py-1 rounded bg-gray-300">취소</button>
-        <button @click="submitEvent" class="px-3 py-1 rounded bg-slate-500 text-white">저장</button>
+        <button @click="save" class="px-3 py-1 rounded bg-slate-600 text-white">
+          {{ props.event ? '수정 완료' : '추가' }}
+        </button>
       </div>
     </div>
   </div>

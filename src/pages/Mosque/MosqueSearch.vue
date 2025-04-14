@@ -1,3 +1,29 @@
+<script setup>
+import { ref, computed } from "vue";
+
+const searchText = ref("");
+
+const users = ref([
+  { order: 7, status: "대기 중", id: "test7", name: "test7" },
+  { order: 6, status: "대기 중", id: "test6", name: "test6" },
+  { order: 5, status: "승인 반려", id: "test5", name: "test5" },
+  { order: 4, status: "승인", id: "test4", name: "test4" },
+  { order: 3, status: "승인", id: "test3", name: "test3" },
+  { order: 2, status: "승인", id: "test2", name: "test2" },
+  { order: 1, status: "승인", id: "test1", name: "test1" },
+]);
+
+const filteredUsers = computed(() => {
+  return users.value.filter((u) => u.id.includes(searchText.value));
+});
+
+const searchUser = () => {
+  console.log(`검색: ${searchText.value}`);
+};
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive');
+</script>
+
 <template>
   <div class="bg-gray-50 min-h-screen p-10">
     <h1 class="text-4xl font-bold text-center text-slate-800 mb-10">사원 관리</h1>
@@ -71,29 +97,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, computed } from "vue";
-
-const searchText = ref("");
-
-const users = ref([
-  { order: 7, status: "대기 중", id: "test7", name: "test7" },
-  { order: 6, status: "대기 중", id: "test6", name: "test6" },
-  { order: 5, status: "승인 반려", id: "test5", name: "test5" },
-  { order: 4, status: "승인", id: "test4", name: "test4" },
-  { order: 3, status: "승인", id: "test3", name: "test3" },
-  { order: 2, status: "승인", id: "test2", name: "test2" },
-  { order: 1, status: "승인", id: "test1", name: "test1" },
-]);
-
-const filteredUsers = computed(() => {
-  return users.value.filter((u) => u.id.includes(searchText.value));
-});
-
-const searchUser = () => {
-  console.log(`검색: ${searchText.value}`);
-};
-
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive');
-</script>

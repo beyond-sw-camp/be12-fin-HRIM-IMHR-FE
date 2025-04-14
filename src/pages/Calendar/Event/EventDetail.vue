@@ -1,4 +1,3 @@
-<!-- EventInfoModal.vue -->
 <script setup>
 import { X } from 'lucide-vue-next'
 
@@ -11,7 +10,7 @@ defineEmits(['close'])
 </script>
 
 <template>
-  <div v-if="visible" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div v-if="visible" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-40">
     <div class="bg-white rounded-xl w-[400px] p-4 relative">
       <button class="absolute top-3 right-3 text-gray-500" @click="$emit('close')">
         <X class="w-5 h-5" />
@@ -24,6 +23,16 @@ defineEmits(['close'])
         <div><span class="font-semibold">내용:</span> {{ event.content }}</div>
         <div :style="{ color: event.color }"><span class="font-semibold">시작일:</span> {{ event.startDate }}</div>
         <div :style="{ color: event.color }"><span class="font-semibold">종료일:</span> {{ event.endDate }}</div>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button @click="$emit('delete-event', event)" class="px-3 py-1 rounded bg-gray-300">
+          삭제
+        </button>
+
+        <button @click="$emit('add-event', event)" class="px-3 py-1 rounded bg-slate-500 text-white">
+          수정
+        </button>
       </div>
     </div>
   </div>

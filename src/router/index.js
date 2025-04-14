@@ -133,7 +133,7 @@ const routes = [
     component: ActivityList
   },
   {
-    path: '/activeDetails/1',
+    path: '/activeDetails/:idx',
     name: 'allActivityDetails',
     component: AllActivityDetails
   },

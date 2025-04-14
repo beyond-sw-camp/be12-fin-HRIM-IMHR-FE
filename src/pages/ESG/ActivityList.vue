@@ -28,7 +28,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="activity in activitySore.activityList" :key="activity.activityIdx" class="border-b hover:bg-slate-50 transition">
+          <tr v-for="activity in activitySore.activityList" :key="activity.activityIdx"
+            class="border-b hover:bg-slate-50 transition">
 
             <td class="py-2">
               <span class="text-white text-xs px-3 py-1 rounded-md inline-block" :class="{
@@ -40,7 +41,7 @@
               </span>
             </td>
 
-            <td>{{activity.memberName}} ({{ activity.memberId }})</td>
+            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
 
             <td>{{ activity.topic }}</td>
             <router-link :to="`/activeDetails/${activity.activityIdx}`">
@@ -93,10 +94,10 @@
           <option>봉사</option>
           <option>기부</option>
         </select>
-        
+
       </div>
-      
-      
+
+
 
       <div v-if="previewImage" class="relative inline-block my-2">
         <!-- 닫기 버튼 -->
@@ -115,24 +116,25 @@
           class="border border-gray-300 rounded-md px-4 py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
         <input type="file" ref="fileInput" accept="image/jpg, image/jpeg, image/png" name="file"
           @change="handleFileUpload" class="border border-gray-300 rounded-md px-4 py-2" />
-        
+
       </div>
 
       <div class="my-2">
-        <textarea placeholder="내용 입력" name="description" class="w-full h-[100px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"></textarea>
+        <textarea placeholder="내용 입력" name="description"
+          class="w-full h-[150px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"></textarea>
       </div>
 
       <button type="button" @click="submit"
-          class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition ml-auto w-[123px]">
-          승인 요청
-        </button>
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition ml-auto w-[123px]">
+        승인 요청
+      </button>
     </form>
 
   </div>
 </template>
 
 <script setup>
-import { ref, computed,onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Search } from "lucide-vue-next";
 import { useActivityStore } from '../../stores/useActivityStore';
 
@@ -177,7 +179,7 @@ const newActivity = ref({ topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {
-  const response = await activitySore.list((currentPage.value-1), perPage);
+  const response = await activitySore.list((currentPage.value - 1), perPage);
   // 여기에 후속 처리 코드도 작성 가능
 })
 
@@ -216,10 +218,10 @@ const previewImageClose = () => {
 const submit = async () => {
   let formData = new FormData(formRef.value);
 
-  
 
-  if (!formData.get('description')) {
-    alert("내용일 입력하여 주십시오.")
+
+  if (!formData.get('title')) {
+    alert("제목을 입력하여 주십시오.")
   }
   else if (!newActivity.value.topic) {
     alert("주제를 선택하여 주십시오.")
@@ -228,9 +230,12 @@ const submit = async () => {
     alert("활동 시간이나 금액을 입력하여 주십시오.")
   } else if (file.value === null) {
     alert("파일을 첨부하여 주십시오.")
+  } else if (!formData.get('description')) {
+    alert("내용을 입력하여 주십시오.")
   } else {
     const dto = {
       type: newActivity.value.topic,
+      title: formData.get("title"),
       description: formData.get("description"),
       performance: formData.get('performance')
     };
@@ -239,7 +244,7 @@ const submit = async () => {
     formData = new FormData();
     formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
 
-    formData.append("file",file.value);
+    formData.append("file", file.value);
 
     const response = await activitySore.regist(formData);
   }

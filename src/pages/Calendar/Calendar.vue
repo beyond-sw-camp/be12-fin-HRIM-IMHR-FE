@@ -1,48 +1,9 @@
-<template>
-  <div class="w-full min-h-screen bg-white px-2 sm:px-10 md:px-20 pt-5">
-    <div
-      class="max-w-screen-xl mx-auto rounded-xl border border-gray-200 p-4 shadow-m"
-    >
-      <CalendarHeader
-        :year="year"
-        :month="month"
-        @prev="prevMonth"
-        @next="nextMonth"
-        @open-add="openAddEvent()"
-      />
-
-      <CalendarMonth
-        :year="year"
-        :month="month"
-        :events="events"
-        @date-click="handleDateClick"
-      />
-    </div>
-
-    <AddEvent
-      :visible="showAddModal"
-      :date="selectedDate"
-      @close="showAddModal = false"
-      @save="handleAddEvent"
-    />
-
-    <EventDetail
-      :visible="showDetailModal"
-      :date="selectedDate"
-      :events="events.filter((e) => e.date === selectedDate)"
-      @close="showDetailModal = false"
-      @add-event="openAddEvent"
-    />
-  </div>
-</template>
-
-
 <script setup>
 import { ref } from "vue";
 import CalendarHeader from "./CalendarHeader.vue";
 import CalendarMonth from "./CalendarMonth.vue";
 import AddEvent from "./Event/AddEvent.vue";
-import EventDetail from "./Event/EventDetail.vue";
+import EventDetail from "./Event/EventByDateDetail.vue";
 
 const today = new Date();
 const year = ref(today.getFullYear());
@@ -79,6 +40,7 @@ function handleAddEvent(event) {
       date: dateStr,
       title: event.title,
       time: event.time,
+      content: event.content,
       color: event.color,
       startDate: event.startDate,
       endDate: event.endDate,
@@ -121,3 +83,41 @@ function nextMonth() {
   }
 }
 </script>
+
+<template>
+  <div class="w-full min-h-screen bg-white px-2 sm:px-10 md:px-20 pt-5">
+    <div
+      class="max-w-screen-xl mx-auto rounded-xl border border-gray-200 p-4 shadow-m"
+    >
+      <CalendarHeader
+        :year="year"
+        :month="month"
+        @prev="prevMonth"
+        @next="nextMonth"
+        @open-add="openAddEvent()"
+      />
+
+      <CalendarMonth
+        :year="year"
+        :month="month"
+        :events="events"
+        @date-click="handleDateClick"
+      />
+    </div>
+
+    <AddEvent
+      :visible="showAddModal"
+      :date="selectedDate"
+      @close="showAddModal = false"
+      @save="handleAddEvent"
+    />
+
+    <EventDetail
+      :visible="showDetailModal"
+      :date="selectedDate"
+      :events="events.filter((e) => e.date === selectedDate)"
+      @close="showDetailModal = false"
+      @add-event="openAddEvent"
+    />
+  </div>
+</template>

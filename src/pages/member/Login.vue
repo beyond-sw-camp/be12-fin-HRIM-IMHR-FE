@@ -9,7 +9,7 @@ const router = useRouter();
 const form = ref({
   memberId: '',
   password: '',
-  way: '',
+  way: '0',
 });
 
 const goToFindId = () => router.push("/findId");

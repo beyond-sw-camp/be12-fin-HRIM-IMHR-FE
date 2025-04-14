@@ -22,6 +22,10 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.post("/api/member/find-id", form);
             return response;
         },
+        async findPW(form) {
+            const response = await axios.post("/api/member/find-pw", form);
+            return response;
+        },
         async companySignup(formData) {
             const response = await axios.post("/api/member/signup/company", formData, {
                 headers: {

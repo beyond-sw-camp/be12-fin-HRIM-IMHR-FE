@@ -20,7 +20,9 @@ const showEventInfoModal = ref(false);
 
 function handleEventClick(event) {
   selectedEvent.value = event;
+  selectedDate.value = event.date || new Date().toISOString().split("T")[0];
   showEventInfoModal.value = true;
+  showAddModal.value = false;
 }
 
 function handleDateClick(date) {
@@ -36,7 +38,19 @@ function handleDateClick(date) {
   showDetailModal.value = true;
 }
 
+function handleEditEvent(event) {
+  selectedEvent.value = event;
+  showAddModal.value = true;
+  showEventInfoModal.value = false;
+}
+
 function handleAddEvent(event) {
+  events.value = events.value.filter(e =>
+    !(e.startDate === selectedEvent.value?.startDate &&
+      e.endDate === selectedEvent.value?.endDate &&
+      e.title === selectedEvent.value?.title)
+  );
+
   // 날짜 범위에 맞게 여러 날짜로 분할하여 이벤트 삽입
   const start = new Date(event.startDate);
   const end = new Date(event.endDate);
@@ -55,6 +69,10 @@ function handleAddEvent(event) {
     });
   }
 
+  
+  showAddModal.value = false;
+  selectedEvent.value = null;
+
   events.value.push(...newEvents);
 
   if (selectedDate.value) {
@@ -71,6 +89,14 @@ function openAddEvent(date = null) {
   // date가 없으면 오늘 날짜로
   selectedDate.value = date || new Date().toISOString().split("T")[0];
   showAddModal.value = true;
+}
+
+function deleteEvent(event) {
+  events.value = events.value.filter((e) => {
+    return !(e.startDate === event.startDate && e.endDate === event.endDate && e.title === event.title);
+  });
+
+  showEventInfoModal.value = false;
 }
 
 function prevMonth() {
@@ -116,6 +142,7 @@ function nextMonth() {
     <AddEvent
       :visible="showAddModal"
       :date="selectedDate"
+      :event="selectedEvent"
       @close="showAddModal = false"
       @save="handleAddEvent"
     />
@@ -133,6 +160,8 @@ function nextMonth() {
       :visible="showEventInfoModal"
       :event="selectedEvent"
       @close="showEventInfoModal = false"
+      @delete-event="deleteEvent"
+      @add-event="handleEditEvent"
     />
   </div>
 </template>

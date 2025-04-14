@@ -89,11 +89,11 @@ function getEventsForDate(date) {
         }"
         @click="$emit('date-click', date.fullDate)"
       >
-        <!-- 날짜 (이벤트 2개 이상이면 동그라미 표시) -->
+        <!-- 날짜 (이벤트 5개 이상이면 동그라미 표시) -->
 
         <div class="h-6">
           <span
-            v-if="getEventsForDate(date.fullDate).length > 1"
+            v-if="getEventsForDate(date.fullDate).length > 4"
             class="inline-flex items-center justify-center w-6 h-6 text-sm font-bold text-zinc-800 bg-violet-100 rounded-full"
           >
             {{ date.day }}

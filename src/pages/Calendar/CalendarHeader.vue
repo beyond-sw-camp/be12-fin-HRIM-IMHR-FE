@@ -1,3 +1,31 @@
+<!-- npm install lucide-vue-next -->
+<!-- npm uninstall lucide-vue-next -->
+<script setup>
+import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { ref } from "vue";
+
+defineProps({
+  year: Number,
+  month: Number,
+});
+
+const allCategories = [];
+
+const selectedCategories = ref(allCategories.map((cat) => cat.name));
+
+function toggleCategory(name) {
+  const i = selectedCategories.value.indexOf(name);
+  if (i === -1) {
+    selectedCategories.value.push(name);
+  } else {
+    selectedCategories.value.splice(i, 1);
+  }
+}
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
+</script>
+
 <template>
   <div class="flex justify-end">
     <button
@@ -26,30 +54,3 @@
     </button>
   </div>
 </template>
-<!-- npm install lucide-vue-next -->
-<!-- npm uninstall lucide-vue-next -->
-<script setup>
-import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { ref } from "vue";
-
-defineProps({
-  year: Number,
-  month: Number,
-});
-
-const allCategories = [];
-
-const selectedCategories = ref(allCategories.map((cat) => cat.name));
-
-function toggleCategory(name) {
-  const i = selectedCategories.value.indexOf(name);
-  if (i === -1) {
-    selectedCategories.value.push(name);
-  } else {
-    selectedCategories.value.splice(i, 1);
-  }
-}
-
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
-</script>

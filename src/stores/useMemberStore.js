@@ -43,7 +43,7 @@ export const useMemberStore = defineStore('member', {
         },
         async logout() {
             this.isLogin = false;
-            // await axios.post("/api/logout");
+            await axios.post("/api/member/logout");
         },
     }
 })

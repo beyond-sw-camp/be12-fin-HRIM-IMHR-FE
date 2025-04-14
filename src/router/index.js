@@ -237,7 +237,15 @@ const routes = [
     name: 'productRegist',
     component: ProductRegistView
   },
-
+  // 친환경 제품 상세보기
+  {
+    path: '/productList/:idx',
+    name: 'ProductDetail',
+    component: () => import('../pages/product/ProductRegist.vue'),
+    meta: { hideLayout: false }
+  }
+  ,
+  
 
 
 ]

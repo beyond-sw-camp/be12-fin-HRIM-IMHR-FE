@@ -1,18 +1,17 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export const useActivityStore = defineStore('product', {
+export const useProductStore = defineStore('product', {
     state: () => (
         {
-            activityList:[],
+            productList:[],
         }),
 
     actions: {
         async regist(formData){
             const response = await axios.post("/api/product/regist", formData, {
-                headers: {
-                    "Content-Type" : "multipart/form-data"
-                }
+                headers: { "Content-Type": "multipart/form-data" },
+                withCredentials: true
             });
             return response;
         },
@@ -22,8 +21,8 @@ export const useActivityStore = defineStore('product', {
             if(page===0 && size===5){
                 response=await axios("/api/product/product?page="+1+"&size="+5);
             }
-            response = await axios("/api/activity/product?page="+page+"&size="+size);
-            this.activityList=response.data.data;
+            response = await axios("/api/product/product?page="+page+"&size="+size);
+            this. productList=response.data.data;
         },
     },
 });

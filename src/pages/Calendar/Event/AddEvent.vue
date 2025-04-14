@@ -70,7 +70,7 @@ function save() {
 
       <div class="space-y-3">
         <input v-model="form.title" placeholder="제목" class="w-full border px-2 py-1 rounded" />
-        <input v-model="form.contetnt" placeholder="메모" class="w-full border px-2 py-1 rounded" />
+        <input v-model="form.content" placeholder="메모" class="w-full border px-2 py-1 rounded" />
         <input v-model="form.time" placeholder="시간 (예: 14:00)" class="w-full border px-2 py-1 rounded" />
         <input type="date" v-model="form.startDate" class="w-full border px-2 py-1 rounded" />
         <input type="date" v-model="form.endDate" class="w-full border px-2 py-1 rounded" />

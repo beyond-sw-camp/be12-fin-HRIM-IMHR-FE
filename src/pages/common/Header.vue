@@ -1,14 +1,17 @@
 <script setup>
 import { defineEmits } from 'vue'
+import { useMemberStore } from '../../stores/useMemberStore'
 import { useRouter } from 'vue-router'
 import { Menu  } from 'lucide-vue-next'
 import { Bell } from 'lucide-vue-next'
 
 const emit = defineEmits(['toggle-sidebar'])
+const memberStore = useMemberStore();
 
 const router = useRouter()
 
-const handleLogout = () => {
+const handleLogout = async () => {
+  await memberStore.logout();
   localStorage.removeItem('accessToken')
   localStorage.removeItem('userInfo')
   router.push('/login')

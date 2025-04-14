@@ -6,18 +6,16 @@
     </h1>
 
     <!-- 🔍 검색창 -->
-    <div
-      class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8"
-    >
+    <div class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8">
       <Search color="black" :size="30" />
-
       <input
+        v-model="search"
         type="text"
         placeholder="검색어를 입력하세요"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
-
       <button
+        @click="onSearch"
         class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
       >
         검색
@@ -34,21 +32,15 @@
             <th class="p-3 border">제품번호</th>
           </tr>
         </thead>
-
         <tbody>
           <tr
             v-for="(product, index) in filteredProducts"
             :key="index"
-            class="border-b hover:bg-slate-50 transition"
+            class="border-b hover:bg-slate-50 transition cursor-pointer"
+            @click="goToDetail(product.index)"
           >
             <td class="p-3">{{ product.index }}</td>
-
-            <router-link to="/products/1">
-              <td class="p-3">
-                {{ product.name }}
-              </td>
-            </router-link>
-
+            <td class="p-3">{{ product.name }}</td>
             <td class="p-3">{{ product.number }}</td>
           </tr>
         </tbody>
@@ -58,9 +50,7 @@
     <!-- 📄 페이지네이션 -->
     <div class="flex justify-center items-center mt-10 space-x-2 text-sm">
       <button disabled class="text-gray-400 px-2 py-1">← 이전</button>
-      <button class="bg-slate-800 text-white px-3 py-1 rounded font-bold">
-        1
-      </button>
+      <button class="bg-slate-800 text-white px-3 py-1 rounded font-bold">1</button>
       <button class="hover:underline">2</button>
       <button class="hover:underline">3</button>
       <span class="text-gray-400">...</span>
@@ -69,19 +59,27 @@
       <button class="text-blue-600 px-2 py-1 hover:underline">다음 →</button>
     </div>
 
-
-    <router-link :to="{ path: '/productRegist', query: { mode: 'create' } }" class="flex justify-end" v-if="userRole === 'manager'">
-      <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">등록</button>
-    </router-link>
+    <!-- ➕ 등록 버튼 -->
+    <div class="max-w-5xl mx-auto flex justify-end mt-6">
+      <router-link
+        v-if="userRole === 'manager'"
+        :to="{ path: '/productRegist', query: { mode: 'create' } }"
+      >
+        <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">
+          등록
+        </button>
+      </router-link>
+    </div>
   </div>
-
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { Search } from "lucide-vue-next";
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { Search } from 'lucide-vue-next';
 
-const search = ref("");
+const router = useRouter();
+const search = ref('');
 
 const products = ref([
   { index: 7, name: "test7", number: "test7" },
@@ -96,17 +94,19 @@ const products = ref([
 
 const filteredProducts = computed(() => {
   return products.value.filter(
-    (p) => p.name.includes(search.value) || p.number.includes(search.value)
+    (p) =>
+      p.name.toLowerCase().includes(search.value.toLowerCase()) ||
+      p.number.toLowerCase().includes(search.value.toLowerCase())
   );
 });
 
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
+
 const onSearch = () => {
-  console.log("검색:", search.value);
+  console.log("🔍 검색어:", search.value);
 };
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
+const goToDetail = (idx) => {
+  router.push({ path: `/productList/${idx}`, query: { mode: 'view' } });
+};
 </script>
-
-<style scoped>
-</style>

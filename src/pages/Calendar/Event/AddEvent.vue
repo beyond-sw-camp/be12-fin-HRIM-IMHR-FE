@@ -1,8 +1,10 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { X } from 'lucide-vue-next'
+import { useCalendarStore } from '../../../stores/useCalendarStore'
 
 const emit = defineEmits(['close', 'save'])
+const calendarStore = useCalendarStore();
 
 const props = defineProps({
   visible: Boolean,
@@ -50,10 +52,16 @@ const colorOptions = [
   '#f87171', '#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#a3a3a3', '#64748b', '#000000',
 ]
 
-function save() {
-  if (!form.value.title || !form.value.startDate || !form.value.endDate) return
-  emit('save', { ...form.value })
-  emit('close')
+async function save() {
+  if (!form.value.title || !form.value.startDate || !form.value.endDate) return;
+
+  try {
+    await calendarStore.regist({ ...form.value });
+    emit('save', { ...form.value }); // 부모 컴포넌트에 저장 이벤트 전달
+    emit('close');
+  } catch (error) {
+    console.error("일정 등록 실패:", error);
+  }
 }
 </script>
 

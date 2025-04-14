@@ -1,15 +1,20 @@
 <script setup>
 import { ref } from 'vue'
 import LogoSection from '../common/LogoSection.vue' // ✅ 경로 확인!
+import { useMemberStore } from '../../stores/useMemberStore'
 
+const memberStore = useMemberStore();
 const form = ref({
-  username: '',
-  email: ''
+  memberId: '',
+  email: '',
+  way: '0',
 })
 
-const submit = () => {
+const submit = async () => {
   console.log('비밀번호 재설정 요청:', form.value)
-  alert('입력된 이메일로 인증 요청이 전송되었습니다.')
+  const response = await memberStore.findPW(form.value)
+  if(response.data.isSuccess)
+    alert('입력된 이메일로 재설정 페이지가 전송되었습니다.')
 }
 </script>
 
@@ -25,14 +30,24 @@ const submit = () => {
 
         <form @submit.prevent="submit" class="space-y-4">
           <div>
-            <label class="text-sm text-gray-700 block mb-1">이메일로 인증</label>
-            <input v-model="form.username" type="text" placeholder="아이디" class="input" />
+            <label class="text-sm text-gray-700 block mb-1">이메일 인증</label>
+            <input v-model="form.memberId" type="text" placeholder="아이디" class="input" />
             <input v-model="form.email" type="email" placeholder="이메일" class="input mt-2" />
+          </div>
+          <div class="flex items-center space-x-4 mb-4 text-sm text-gray-700">
+            <label class="flex items-center">
+              <input type="radio" name="role" value="0" checked class="mr-1" v-model="form.way"/>
+              관리자
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="role" value="1" class="mr-1" v-model="form.way"/>
+              임직원
+            </label>
           </div>
 
           <button type="submit"
                   class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 transition">
-            이메일 인증 요청
+            재설정 이메일 요청
           </button>
         </form>
 

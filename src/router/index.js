@@ -11,9 +11,9 @@ import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-import PermissionSetting from '../pages/mosque/PermissionSetting.vue';
-import MosqueSearch from '../pages/mosque/MosqueSearch.vue';
-import MosqueDetail from '../pages/mosque/MosqueDetail.vue';
+import PermissionSetting from '../pages/Staff/PermissionSetting.vue';
+import StaffSearch from '../pages/Staff/StaffSearch.vue';
+import StaffDetail from '../pages/Staff/StaffDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 // 활동
@@ -116,14 +116,14 @@ const routes = [
 
   // 관리자
   {
-    path: '/mosqueSearch/1',
-    name: 'mosqueSearch',
-    component: MosqueSearch
+    path: '/staffSearch/1',
+    name: 'staffSearch',
+    component: StaffSearch
   },
   {
-    path: '/mosqueDetail/:id',
-    name: 'mosqueDetail',
-    component: MosqueDetail,
+    path: '/staffDetail/:id',
+    name: 'staffDetail',
+    component: StaffDetail,
     props: true
   },
   {

@@ -13,7 +13,7 @@ const menuItems = [
   { path: "/reportsList/1", label: "사원 리포트" },
   { path: "/partnerList/1", label: "협력사" },
   { path: "/mosqueSearch/1", label: "피드백" },
-  { path: "/calendar/1", label: "캘린더" },
+  { path: "/calendar", label: "캘린더" },
 ];
 </script>
 

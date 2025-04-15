@@ -1,8 +1,11 @@
 <script setup>
+
 const props = defineProps({
   isOpen: Boolean,
   companyIdx: Number,
 });
+
+const activeCompanyIdx = props.companyIdx ?? 1;
 
 const menuItems = [
   { path: "/partner/1", label: "기업 ESG 현황" },
@@ -13,8 +16,8 @@ const menuItems = [
   { path: "/productList/1", label: "친환경 제품 관리" },
   { path: "/partnerList/1", label: "협력사 관리" },
   { path: "/mosqueSearch/1", label: "사원 관리" },
-  { path: `/calendar/${props.companyIdx}`, label: "캘린더 관리" },
-  // ${props.companyIdx}
+  { path: `/calendar/${activeCompanyIdx}`, label: "캘린더 관리" },
+  // `/calendar/${props.companyIdx}`
   { path: "/departmentSetting/1", label: "부서 설정" },
   { path: "/feedbackForm/1", label: "피드백 설정" },
 ];

@@ -43,7 +43,7 @@ import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 피드백
-import FeedbackForm from '../pages/feedback/FeedbackDetail.vue';
+import FeedbackForm from '../pages/feedback/FeedbackForm.vue';
 import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
 import MyPageView from '../pages/mypage/MyPageView.vue';
@@ -186,9 +186,10 @@ const routes = [
 
   // 캘린더
   {
-    path: '/calendar/1',
+    path: "/calendar/:companyIdx",
     name: 'calendar',
-    component: Calendar
+    component: Calendar,
+    props: true,
   },
 
   // 파트너사

@@ -1,15 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import CalendarHeader from "./CalendarHeader.vue";
 import CalendarMonth from "./CalendarMonth.vue";
 import AddEvent from "./Event/AddEvent.vue";
 import EventByDateDetail from "./Event/EventByDateDetail.vue";
 import EventDetail from "./Event/EventDetail.vue";
+import { useCalendarStore } from "../../stores/useCalendarStore";
+
+const route = useRoute();
+const calendarStore = useCalendarStore();
 
 const today = new Date();
 const year = ref(today.getFullYear());
 const month = ref(today.getMonth() + 1);
-const events = ref([]);
+const events = computed(() => calendarStore.events);
 
 const showAddModal = ref(false);
 const showDetailModal = ref(false);
@@ -17,6 +22,28 @@ const selectedDate = ref(null);
 const selectedEvents = ref([]);
 const selectedEvent = ref(null);
 const showEventInfoModal = ref(false);
+
+const normalizedEvents = computed(() => {
+  const result = [];
+  for (const e of events.value) {
+    // startDate, endDate가 없는 경우 방지
+    if (!e.startDate || !e.endDate) continue;
+    const start = new Date(e.startDate);
+    const end = new Date(e.endDate);
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      result.push({
+        ...e,
+        date: d.toISOString().split("T")[0], // YYYY-MM-DD
+      });
+    }
+  }
+  return result;
+});
+
+const filteredEvents = computed(() => {
+  if (!selectedDate.value || !events.value) return [];
+  return events.value.filter((e) => e.date === selectedDate.value);
+});
 
 function handleEventClick(event) {
   selectedEvent.value = event;
@@ -45,10 +72,13 @@ function handleEditEvent(event) {
 }
 
 function handleAddEvent(event) {
-  events.value = events.value.filter(e =>
-    !(e.startDate === selectedEvent.value?.startDate &&
-      e.endDate === selectedEvent.value?.endDate &&
-      e.title === selectedEvent.value?.title)
+  events.value = events.value.filter(
+    (e) =>
+      !(
+        e.startDate === selectedEvent.value?.startDate &&
+        e.endDate === selectedEvent.value?.endDate &&
+        e.title === selectedEvent.value?.title
+      )
   );
 
   // 날짜 범위에 맞게 여러 날짜로 분할하여 이벤트 삽입
@@ -69,7 +99,6 @@ function handleAddEvent(event) {
     });
   }
 
-  
   showAddModal.value = false;
   selectedEvent.value = null;
 
@@ -93,7 +122,11 @@ function openAddEvent(date = null) {
 
 function deleteEvent(event) {
   events.value = events.value.filter((e) => {
-    return !(e.startDate === event.startDate && e.endDate === event.endDate && e.title === event.title);
+    return !(
+      e.startDate === event.startDate &&
+      e.endDate === event.endDate &&
+      e.title === event.title
+    );
   });
 
   showEventInfoModal.value = false;
@@ -116,6 +149,18 @@ function nextMonth() {
     month.value++;
   }
 }
+
+onMounted(async () => {
+  const companyIdx = route.params.companyIdx ?? 1; // URL 파라미터에서 회사 idx 가져오기
+  console.log("회사 IDx : " + companyIdx);
+
+  try {
+    await calendarStore.monthevents(companyIdx); // Pinia Store의 monthevents 호출
+    console.log("이벤트 리스트 : ", events.value);
+  } catch (error) {
+    console.error("일정 데이터를 가져오는 중 오류 발생:", error);
+  }
+});
 </script>
 
 <template>
@@ -134,7 +179,7 @@ function nextMonth() {
       <CalendarMonth
         :year="year"
         :month="month"
-        :events="events"
+        :events="normalizedEvents"
         @date-click="handleDateClick"
       />
     </div>
@@ -150,7 +195,7 @@ function nextMonth() {
     <EventByDateDetail
       :visible="showDetailModal"
       :date="selectedDate"
-      :events="events.filter((e) => e.date === selectedDate)"
+      :events="filteredEvents"
       @close="showDetailModal = false"
       @add-event="openAddEvent"
       @event-click="handleEventClick"

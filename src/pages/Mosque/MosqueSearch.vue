@@ -21,7 +21,7 @@ const searchUser = () => {
   console.log(`검색: ${searchText.value}`);
 };
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive');
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
 </script>
 
 <template>

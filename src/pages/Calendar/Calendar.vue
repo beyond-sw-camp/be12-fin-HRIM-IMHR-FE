@@ -14,17 +14,19 @@ const calendarStore = useCalendarStore();
 const today = new Date();
 const year = ref(today.getFullYear());
 const month = ref(today.getMonth() + 1);
-const events = computed(() => calendarStore.monthevent);
+const events = ref([]);
 
 const showAddModal = ref(false);
 const showDetailModal = ref(false);
 const selectedDate = ref(null);
-const selectedEvents = ref([]);
 const selectedEvent = ref(null);
 const showEventInfoModal = ref(false);
 
 const normalizedEvents = computed(() => {
   const result = [];
+
+  if (!Array.isArray(events.value)) return result;
+
   for (const e of events.value) {
     // startDate, endDate가 없는 경우 방지
     if (!e.startDate || !e.endDate) continue;
@@ -49,7 +51,7 @@ function handleEventClick(event) {
 
 async function handleDateClick(date) {
   selectedDate.value = date;
-  await calendarStore.dayevents(route.params.companyIdx ?? 1, date);
+  await calendarStore.dayevents(date);
   showDetailModal.value = true;
 }
 
@@ -61,17 +63,13 @@ function handleEditEvent(event) {
   showEventInfoModal.value = false;
 }
 
-function handleAddEvent(event) {
-  events.value = events.value.filter(
-    (e) =>
-      !(
-        e.startDate === selectedEvent.value?.startDate &&
-        e.endDate === selectedEvent.value?.endDate &&
-        e.title === selectedEvent.value?.title
-      )
-  );
+async function handleAddEvent(event) {
+  const isEdit = !!event.id;
 
-  // 날짜 범위에 맞게 여러 날짜로 분할하여 이벤트 삽입
+  if (isEdit) {
+    events.value = events.value.filter((e) => e.idx !== event.id);
+  }
+
   const start = new Date(event.startDate);
   const end = new Date(event.endDate);
   const newEvents = [];
@@ -79,29 +77,19 @@ function handleAddEvent(event) {
   for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     const dateStr = d.toISOString().split("T")[0];
     newEvents.push({
+      ...event,
       date: dateStr,
-      title: event.title,
-      time: event.time,
-      content: event.content,
-      color: event.color,
-      startDate: event.startDate,
-      endDate: event.endDate,
     });
   }
 
+
+  events.value.push(...newEvents);
   showAddModal.value = false;
   selectedEvent.value = null;
 
-  events.value.push(...newEvents);
-
-  if (selectedDate.value) {
-    const dateObj = new Date(selectedDate.value);
-    selectedEvents.value = events.value.filter((e) => {
-      const start = new Date(e.startDate);
-      const end = new Date(e.endDate);
-      return dateObj >= start && dateObj <= end;
-    });
-  }
+  await calendarStore.monthevents(year.value, month.value);
+  
+  events.value = calendarStore.monthevent;
 }
 
 function openAddEvent(date = null) {
@@ -110,7 +98,7 @@ function openAddEvent(date = null) {
   showAddModal.value = true;
 }
 
-function deleteEvent(event) {
+async function deleteEvent(event) {
   events.value = events.value.filter((e) => {
     return !(
       e.startDate === event.startDate &&
@@ -120,35 +108,40 @@ function deleteEvent(event) {
   });
 
   showEventInfoModal.value = false;
+
+  await calendarStore.monthevents(year.value, month.value);
+  events.value = calendarStore.monthevent;
 }
 
-function prevMonth() {
+async function prevMonth() {
   if (month.value === 1) {
     month.value = 12;
     year.value--;
   } else {
     month.value--;
   }
+  await calendarStore.monthevents(year.value, month.value);
+  events.value = calendarStore.monthevent;
 }
 
-function nextMonth() {
+async function nextMonth() {
   if (month.value === 12) {
     month.value = 1;
     year.value++;
   } else {
     month.value++;
   }
+  await calendarStore.monthevents(year.value, month.value);
+  events.value = calendarStore.monthevent;
 }
 
 onMounted(async () => {
-  const companyIdx = route.params.companyIdx ?? 1; // URL 파라미터에서 회사 idx 가져오기
-  console.log("회사 IDx : " + companyIdx);
-
+  const companyIdx = route.params.companyIdx ?? 1;
   try {
-    await calendarStore.monthevents(companyIdx); // Pinia Store의 monthevents 호출
-    // console.log("이벤트 리스트 : ", events.value);
+    await calendarStore.monthevents(year.value, month.value);
+    events.value = calendarStore.monthevent; // 직접 할당
   } catch (error) {
-    console.error("일정 데이터를 가져오는 중 오류 발생:", error);
+    console.error("초기 월별 일정 로딩 실패:", error);
   }
 });
 </script>
@@ -178,7 +171,12 @@ onMounted(async () => {
       :visible="showAddModal"
       :date="selectedDate"
       :event="selectedEvent"
-      @close="showAddModal = false"
+      @close="
+        () => {
+          showAddModal = false;
+          selectedEvent = null;
+        }
+      "
       @save="handleAddEvent"
     />
 

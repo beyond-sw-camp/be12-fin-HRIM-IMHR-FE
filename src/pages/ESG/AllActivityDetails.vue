@@ -30,7 +30,7 @@ const oppose=async()=>{
 
 const router = useRouter();
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive mosque `'${{변수명}}'`
+// manager executive staff `'${{변수명}}'`
 </script>
 
 <template>

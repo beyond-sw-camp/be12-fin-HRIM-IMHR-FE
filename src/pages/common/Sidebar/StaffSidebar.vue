@@ -8,7 +8,7 @@ const menuItems = [
   { path: "/educationList/1", label: "ESG 교육 활동" },
   { path: "/activityList/1", label: "ESG 기타 활동" },
   { path: "/campaignlist/1", label: "ESG 사내 캠페인 활동" },
-  { path: "/mosqueSearch/1", label: "피드백" },
+  { path: "/staffSearch/1", label: "피드백" },
   { path: "/calendar/1", label: "캘린더" },
 ];
 </script>

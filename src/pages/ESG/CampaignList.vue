@@ -88,5 +88,5 @@ const goToDetail = (item) => {
 }
 
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
+// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

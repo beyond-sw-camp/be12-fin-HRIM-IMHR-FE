@@ -4,7 +4,7 @@ import { ref, computed } from "vue";
 
 import Header from "./pages/common/Header.vue";
 import ManagerSidebar from "./pages/common/Sidebar/ManagerSidebar.vue";
-import MosqueSidebar from "./pages/common/Sidebar/MosqueSidebar.vue";
+import StaffSidebar from "./pages/common/Sidebar/StaffSidebar.vue";
 import ExecutiveSidebar from "./pages/common/Sidebar/ExecutiveSidebar.vue";
 import NotificationDetail from "./pages/common/Notification/NotificationDetail.vue";
 import NotificationList from "./pages/common/Notification/NotificationList.vue";
@@ -27,8 +27,8 @@ const sidebarComponent = computed(() => {
       return ManagerSidebar;
     case "executive":
       return ExecutiveSidebar;
-    case "mosque":
-      return MosqueSidebar;
+    case "staff":
+      return StaffSidebar;
   }
 });
 

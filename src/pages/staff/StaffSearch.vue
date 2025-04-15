@@ -75,7 +75,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
             <td class="border" v-if="userRole === 'manager'">
               <router-link
                 :to="{
-                  path: user.status === '대기 중' ? `/permissionSetting/${user.id}` : `/mosqueDetail/${user.id}`,
+                  path: user.status === '대기 중' ? `/permissionSetting/${user.id}` : `/staffDetail/${user.id}`,
                   query: { status: user.status },
                 }"
               >

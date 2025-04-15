@@ -22,18 +22,28 @@ export const useCalendarStore = defineStore('calendar', {
       }
     },
 
-    async monthevents(companyIdx) {
+    async update(idx, formData) {
       try {
-        const response = await axios.get(`/api/event/list/${companyIdx}`, companyIdx);
-        this.monthevent = response.data.data.content;
+        const response = await axios.put(`/api/event/update/${idx}`, formData);
+        return response.data;
       } catch (error) {
-        console.error("일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
+        console.error("수정 실패:", error.response || error.message);
+        throw error;
       }
     },
 
-    async dayevents(companyIdx, date) {
+    async monthevents(year, month) {
       try {
-        const response = await axios.get(`/api/event/date/${companyIdx}?date=${date}`);
+        const response = await axios.get(`/api/event/month/list?year=${year}&month=${month}`);
+        this.monthevent = response.data.data;
+      } catch (error) {
+        console.error("월별 일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
+      }
+    },
+
+    async dayevents(date) {
+      try {
+        const response = await axios.get(`/api/event/date/list?date=${date}`);
 
         console.log("특정 날짜 이벤트 리스트 : ", response.data.data);
         this.dayevent = response.data.data;

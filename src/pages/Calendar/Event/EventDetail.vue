@@ -23,7 +23,6 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <h2 class="text-lg font-bold mb-4">이벤트 상세</h2>
       <div class="space-y-2">
         <div><span class="font-semibold">제목:</span> {{ event.title }}</div>
-        <div><span class="font-semibold">시간:</span> {{ event.time }}</div>
         <div><span class="font-semibold">내용:</span> {{ event.content }}</div>
         <div :style="{ color: event.color }"><span class="font-semibold">시작일:</span> {{ event.startDate }}</div>
         <div :style="{ color: event.color }"><span class="font-semibold">종료일:</span> {{ event.endDate }}</div>

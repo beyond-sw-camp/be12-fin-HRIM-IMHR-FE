@@ -44,12 +44,20 @@ export const useCalendarStore = defineStore('calendar', {
     async dayevents(date) {
       try {
         const response = await axios.get(`/api/event/date/list?date=${date}`);
-
-        console.log("특정 날짜 이벤트 리스트 : ", response.data.data);
         this.dayevent = response.data.data;
       } catch (error) {
         console.error("일간 일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
       }
     },
+
+    async eventdelete(idx){
+      try {
+        const response = await axios.delete(`/api/event/delete/${idx}`);
+      } catch(error) {
+        console.error("일정 데이터 삭제중 오류 발생", error.response || error.message);
+      }
+    },
+
+    
   },
 });

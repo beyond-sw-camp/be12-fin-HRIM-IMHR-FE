@@ -176,7 +176,7 @@ const routes = [
 
   // 캘린더
   {
-    path: "/calendar/:companyIdx",
+    path: '/calendar',
     name: 'calendar',
     component: Calendar,
     props: true,

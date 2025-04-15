@@ -136,7 +136,6 @@ async function nextMonth() {
 }
 
 onMounted(async () => {
-  const companyIdx = route.params.companyIdx ?? 1;
   try {
     await calendarStore.monthevents(year.value, month.value);
     events.value = calendarStore.monthevent; // 직접 할당

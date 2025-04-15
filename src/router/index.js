@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
-// import { useMemberStore } from '../stores/useMemberStore';
+
 // 로그인 & 인증
 import Login from '../pages/member/Login.vue';
 import FindIdView from '../pages/member/FindIdView.vue'
@@ -16,12 +16,11 @@ import StaffSearch from '../pages/Staff/StaffSearch.vue';
 import StaffDetail from '../pages/Staff/StaffDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
-
 // 활동
 import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
 import ActivityList from '../pages/esg/ActivityList.vue'
 import CampaignList from '../pages/esg/CampaignList.vue'
-import CampaignDetail from '../pages/esg/CampaignDetail.vue';
+import CampaignDetail from '../pages/esg/CampaignDetail.vue'
 
 // 교육
 import EducationList from '../pages/esg/EducationList.vue'
@@ -38,6 +37,7 @@ import ProductRegistView from '../pages/product/ProductRegist.vue'
 // 캘린더
 import Calendar from '../pages/Calendar/Calendar.vue';
 
+// 대시보드 & 파트너
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
@@ -46,19 +46,19 @@ import PartnerListView from '../pages/partner/partnerList.vue';
 import FeedbackForm from '../pages/feedback/FeedbackForm.vue';
 import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
+// 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
+
 const routes = [
   {
     path: '/',
     name: 'homeRedirect',
     beforeEnter: (to, from, next) => {
       const companyId = 1;
-      // getUserCompanyIdSomehow(); // 예: store 또는 localStorage 등 
       if (companyId) {
         next(`/partner/${companyId}`);
       } else {
-        next(`/partner/${companyId}`)
-        // next('/login'); // 로그인 안됐으면 로그인으로
+        next(`/partner/${companyId}`); // 또는 next('/login')
       }
     }
   },
@@ -67,7 +67,8 @@ const routes = [
     name: 'dashboard',
     component: DashboardView
   },
-  // 로그인 & 인증 (레이아웃 없이)
+
+  // 로그인 & 인증
   {
     path: '/login',
     name: 'login',
@@ -99,7 +100,7 @@ const routes = [
     meta: { hideLayout: true }
   },
 
-  // 회원가입 (레이아웃 없이)
+  // 회원가입
   {
     path: '/companySignup',
     name: 'companyRegister',
@@ -165,17 +166,6 @@ const routes = [
     name: 'reportDetail',
     component: ReportDetailView
   },
-  // 제품
-  {
-    path: '/productList/1',
-    name: 'productList',
-    component: ProductListView
-  },
-  {
-    path: '/products/1',
-    name: 'productDetail',
-    component: ProductDetailView
-  },
 
   // 교육
   {
@@ -186,7 +176,7 @@ const routes = [
 
   // 캘린더
   {
-    path: "/calendar/:companyIdx",
+    path: '/calendar',
     name: 'calendar',
     component: Calendar,
     props: true,
@@ -198,33 +188,26 @@ const routes = [
     name: 'partnerList',
     component: PartnerListView
   },
-
-  // 마이페이지
-  {
-    path: '/mypage',
-    name: 'mypage',
-    component: MyPageView
-  },
-  // 파트너 회사 대시보드
   {
     path: '/partner/1',
     name: 'partnerDashboard',
     component: PartnerDashboard,
     props: true
   },
-  // 부서 주기 설정
+
+  // 부서 설정
   {
     path: '/departmentSetting/1',
     name: 'DepartmentSetting',
     component: DepartmentSetting
   },
-  // 피드백 양식 관리
+
+  // 피드백
   {
     path: '/feedbackForm/1',
     name: 'feedbackForm',
     component: FeedbackForm,
   },
-  //피드백 작성
   {
     path: '/feedback/:id',
     name: 'feedbackDetail',
@@ -232,41 +215,32 @@ const routes = [
     props: true
   },
 
-  // 친환경 제품 등록
+  // 제품 등록
   {
     path: '/productRegist',
     name: 'productRegist',
     component: ProductRegistView
   },
-  // 친환경 제품 상세보기
+
+  // 제품 목록 (회사별)
   {
     path: '/productList/:idx',
-    name: 'ProductDetail',
-    component: () => import('../pages/product/ProductRegist.vue'),
-    meta: { hideLayout: false }
+    name: 'ProductList',
+    component: ProductListView
+  },
+
+  // 제품 상세 (회사 idx + 제품 idx)
+  {
+    path: '/productList/:company_idx/:product_idx',
+    name: 'productDetail',
+    component: ProductDetailView,
+    props: true,
   }
-  ,
-  
-
-
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  //   scrollBehavior(to, from, savedPosition) {
-  //     if (to.hash) {
-  //       return {
-  //         el: to.hash,
-  //         behavior: 'smooth',
-  //       }
-  //     }
-  //     if (savedPosition) {
-  //       return savedPosition
-  //     } else {
-  //       return { top: 0 }
-  //     }
-  //   }
-})
+});
 
 export default router;

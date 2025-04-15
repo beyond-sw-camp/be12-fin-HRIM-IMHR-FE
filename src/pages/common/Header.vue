@@ -1,8 +1,9 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { defineEmits,onMounted,ref } from 'vue'
 import { useMemberStore } from '../../stores/useMemberStore'
 import { useRouter } from 'vue-router'
 import { Menu, Bell } from 'lucide-vue-next'
+import { useStompStore } from '../../stores/useStompStore'
 
 const memberStore = useMemberStore();
 const emit = defineEmits(['toggle-sidebar', 'toggle-noti']);
@@ -18,8 +19,22 @@ const handleLogout = async () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('userInfo')
     router.push('/login')
-  }  
+  }
 }
+
+const stomp = useStompStore()
+
+onMounted(() => {
+  const memberIdx=ref({});
+  // memberIdx.value=memberStore.fetchMember();
+  if(!memberStore.userInfo){
+    memberIdx.value=memberStore.fetchMember();
+  }else{
+    memberIdx.value=memberStore.userInfo
+  }
+  
+  stomp.connect(memberIdx.value)
+})
 </script>
 
 <template>

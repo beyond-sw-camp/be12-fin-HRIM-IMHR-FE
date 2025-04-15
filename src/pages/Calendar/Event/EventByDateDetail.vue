@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { X } from "lucide-vue-next";
 
-defineProps({
+const props = defineProps({
   visible: Boolean,
   events: {
     type: Array,
@@ -14,7 +14,17 @@ defineProps({
   },
 });
 
-defineEmits(["close"]);
+defineEmits(["close", "event-click", "add-event"]);
+
+const localEvents = ref([...props.events]);
+
+watch(
+  () => props.events,
+  (newVal) => {
+    localEvents.value = [...newVal];
+  },
+  { immediate: true, deep: true }
+);
 
 const userRole = ref(
   JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
@@ -43,6 +53,7 @@ const userRole = ref(
           v-for="event in events"
           :key="event.title + event.time"
           class="mb-2 p-2 rounded border"
+          :style="{ color: event.color }"
           @click="$emit('event-click', event)"
         >
           <div class="font-bold">{{ event.title }}</div>

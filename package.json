@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fullcalendar/timegrid": "^6.1.17",
+    "@stomp/stompjs": "^7.1.1",
     "axios": "^1.8.4",
     "chart.js": "^4.4.8",
     "lucide-vue-next": "^0.487.0",

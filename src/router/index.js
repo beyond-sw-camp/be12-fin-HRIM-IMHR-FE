@@ -53,7 +53,7 @@ const routes = [
     name: 'homeRedirect',
     beforeEnter: (to, from, next) => {
       const companyId = 1;
-      // getUserCompanyIdSomehow(); // 예: store 또는 localStorage 등 
+      // getUserCompanyIdSomehow(); // 예: store 또는 localStorage 등
       if (companyId) {
         next(`/partner/${companyId}`);
       } else {
@@ -232,21 +232,24 @@ const routes = [
     props: true
   },
 
-  // 친환경 제품 등록
+  // 제품 등록 (create/edit 모드 모두 지원)
   {
     path: '/productRegist',
     name: 'productRegist',
     component: ProductRegistView
   },
-  // 친환경 제품 상세보기
+  // 회사별 제품 리스트 보기 (companyIdx 기준)
   {
     path: '/productList/:idx',
-    name: 'ProductDetail',
-    component: () => import('../pages/product/ProductRegist.vue'),
-    meta: { hideLayout: false }
-  }
-  ,
-  
+    name: 'ProductList',
+    component: ProductListView
+  },
+    // 제품 상세 보기 (제품 PK 기준)
+    {
+      path: '/productDetail/:idx',
+      name: 'ProductDetail',
+      component: ProductDetailView
+    }
 
 
 ]

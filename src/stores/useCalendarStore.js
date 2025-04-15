@@ -23,13 +23,12 @@ export const useCalendarStore = defineStore('calendar', {
 
     async monthevents(companyIdx) {
       try {
-        const response = await axios.get(`/api/event/list/${companyIdx}`);
-        this.events = response.data.content;
-      } catch (eeror) {
+        const response = await axios.get(`/api/event/list/${companyIdx}`, companyIdx);  
+        this.events = response.data.data.content;
+      } catch (error) {
         console.error("일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
       }
     },
 
-    
   },
 });

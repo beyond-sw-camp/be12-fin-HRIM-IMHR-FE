@@ -57,6 +57,10 @@ const openDetail = (noti) => {
 };
 
 const closeDetail = () => (selectedNotification.value = null);
+
+const companyIdx = ref(
+  JSON.parse(localStorage.getItem("userInfo"))?.companyIdx || 1
+);
 </script>
 
 <template>
@@ -86,6 +90,7 @@ const closeDetail = () => (selectedNotification.value = null);
         v-if="!hideLayout"
         :is="sidebarComponent"
         :isOpen="isSidebarOpen"
+        :companyIdx="companyIdx"
       />
 
       <main

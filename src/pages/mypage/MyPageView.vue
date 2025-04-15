@@ -41,7 +41,7 @@ const goToPage = (page) => {
 }
 
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
 // manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 

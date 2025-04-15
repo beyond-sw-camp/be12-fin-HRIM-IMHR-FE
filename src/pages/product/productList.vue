@@ -44,18 +44,6 @@
       </table>
     </div>
 
-    <!-- 페이지네이션 (예시) -->
-    <div class="flex justify-center items-center mt-10 space-x-2 text-sm">
-      <button disabled class="text-gray-400 px-2 py-1">← 이전</button>
-      <button class="bg-slate-800 text-white px-3 py-1 rounded font-bold">1</button>
-      <button class="hover:underline">2</button>
-      <button class="hover:underline">3</button>
-      <span class="text-gray-400">...</span>
-      <button class="hover:underline">67</button>
-      <button class="hover:underline">68</button>
-      <button class="text-blue-600 px-2 py-1 hover:underline">다음 →</button>
-    </div>
-
     <!-- 등록 버튼 -->
     <div class="max-w-5xl mx-auto flex justify-end mt-6">
       <router-link
@@ -80,13 +68,13 @@ const router = useRouter();
 const route = useRoute();
 const search = ref('');
 const products = ref([]);
-const companyIdx = route.params.idx || 1;
+const company_idx = route.params.idx || 1;
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
 
-// 🔍 데이터 불러오기
+// 데이터 불러오기
 onMounted(async () => {
   try {
-    const res = await axios.get(`/api/product/company/${companyIdx}`);
+    const res = await axios.get(`/api/product/company/${company_idx}`);
     products.value = res.data.data;
   } catch (err) {
     console.error("제품 목록 조회 실패:", err);
@@ -94,7 +82,7 @@ onMounted(async () => {
   }
 });
 
-// 🔍 검색 필터
+// 검색 필터
 const filteredProducts = computed(() => {
   return products.value.filter(
     (p) =>
@@ -107,15 +95,14 @@ const onSearch = () => {
   console.log("🔍 검색어:", search.value);
 };
 
-// ✅ 상세 보기로 이동
-const goToDetail = (productIdx) => {
+// 상세 보기로 이동
+const goToDetail = (product_idx) => {
   router.push({
-    name: 'ProductDetail',  // 등록된 라우터 name을 사용하는 게 가장 안전함
-    params: { idx: productIdx }
+    name: 'ProductDetail',
+    params: {
+      company_idx,
+      product_idx
+    }
   });
 };
 </script>
-
-<style scoped>
-/* 필요 시 추가 스타일 작성 */
-</style>

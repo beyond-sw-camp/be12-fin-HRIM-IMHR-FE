@@ -67,21 +67,24 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
-const route = useRoute();
 const router = useRouter();
 const product = ref({});
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
 const totalRevenue = ref(0);
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
+
+const props = defineProps({
+  company_idx: [String, Number],
+  product_idx: [String, Number],
+});
 
 const fetchProduct = async () => {
   try {
-    const res = await axios.get(`/api/product/detail/${route.params.idx}`);
+    const res = await axios.get(`/api/product/detail/${props.product_idx}`);
     product.value = res.data.data;
     totalRevenue.value = Math.floor((product.value.unitPrice || 0) * (product.value.salesQty || 0) / 10000);
   } catch (err) {
@@ -92,9 +95,9 @@ const fetchProduct = async () => {
 const handleDelete = async () => {
   if (confirm("정말 삭제하시겠습니까?")) {
     try {
-      await axios.delete(`/api/product/${route.params.idx}`);
+      await axios.delete(`/api/product/${props.product_idx}`);
       alert("삭제되었습니다.");
-      router.push(`/productList/1`); // TODO: 실제 companyIdx로 동적 처리 시 수정
+      router.push(`/productList/${props.company_idx}`);
     } catch (err) {
       alert("삭제 실패");
     }
@@ -103,6 +106,7 @@ const handleDelete = async () => {
 
 onMounted(fetchProduct);
 </script>
+
 
 <style scoped>
 </style>

@@ -58,6 +58,7 @@ async function save() {
   try {
     await calendarStore.regist({ ...form.value });
     emit('save', { ...form.value }); // 부모 컴포넌트에 저장 이벤트 전달
+    console.log(form.value);
     emit('close');
   } catch (error) {
     console.error("일정 등록 실패:", error);

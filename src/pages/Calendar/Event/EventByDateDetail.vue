@@ -16,7 +16,9 @@ defineProps({
 
 defineEmits(["close"]);
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+const userRole = ref(
+  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
+);
 // manager executive mosque `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
@@ -36,15 +38,18 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <h2 class="text-lg font-bold mb-4">{{ date }} 일정</h2>
 
       <!-- 일정 리스트 -->
-      <div
-        v-for="event in events"
-        :key="event.title + event.time"
-        class="mb-2 p-2 rounded border"
-        @click="$emit('event-click', event)"
-      >
-        <div class="font-bold">{{ event.title }}</div>
-        <div class="text-lg text-slate-700">{{ event.content }}</div>
-        <div class="text-sm text-gray-500">{{ event.time }}</div>
+      <div class="mb-2 max-h-60 overflow-y-auto">
+        <div
+          v-for="event in events"
+          :key="event.title + event.time"
+          class="mb-2 p-2 rounded border"
+          @click="$emit('event-click', event)"
+        >
+          <div class="font-bold">{{ event.title }}</div>
+          <div class="text-lg text-slate-700">{{ event.content }}</div>
+          <div class="text-sm text-gray-500">{{ event.time }}</div>
+        </div>
+        
       </div>
 
       <div v-if="!events.length" class="text-gray-400 text-sm">
@@ -52,11 +57,11 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       </div>
 
       <button
-          @click="$emit('add-event', date)"
-          class="bg-slate-600 text-white mt-3 px-2 py-1 rounded-lg hover:bg-slate-800"
-          v-if="userRole === 'manager'"
-        >
-          + 일정 추가
+        @click="$emit('add-event', date)"
+        class="bg-slate-600 text-white mt-3 px-2 py-1 rounded-lg hover:bg-slate-800"
+        v-if="userRole === 'manager'"
+      >
+        + 일정 추가
       </button>
     </div>
   </div>

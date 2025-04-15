@@ -14,7 +14,7 @@ const calendarStore = useCalendarStore();
 const today = new Date();
 const year = ref(today.getFullYear());
 const month = ref(today.getMonth() + 1);
-const events = computed(() => calendarStore.events);
+const events = computed(() => calendarStore.monthevent);
 
 const showAddModal = ref(false);
 const showDetailModal = ref(false);
@@ -40,11 +40,6 @@ const normalizedEvents = computed(() => {
   return result;
 });
 
-const filteredEvents = computed(() => {
-  if (!selectedDate.value || !events.value) return [];
-  return events.value.filter((e) => e.date === selectedDate.value);
-});
-
 function handleEventClick(event) {
   selectedEvent.value = event;
   selectedDate.value = event.date || new Date().toISOString().split("T")[0];
@@ -52,18 +47,13 @@ function handleEventClick(event) {
   showAddModal.value = false;
 }
 
-function handleDateClick(date) {
-  const foundEvents = events.value.filter((e) => {
-    const dateObj = new Date(date);
-    const start = new Date(e.startDate);
-    const end = new Date(e.endDate);
-    return dateObj >= start && dateObj <= end;
-  });
-
+async function handleDateClick(date) {
   selectedDate.value = date;
-  selectedEvents.value = foundEvents;
+  await calendarStore.dayevents(route.params.companyIdx ?? 1, date);
   showDetailModal.value = true;
 }
+
+const dayEvents = computed(() => calendarStore.dayevent);
 
 function handleEditEvent(event) {
   selectedEvent.value = event;
@@ -156,7 +146,7 @@ onMounted(async () => {
 
   try {
     await calendarStore.monthevents(companyIdx); // Pinia Store의 monthevents 호출
-    console.log("이벤트 리스트 : ", events.value);
+    // console.log("이벤트 리스트 : ", events.value);
   } catch (error) {
     console.error("일정 데이터를 가져오는 중 오류 발생:", error);
   }
@@ -195,7 +185,7 @@ onMounted(async () => {
     <EventByDateDetail
       :visible="showDetailModal"
       :date="selectedDate"
-      :events="filteredEvents"
+      :events="dayEvents"
       @close="showDetailModal = false"
       @add-event="openAddEvent"
       @event-click="handleEventClick"

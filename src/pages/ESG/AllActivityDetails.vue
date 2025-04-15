@@ -2,6 +2,7 @@
 import { ref,onMounted } from 'vue'
 import { useRouter,useRoute } from "vue-router";
 import { useActivityStore } from '../../stores/useActivityStore';
+import { useStompStore } from '../../stores/useStompStore'
 
 const activitySore = useActivityStore()
 const route = useRoute();
@@ -9,16 +10,17 @@ const idx = route.params.idx;
 
 const detail = ref({});
 
+const stomp = useStompStore()
+
 onMounted(async () => {
-  console.log(idx);
   detail.value=await activitySore.detail(idx);
-  console.log(detail.value)
 })
 
 // 승인
 const agree=async()=>{
   activitySore.agree(idx);
   window.location.reload();
+  stomp.sendMessage("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",detail.value.member);
 }
 
 // 반려
@@ -47,7 +49,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <!-- 게시자 -->
       <div>
         <span class="font-semibold text-slate-700">게시자:</span>
-        <span class="text-slate-600 ml-2">{{ detail.memberName }}</span>
+        <!-- <span class="text-slate-600 ml-2">{{ detail.member.name }}</span> -->
       </div>
 
       <!-- 제목 -->

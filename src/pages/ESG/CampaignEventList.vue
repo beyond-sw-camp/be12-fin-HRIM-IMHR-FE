@@ -1,69 +1,64 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
-import MemberAdd from './CampaignMemberAdd.vue';
+import { useCalendarStore } from "../../stores/useCalendarStore";
+import MemberList from "./CampaignMemberList.vue";
 
+const router = useRouter();
+const calendarStore = useCalendarStore();
 
-const search = ref("");
-const router = useRouter()
-const searchQuery = ref('')
+const currentPage = ref(0);
+const totalPages = ref(0); // 응갑 받은 총 페이지 수
+const searchQuery = ref(""); // 검색
 
-const selectedCampaignIndex = ref(null);
-const registerModule = ref(false);
-
-const deleteCampaign = () => {
-  if (selectedCampaignIndex.value !== null) {
-
-    selectedCampaignIndex.value = null;
-  }
+// 이벤트 가져오기
+const fetchCampaigns = async () => {
+  totalPages.value = await calendarStore.companyeventList(
+    currentPage.value,
+    10
+  );
 };
 
-const addCampain = (newPartners) => {
-  newPartners.forEach(partner => {
-    companies.value.push({
-      name: partner.name,
+// 페이지가 바뀌거나 처음 로딩될 때 데이터 가져오기
+watch(currentPage, fetchCampaigns);
+onMounted(fetchCampaigns);
 
-    })
-  })
-  registerModule.value = false
-}
-
-const addPartners = (newPartners) => {
-  newPartners.forEach(partner => {
-    companies.value.push({
-      name: partner.name,
-      totalGrade: '-', environment: '-', social: '-', governance: '-', score: 0
-    })
-  })
-  registerModule.value = false
-}
-
-const campaigns = ref([
-  { title: 'ESG 캠페인 5', date: '2025.02.12' },
-  { title: 'ESG 캠페인 4', date: '2025.02.12' },
-  { title: 'ESG 캠페인 3', date: '2025.02.12' },
-  { title: 'ESG 캠페인 2', date: '2025.02.12' },
-  { title: 'ESG 캠페인 1', date: '2025.02.12' }
-])
-
+// 검색 필터
 const filteredCampaigns = computed(() =>
-    campaigns.value.filter(c => c.title.includes(searchQuery.value))
-)
+  calendarStore.pageEventList.filter((c) =>
+    (c.content || "").toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
 
-const goToDetail = (item) => {
-  router.push({ path: '/campaigndetail/1', query: { title: item.title } })
-}
+// 모달
+const showModal = ref(false);
+const selectedCampaign = ref(null);
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// 캠페인 클릭 시
+const openModal = (campaign) => {
+  selectedCampaign.value = campaign;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+// 페이지 권한 설정
+const userRole = ref(
+  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
+);
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 
 <template>
-  <div class="px-8 py-10 bg-gray-50 min-h-screen">
+  <div class="px-8 py-6 bg-gray-50 min-h-screen">
     <!-- 페이지 제목 -->
-    <h2 class="text-2xl font-bold text-slate-800 text-center mb-8">사내 캠페인 리스트</h2>
+    <h2 class="text-4xl font-bold text-slate-800 text-center mb-8">
+      사내 캠페인 리스트
+    </h2>
 
     <!-- 검색창 -->
     <div
@@ -73,6 +68,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
 
       <input
         type="text"
+        v-model="searchQuery"
         placeholder="캠페인명 검색"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
@@ -84,51 +80,81 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       </button>
     </div>
 
-    
-
-    <div class="flex justify-end max-w-4xl mx-auto" v-if="userRole === 'manager'">
-      <button
-        @click="registerModule = true"
-        class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
-      >
-        캠페인 추가
-      </button>
-    </div>
-
     <!-- 리스트 테이블 -->
     <div class="bg-white rounded-lg shadow overflow-hidden max-w-4xl mx-auto">
       <table class="min-w-full text-sm text-slate-800 text-center">
         <thead class="bg-slate-100 border-b border-gray-200">
-        <tr>
-          <th class="py-3 px-6">내용</th>
-          <th class="py-3 px-6">날짜</th>
-        </tr>
+          <tr>
+            <th class="py-3 px-6">내용</th>
+            <th class="py-3 px-6">날짜</th>
+            <th class="py-3 px-6" v-if="userRole === 'manager'">사원 추가</th>
+          </tr>
         </thead>
+
         <tbody>
-        <tr
-            v-for="(item, index) in filteredCampaigns"
-            :key="index"
-            @click="goToDetail(item)"
+          <tr
+            v-for="(event, idx) in filteredCampaigns"
+            :key="idx"
             class="border-b hover:bg-slate-50 cursor-pointer transition"
-        >
-          <td class="py-3 px-6 font-medium">{{ item.title }}</td>
-          <td class="py-3 px-6 text-slate-500">{{ item.date }}</td>
-        </tr>
+          >
+            <td class="py-3 px-6 font-medium" @click="openModal(event)">
+              {{ event.content }}
+            </td>
+
+            <td class="py-3 px-6 text-slate-500">
+              {{ event.startDate }} ~ {{ event.endDate }}
+            </td>
+
+            <td class="py-3 px-6" v-if="userRole === 'manager'">
+              <router-link
+                :to="`/memberadd/${event.idx}`"
+                class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
+              >
+                사원 추가
+              </router-link>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <!-- 페이지네이션 -->
     <div class="flex justify-center mt-8 space-x-2 text-sm">
-      <button class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900">← 이전</button>
-      <button v-for="page in 5" :key="page" class="px-3 py-1 bg-slate-100 rounded hover:bg-slate-200">{{ page }}</button>
-      <button class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900">다음 →</button>
+      <button
+        class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900"
+        :disabled="currentPage === 0"
+        @click="currentPage--"
+      >
+        ← 이전
+      </button>
+
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        @click="currentPage = page - 1"
+        :class="[
+          'px-3 py-1 rounded',
+          currentPage === page - 1
+            ? 'bg-slate-800 text-white'
+            : 'bg-slate-100 hover:bg-slate-200',
+        ]"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900"
+        :disabled="currentPage === totalPages - 1"
+        @click="currentPage++"
+      >
+        다음 →
+      </button>
     </div>
 
-    <MemberAdd
-      :visible="registerModule"
-      @close="registerModule = false"
-      @confirm="addCampain"
+    <MemberList
+      v-if="showModal"
+      :campaign="selectedCampaign"
+      @close="closeModal"
     />
   </div>
 </template>

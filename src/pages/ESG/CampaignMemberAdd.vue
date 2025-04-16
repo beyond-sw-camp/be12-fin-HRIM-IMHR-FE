@@ -1,3 +1,29 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { Search } from "lucide-vue-next";
+
+const route = useRoute();
+const campaignTitle = ref("");
+const startDate = ref("2025-08-17");
+const endDate = ref("2025-08-17");
+
+onMounted(() => {
+  campaignTitle.value = route.query.title || "ESG 캠페인 1";
+});
+
+const users = ref([
+  { id: "test4", name: "test4" },
+  { id: "test3", name: "test3" },
+  { id: "test2", name: "test2" },
+  { id: "test1", name: "test1" },
+  { id: "test", name: "test" },
+]);
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
+</script>
+
 <template>
   <div class="p-8 bg-gray-50 min-h-screen">
       <h1 class="text-3xl font-bold text-slate-800 mb-6"> 사내 캠페인 상세 </h1>
@@ -70,29 +96,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { Search } from "lucide-vue-next";
-
-const route = useRoute();
-const campaignTitle = ref("");
-const startDate = ref("2025-08-17");
-const endDate = ref("2025-08-17");
-
-onMounted(() => {
-  campaignTitle.value = route.query.title || "ESG 캠페인 1";
-});
-
-const users = ref([
-  { id: "test4", name: "test4" },
-  { id: "test3", name: "test3" },
-  { id: "test2", name: "test2" },
-  { id: "test1", name: "test1" },
-  { id: "test", name: "test" },
-]);
-
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
-</script>

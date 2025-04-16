@@ -21,7 +21,10 @@ const showDetailModal = ref(false);
 const selectedDate = ref(null);
 const selectedEvent = ref(null);
 const showEventInfoModal = ref(false);
+// 특정 날짜의 이벤트 리스트 데이터 담기
+const dayEvents = computed(() => calendarStore.dayevent);
 
+// 일별로 데이터를 뿌리는 코드
 const normalizedEvents = computed(() => {
   const result = [];
 
@@ -42,6 +45,7 @@ const normalizedEvents = computed(() => {
   return result;
 });
 
+// 버튼 클릭시 실행 되어 데이터를 담는 코드
 function handleEventClick(event) {
   selectedEvent.value = event;
   selectedDate.value = event.date || new Date().toISOString().split("T")[0];
@@ -49,13 +53,12 @@ function handleEventClick(event) {
   showAddModal.value = false;
 }
 
+// 데이터 불러오는 버튼 발동 코드드
 async function handleDateClick(date) {
   selectedDate.value = date;
   await calendarStore.dayevents(date);
   showDetailModal.value = true;
 }
-
-const dayEvents = computed(() => calendarStore.dayevent);
 
 function handleEditEvent(event) {
   selectedEvent.value = event;
@@ -63,6 +66,7 @@ function handleEditEvent(event) {
   showEventInfoModal.value = false;
 }
 
+// 이벤트 생성 모달의 저장 or 수정 버튼 클릭시 저장과 수정되는 코드
 async function handleAddEvent(event) {
   const isEdit = !!event.id;
 
@@ -92,8 +96,8 @@ async function handleAddEvent(event) {
   events.value = calendarStore.monthevent;
 }
 
-function openAddEvent(date = null) {
   // date가 없으면 오늘 날짜로
+function openAddEvent(date = null) {
   selectedDate.value = date || new Date().toISOString().split("T")[0];
   showAddModal.value = true;
 }
@@ -113,6 +117,7 @@ async function deleteEvent(event) {
   events.value = calendarStore.monthevent;
 }
 
+// 저번달달
 async function prevMonth() {
   if (month.value === 1) {
     month.value = 12;
@@ -124,6 +129,7 @@ async function prevMonth() {
   events.value = calendarStore.monthevent;
 }
 
+// 다음달
 async function nextMonth() {
   if (month.value === 12) {
     month.value = 1;
@@ -135,6 +141,7 @@ async function nextMonth() {
   events.value = calendarStore.monthevent;
 }
 
+// 데이터
 onMounted(async () => {
   try {
     await calendarStore.monthevents(year.value, month.value);

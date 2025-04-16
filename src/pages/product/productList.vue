@@ -1,20 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-50 px-6 py-10">
     <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">친환경 제품 리스트</h1>
-
+    <pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>
     <!-- 검색창 -->
     <div class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8">
       <Search color="black" :size="30" />
-      <input
-        v-model="search"
-        type="text"
-        placeholder="검색어를 입력하세요"
-        class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
-      />
-      <button
-        @click="onSearch"
-        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
-      >
+      <input v-model="search" type="text" placeholder="검색어를 입력하세요"
+        class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500" />
+      <button @click="onSearch" class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition">
         검색
       </button>
     </div>
@@ -26,19 +19,17 @@
           <tr>
             <th class="p-3">제품 번호</th>
             <th class="p-3">제품명</th>
-            <th class="p-3">회사 번호</th>
+            <th class="p-3">시리얼 넘버</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(product, index) in filteredProducts"
-            :key="product.idx"
-            class="border-b hover:bg-slate-50 transition cursor-pointer"
-            @click="goToDetail(product.idx)"
-          >
-            <td class="p-3">{{ index + 1 }}</td>
+          <tr v-for="(product, index) in filteredProducts" :key="product.idx"
+          
+            class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.productIdx)">
+            <td class="p-3">{{ product.productIdx }}</td>
             <td class="p-3">{{ product.productName }}</td>
-            <td class="p-3">{{ product.idx }}</td>
+            <td class="p-3">{{ product.serialNumber }}</td>
+
           </tr>
         </tbody>
       </table>
@@ -46,10 +37,7 @@
 
     <!-- 등록 버튼 -->
     <div class="max-w-5xl mx-auto flex justify-end mt-6">
-      <router-link
-        v-if="userRole === 'manager'"
-        :to="{ path: '/productRegist', query: { mode: 'create' } }"
-      >
+      <router-link v-if="userRole === 'manager'" :to="{ path: '/productRegist', query: { mode: 'create' } }">
         <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">
           등록
         </button>
@@ -76,6 +64,7 @@ onMounted(async () => {
   try {
     const res = await axios.get(`/api/product/company/${company_idx}`);
     products.value = res.data.data;
+    console.log("제품 목록 조회 성공:", products.value);
   } catch (err) {
     console.error("제품 목록 조회 실패:", err);
     alert("제품 목록 조회 중 오류가 발생했습니다.");
@@ -97,12 +86,14 @@ const onSearch = () => {
 
 // 상세 보기로 이동
 const goToDetail = (product_idx) => {
+  const company_idx = String(route.params.idx || 1);  // ← 문자열로 변환
   router.push({
-    name: 'ProductDetail',
+    name: 'productDetail',
     params: {
-      company_idx,
-      product_idx
+      company_idx: String(company_idx),
+      product_idx: String(product_idx)
     }
   });
 };
+
 </script>

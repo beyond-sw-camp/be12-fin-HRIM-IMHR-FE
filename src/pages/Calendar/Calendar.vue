@@ -102,8 +102,6 @@ async function prevMonth() {
   }
   await calendarStore.monthevents(year.value, month.value);
 }
-// 확인
-//   console.log(month.value, " 월 달력 이벤트 리스트 : ", normalizedEvents.value);
 
 // 다음달
 async function nextMonth() {

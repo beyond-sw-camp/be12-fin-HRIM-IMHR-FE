@@ -6,7 +6,8 @@ export const useCalendarStore = defineStore('calendar', {
     {
       monthevent: [],
       dayevent: [],
-      pageEventList: []
+      pageEventList: [],
+      detailevent: {},
     }
   ),
 
@@ -21,7 +22,7 @@ export const useCalendarStore = defineStore('calendar', {
       }
     },
 
-    // 이벤트 수정정
+    // 이벤트 수정
     async update(idx, formData) {
       try {
         const response = await axios.put(`/api/event/update/${idx}`, formData);
@@ -32,7 +33,7 @@ export const useCalendarStore = defineStore('calendar', {
       }
     },
 
-    // 캘린더 한달치 이벤트 끌고오기기
+    // 캘린더 한달치 이벤트 끌고오기
     async monthevents(year, month) {
       try {
         const response = await axios.get(`/api/event/month/list?year=${year}&month=${month}`);
@@ -58,8 +59,23 @@ export const useCalendarStore = defineStore('calendar', {
     async eventdelete(idx) {
       try {
         const response = await axios.delete(`/api/event/delete/${idx}`);
+        
       } catch (error) {
         console.error("일정 데이터 삭제중 오류 발생", error.response || error.message);
+      }
+    },
+
+    // 회사 특정 이벤트 끌고 오기
+    async eventdetial(idx) {
+      try {
+        const response = await axios.get(`/api/event/eventDetail/${idx}`);
+        
+        this.detailevent = response.data.data;
+        return response.data.data;
+
+      } catch (error) {
+        console.error("이벤트 데이터 가저오는 중 오류 발생", error.response || error.message);
+        return null;
       }
     },
 

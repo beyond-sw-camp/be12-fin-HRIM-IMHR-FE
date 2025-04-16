@@ -27,7 +27,7 @@ onMounted(fetchCampaigns);
 // 검색 필터
 const filteredCampaigns = computed(() =>
   calendarStore.pageEventList.filter((c) =>
-    (c.content || "").toLowerCase().includes(searchQuery.value.toLowerCase())
+    (c.title || "").toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 );
 
@@ -85,7 +85,7 @@ const userRole = ref(
       <table class="min-w-full text-sm text-slate-800 text-center">
         <thead class="bg-slate-100 border-b border-gray-200">
           <tr>
-            <th class="py-3 px-6">내용</th>
+            <th class="py-3 px-6">제목</th>
             <th class="py-3 px-6">날짜</th>
             <th class="py-3 px-6" v-if="userRole === 'manager'">사원 추가</th>
           </tr>
@@ -98,7 +98,7 @@ const userRole = ref(
             class="border-b hover:bg-slate-50 cursor-pointer transition"
           >
             <td class="py-3 px-6 font-medium" @click="openModal(event)">
-              {{ event.content }}
+              {{ event.title }}
             </td>
 
             <td class="py-3 px-6 text-slate-500">

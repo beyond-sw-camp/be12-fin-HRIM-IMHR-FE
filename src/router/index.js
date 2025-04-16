@@ -20,7 +20,7 @@ import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
 import ActivityList from '../pages/esg/ActivityList.vue'
 import CampaignList from '../pages/esg/CampaignEventList.vue';
-import MemberList from '../pages/esg/CampaignMemberList.vue'
+import CampaignMemberAdd from '../pages/esg/CampaignMemberAdd.vue';
 
 // 교육
 import EducationList from '../pages/esg/EducationList.vue'
@@ -48,7 +48,6 @@ import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
 // 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
-import CampaignMemberAdd from '../pages/esg/CampaignMemberAdd.vue';
 
 const routes = [
   {
@@ -159,7 +158,7 @@ const routes = [
     component: CampaignList
   },
   {
-    path: '/memberadd/:eventidx',
+    path: '/memberadd/:idx',
     name: 'memberadd',
     component: CampaignMemberAdd
   },

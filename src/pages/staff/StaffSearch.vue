@@ -79,7 +79,6 @@ onMounted(async () => {
               <router-link
                 :to="{
                   path: user.status === 'APPROVED' ? `/permissionSetting/${user.idx}` : `/staffDetail/${user.idx}`,
-                  query: { status: user.status },
                 }"
               >
                 {{ user.memberId }}

@@ -28,8 +28,10 @@
           </tr>
         </thead>
         <tbody>
+
           <tr v-for="activity in activitySore.activityList" :key="activity.activityIdx"
-            class="border-b hover:bg-slate-50 transition">
+            @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
+            class="border-b hover:bg-slate-50 transition cursor-pointer">
 
             <td class="py-2">
               <span class="text-white text-xs px-3 py-1 rounded-md inline-block" :class="{
@@ -43,17 +45,20 @@
 
             <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
 
-            <td>{{ activity.topic }}</td>
-            <router-link :to="`/activeDetails/${activity.activityIdx}`">
-              <td>{{ activity.description }}</td>
-            </router-link>
+            <td>{{ activity.title }}</td>
+
+            <td>{{ activity.description }}</td>
+
 
             <td v-if="userRole !== 'manager'">
-              <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition">
+              <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
+                @click.stop="activityDelete()">
                 삭제
               </button>
             </td>
+
           </tr>
+
         </tbody>
       </table>
     </div>
@@ -250,6 +255,10 @@ const submit = async () => {
   }
 }
 
+
+const activityDelete=()=>{
+  console.log("test")
+};
 
 
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')

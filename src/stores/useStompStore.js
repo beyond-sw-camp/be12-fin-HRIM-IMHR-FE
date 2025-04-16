@@ -7,10 +7,9 @@ export const useStompStore = defineStore('stomp', () => {
   const stompClient = ref(null)
   const connected = ref(false)
   const receivedMessages = ref([])
-  const member = ref({})
 
   const connect = (member) => {
-    member.value = member
+    // member.value = member
 
     stompClient.value = new Client({
       brokerURL: 'ws://localhost:8080/ws',
@@ -40,9 +39,7 @@ export const useStompStore = defineStore('stomp', () => {
   //   }
   // }
 
-  const sendMessage = (title,content,member) => {
-    console.log("보내기 함수 실행")
-    console.log(member)
+  const sendApprove = (title,content,member) => {
 
     if (connected.value && stompClient.value) {
       const payload = JSON.stringify({
@@ -52,7 +49,7 @@ export const useStompStore = defineStore('stomp', () => {
       });
 
       stompClient.value.publish({
-        destination: `/app/notification/${member.value}`,
+        destination: `/app/notification/approve/${member.idx}`,
         body: payload,
         headers: {
           'content-type': 'application/json', // 명시적 content-type (선택사항)
@@ -68,6 +65,6 @@ export const useStompStore = defineStore('stomp', () => {
     connected,
     receivedMessages,
     connect,
-    sendMessage,
+    sendApprove,
   }
 })

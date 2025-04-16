@@ -48,6 +48,7 @@ import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
 // 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
+import CampaignMemberAdd from '../pages/esg/CampaignMemberAdd.vue';
 
 const routes = [
   {
@@ -154,8 +155,13 @@ const routes = [
   },
   {
     path: '/campaignlist/1',
-    name: 'activityCampaignList',
-    component: MemberList
+    name: 'campaignList',
+    component: CampaignList
+  },
+  {
+    path: '/memberadd/:eventidx',
+    name: 'memberadd',
+    component: CampaignMemberAdd
   },
 
   // 보고서

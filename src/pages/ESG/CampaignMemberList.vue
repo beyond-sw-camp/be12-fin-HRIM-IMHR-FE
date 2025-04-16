@@ -11,6 +11,7 @@
           placeholder="회사명을 입력하세요"
           class="flex-1 border px-3 py-2 rounded"
         />
+        
         <button
           @click="onSearch"
           class="bg-slate-600 text-white px-4 rounded hover:bg-slate-700"

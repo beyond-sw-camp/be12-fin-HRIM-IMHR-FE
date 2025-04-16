@@ -1,19 +1,32 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useMemberStore } from '../../stores/useMemberStore'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const memberStore = useMemberStore();
 const route = useRoute();
+const router = useRouter();
 const user = ref({})
 
 let memberIdx = route.params.id;
 
 const departments = ref([]);
 
-const save = () => {
-  alert('✅ 권한 저장 완료!')
-  console.log('선택된 권한:', user.value.permissions)
+const save = async () => {
+  let form = {
+    department: user.value.department,
+    isAdmin: user.value.isAdmin,
+    hasProdAuth: user.value.hasProdAuth,
+    hasPartnerAuth: user.value.hasPartnerAuth,
+    hrRoles: user.value.hrRoles,
+  }
+  console.log(form);
+  const response = await memberStore.staffModify(user.value.idx, form);
+  if(response.data.isSuccess) {
+    alert('✅ 회원 정보 수정 완료!');
+    router.go(0);
+  }
+  
 }
 
 const terminate = () => {
@@ -46,7 +59,7 @@ onMounted(async () => {
             <label class="block text-sm mb-1 text-gray-700">부서 선택</label>
             <select v-model="user.department" class="w-full border px-4 py-2 rounded">
               <option disabled value="">부서를 선택하세요</option>
-              <option v-for="dept in departments" :key="dept">{{ dept }}</option>
+              <option v-for="dept in departments" :value="dept" :key="dept">{{ dept.name }}</option>
             </select>
           </div>
           <p class="text-sm text-gray-400 mt-2">등록일: {{ user.joinedAt }}</p>
@@ -71,7 +84,7 @@ onMounted(async () => {
             </div>
           </div>
 
-          <div class="mb-6">
+          <div class="mb-6" v-if="!user.isAdmin">
             <!-- 그룹 타이틀 -->
             <h5 class="font-bold mb-2">인사 권한</h5>
             <!-- 인사 권한이면 스크롤 박스 처리 -->
@@ -83,7 +96,7 @@ onMounted(async () => {
               >
                 <input
                   type="checkbox"
-                  :value="dept"
+                  :value="String(dept.idx)"
                   v-model="user.hrRoles"
                   class="mr-2"
                 />
@@ -92,7 +105,7 @@ onMounted(async () => {
             </div>
           </div>
 
-          <div class="mb-6">
+          <div class="mb-6" v-if="!user.isAdmin">
             <!-- 그룹 타이틀 -->
             <h5 class="font-bold mb-2">경영 권한</h5>
             <!-- 기타 그룹은 그리드 형태로 -->
@@ -132,7 +145,7 @@ onMounted(async () => {
           @click="terminate"
           class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
         >
-          반려
+          탈퇴
         </button>
       </div>
     </main>

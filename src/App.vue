@@ -47,6 +47,32 @@ const notifications = ref([
     read: true,
     link: "/educationList/1",
   },
+  {
+    title: "활동 보고서 제츨 안내",
+    content: "활동 보고서 제출 기한이 곧 마감됩니다.",
+    read: true,
+    link: "/educationList/1",
+  },
+  {
+    title: "활동 보고서 제츨 안내",
+    content: "활동 보고서 제출 기한이 곧 마감됩니다.",
+    read: true,
+    link: "/educationList/1",
+  },
+  {
+    title: "활동 보고서 제츨 안내",
+    content: "활동 보고서 제출 기한이 곧 마감됩니다.",
+    read: true,
+    link: "/educationList/1",
+  },
+  {
+    title: "활동 보고서 제츨 안내",
+    content: "활동 보고서 제출 기한이 곧 마감됩니다.",
+    read: true,
+    link: "/educationList/1",
+  },
+
+
 ]);
 
 const toggleNoti = () => (showNotiPopup.value = !showNotiPopup.value);

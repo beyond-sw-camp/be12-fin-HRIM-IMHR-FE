@@ -14,7 +14,6 @@ export const useCalendarStore = defineStore('calendar', {
     async regist(formData) {
       try {
         const response = await axios.post("/api/event/register", formData);
-        console.log("전송데이터 : " + response.data);
         return response.data; 
       } catch (error) {
         console.error("등록 실패:", error.response || error.message);

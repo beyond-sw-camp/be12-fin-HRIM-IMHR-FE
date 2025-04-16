@@ -8,7 +8,7 @@ const router = useRouter();
 const route = useRoute();
 const productStore = useProductStore();
 
-const idx = route.params.idx;
+const idx = route.query.idx;
 const mode = ref(route.query.mode || (idx ? "view" : "create"));
 
 const form = reactive({
@@ -33,6 +33,7 @@ onMounted(async () => {
   if (mode.value !== "create" && idx) {
     try {
       const res = await axios.get(`/api/product/detail/${idx}`);
+      console.log(res.data.data);// Debugging line
       const data = res.data.data;
       form.name = data.productName;
       form.serial = data.productIdx;
@@ -104,6 +105,7 @@ const handleDelete = async () => {
 </script>
 <template>
   <div class="bg-gray-50 p-10 min-h-screen">
+    <pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
       <h2 class="text-blue-600 font-semibold mb-6">
         {{ mode === 'edit' ? '제품 수정' : mode === 'view' ? '제품 상세 보기' : '제품 등록' }}

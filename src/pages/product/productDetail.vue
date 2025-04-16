@@ -4,12 +4,13 @@
     <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">
       친환경 제품 상세 보기
     </h1>
+    <pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>
 
     <!-- 📦 상세 내용 영역 -->
     <div class="flex flex-col md:flex-row gap-10 items-start justify-center">
       <!-- 📸 제품 이미지 + 매출 -->
       <div class="flex flex-col items-center bg-white p-6 rounded shadow-md w-full md:w-1/3">
-        <img
+        <img 
           :src="product.imagePath || 'https://via.placeholder.com/300x300?text=No+Image'"
           alt="제품 이미지"
           class="w-full h-auto max-w-xs mb-4 rounded-md"
@@ -52,12 +53,11 @@
 
     <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
       <router-link
-        :to="{ path: '/productRegist', query: { mode: 'edit' }, params: { idx: product.idx } }"
+        :to="{ path: '/productRegist', query: { mode: 'edit' , idx: `${product.productIdx}`}, params: { idx: product.idx } }"
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
       >
         수정
       </router-link>
-
       <button
         class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
         @click="handleDelete"
@@ -84,8 +84,11 @@ const props = defineProps({
 
 const fetchProduct = async () => {
   try {
+    console.log("📦 props.product_idx:", props.product_idx);
     const res = await axios.get(`/api/product/detail/${props.product_idx}`);
+    console.log("✅ 응답 데이터:", res.data.data);
     product.value = res.data.data;
+    console.log(product.value);
     totalRevenue.value = Math.floor((product.value.unitPrice || 0) * (product.value.salesQty || 0) / 10000);
   } catch (err) {
     alert('제품 데이터를 불러오는 데 실패했습니다.');
@@ -95,6 +98,7 @@ const fetchProduct = async () => {
 const handleDelete = async () => {
   if (confirm("정말 삭제하시겠습니까?")) {
     try {
+      console.log("✅ 응답 데이터:", res.data.data);
       await axios.delete(`/api/product/${props.product_idx}`);
       alert("삭제되었습니다.");
       router.push(`/productList/${props.company_idx}`);

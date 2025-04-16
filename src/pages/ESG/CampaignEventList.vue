@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Search } from "lucide-vue-next";
+import MemberAdd from './CampaignMemberAdd.vue';
 
 
 const search = ref("");
@@ -124,7 +125,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <button class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900">다음 →</button>
     </div>
 
-    <CampaignRegist
+    <MemberAdd
       :visible="registerModule"
       @close="registerModule = false"
       @confirm="addCampain"

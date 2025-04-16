@@ -154,7 +154,7 @@ const routes = [
     props: true,
   },
   {
-    path: '/campaignlist/1',
+    path: '/campaignlist',
     name: 'campaignList',
     component: CampaignList
   },

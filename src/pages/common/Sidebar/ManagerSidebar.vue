@@ -9,7 +9,7 @@ const menuItems = [
   // { path: '/dashboard', label: '부서서 ESG 현황' },
   { path: "/educationList/1", label: "ESG 교육 활동 관리" },
   { path: "/activityList", label: "ESG 기타 활동 관리" },
-  { path: "/campaignlist/1", label: "ESG 사내 캠페인 관리" },
+  { path: "/campaignlist", label: "ESG 사내 캠페인 관리" },
   { path: "/productList/1", label: "친환경 제품 관리" },
   { path: "/partnerList/1", label: "협력사 관리" },
   { path: "/staffSearch", label: "사원 관리" },

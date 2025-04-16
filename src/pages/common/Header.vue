@@ -26,17 +26,17 @@ const handleLogout = async () => {
 }
 
 const stomp = useStompStore()
-
-onMounted(() => {
-  const member=ref({});
-  // memberIdx.value=memberStore.fetchMember();
-  if(!memberStore.userInfo){
-    member.value=memberStore.fetchMember();
+const member=ref({});
+onMounted(async () => {
+  // fetchMember가 비동기 함수라면 await 사용
+  member.value = await memberStore.fetchMember();
+  // if(!memberStore.userInfo){
+  //   member.value=memberStore.fetchMember();
     
-  }else{
-    member.value=memberStore.userInfo
-    
-  }
+  // }else{
+  //   member.value=memberStore.userInfo
+  //   console.log("왜 있지?")
+  // }
 
   stomp.connect(member.value)
 })
@@ -68,7 +68,7 @@ onMounted(() => {
         to="/mypage"
         class="text-slate-700 text-base md:text-3xl font-medium hover:underline mr-2 font-semibold"
       >
-        홍길동
+        {{ member.name }}
       </router-link>
 
       <button @click="$emit('toggle-noti')" class="relative">

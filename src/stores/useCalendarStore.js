@@ -36,7 +36,7 @@ export const useCalendarStore = defineStore('calendar', {
       try {
         const response = await axios.get(`/api/event/month/list?year=${year}&month=${month}`);
 
-        console.log("응답데이터 : ", response.data.data);
+        // console.log("응답데이터 : ", response.data.data);
 
         this.monthevent = response.data.data;
         

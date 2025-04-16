@@ -14,7 +14,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(["close", "event-click", "add-event"]);
+const emit = defineEmits(["close", "save", "add-event", "event-click"]);
 
 const localEvents = ref([...props.events]);
 

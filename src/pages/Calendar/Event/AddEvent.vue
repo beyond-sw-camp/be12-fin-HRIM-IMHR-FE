@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import { X } from "lucide-vue-next";
 import { useCalendarStore } from "../../../stores/useCalendarStore";
 
-const emit = defineEmits(["close", "save"]);
+const emit = defineEmits(["close", "save", "add-event"]);
 const calendarStore = useCalendarStore();
 
 const props = defineProps({

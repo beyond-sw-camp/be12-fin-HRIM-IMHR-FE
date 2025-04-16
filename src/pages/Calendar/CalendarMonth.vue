@@ -91,7 +91,7 @@ function getEventsForDate(date) {
         <!-- 날짜 숫자(동그라미) - absolute로 고정 -->
         <div class="absolute top-2 left-2 z-10">
           <span
-            v-if="getEventsForDate(date.fullDate).length > 2"
+            v-if="getEventsForDate(date.fullDate).length > 3"
             class="inline-flex items-center justify-center w-6 h-6 text-sm font-bold text-zinc-800 bg-violet-100 rounded-full"
           >
             {{ date.day }}

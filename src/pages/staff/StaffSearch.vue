@@ -1,27 +1,30 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useMemberStore } from "../../stores/useMemberStore";
 
+const memberStore = useMemberStore();
 const searchText = ref("");
 
-const users = ref([
-  { order: 7, status: "대기 중", id: "test7", name: "test7" },
-  { order: 6, status: "대기 중", id: "test6", name: "test6" },
-  { order: 5, status: "승인 반려", id: "test5", name: "test5" },
-  { order: 4, status: "승인", id: "test4", name: "test4" },
-  { order: 3, status: "승인", id: "test3", name: "test3" },
-  { order: 2, status: "승인", id: "test2", name: "test2" },
-  { order: 1, status: "승인", id: "test1", name: "test1" },
-]);
+const myinfo = ref([]);
+const users = ref([]);
 
 const filteredUsers = computed(() => {
-  return users.value.filter((u) => u.id.includes(searchText.value));
+  return users.value.filter((u) => u.memberId.includes(searchText.value));
 });
 
 const searchUser = () => {
   console.log(`검색: ${searchText.value}`);
 };
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
+onMounted(async () => {
+  myinfo.value = (await memberStore.myPageInfo()).data.data;
+  console.log(myinfo.value)
+  if(myinfo.value.isAdmin) {
+    const response = await memberStore.adminMemberList();
+    console.log(response);
+    users.value = response.data.data;
+  }
+})
 </script>
 
 <template>
@@ -50,41 +53,40 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
         <thead class="bg-slate-100 text-slate-700">
           <tr>
             <th class="py-3 border">순번</th>
-            <th class="py-3 border" v-if="userRole === 'manager'">상태</th>
+            <th class="py-3 border" v-if="myinfo.isAdmin">상태</th>
             <th class="py-3 border">아이디</th>
             <th class="py-3 border">이름</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user, index) in filteredUsers" :key="user.id" class="border-b hover:bg-slate-50 transition">
-            <td class="py-2 border">{{ user.order }}</td>
+          <tr v-for="(user, index) in filteredUsers" :key="user.memberId" class="border-b hover:bg-slate-50 transition">
+            <td class="py-2 border">{{ index }}</td>
 
-            <td class="border" v-if="userRole === 'manager'">
+            <td class="border" v-if="myinfo.isAdmin">
               <span
                 class="px-2 py-1 text-white text-xs font-semibold rounded"
                 :class="{
-                  'bg-gray-500': user.status === '대기 중',
-                  'bg-green-500': user.status === '승인',
+                  'bg-gray-500': user.status === 'PENDING',
+                  'bg-green-500': user.status === 'APPROVED',
                   'bg-red-500': user.status === '승인 반려',
                 }"
               >
-                {{ user.status }}
+                {{ (user.status === "APPROVED" ? "승인" : "대기 중") }}
               </span>
             </td>
 
-            <td class="border" v-if="userRole === 'manager'">
+            <td class="border" v-if="myinfo.isAdmin">
               <router-link
                 :to="{
-                  path: user.status === '대기 중' ? `/permissionSetting/${user.id}` : `/staffDetail/${user.id}`,
-                  query: { status: user.status },
+                  path: user.status === 'APPROVED' ? `/permissionSetting/${user.idx}` : `/staffDetail/${user.idx}`,
                 }"
               >
-                {{ user.id }}
+                {{ user.memberId }}
               </router-link>
             </td>
 
             <!-- ✅ 수정된 부분 -->
-            <td class="border" v-if="userRole !== 'manager'">
+            <td class="border" v-if="!myinfo.isAdmin">
               <router-link :to="`/feedback/${user.id}`">
                 {{ user.id }}
               </router-link>

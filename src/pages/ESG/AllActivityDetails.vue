@@ -19,8 +19,9 @@ onMounted(async () => {
 // 승인
 const agree=async()=>{
   activitySore.agree(idx);
-  window.location.reload();
-  stomp.sendMessage("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",detail.value.member);
+  stomp.sendApprove("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",detail.value.member);
+  // window.location.reload();
+  
 }
 
 // 반려

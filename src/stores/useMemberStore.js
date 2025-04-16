@@ -34,6 +34,18 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.get("/api/member/detail/info/"+idx);
             return response;
         },
+        async myPageInfo() {
+            const response = await axios.post("/api/member/myinfo");
+            return response;
+        },
+        async myActivity() {
+            const response = await axios.post("/api/member/myactivity/list");
+            return response;
+        },
+        async adminMemberList() {
+            const response = await axios.post("/api/member/list");
+            return response;
+        },
         async companySignup(formData) {
             const response = await axios.post("/api/member/signup/company", formData, {
                 headers: {
@@ -52,10 +64,12 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.post("/api/member/signup/personal", form);
             return response;
         },
-        async fetchMember() {
-            const response = await axios.post("/api/member/info")
-            this.userInfo = response.data;
-            
+        async approveMember(idx) {
+            const response = await axios.post("/api/member/approve/"+idx);
+            return response;
+        },
+        async rejectMember(idx) {
+            const response = await axios.post("/api/member/reject/"+idx);
             return response;
         },
         async logout() {

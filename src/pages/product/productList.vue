@@ -24,9 +24,9 @@
       <table class="w-full border-collapse text-sm text-center text-slate-800">
         <thead class="bg-slate-100 border-b text-slate-700">
           <tr>
-            <th class="p-3">순번</th>
+            <th class="p-3">제품 번호</th>
             <th class="p-3">제품명</th>
-            <th class="p-3">제품번호</th>
+            <th class="p-3">회사 번호</th>
           </tr>
         </thead>
         <tbody>

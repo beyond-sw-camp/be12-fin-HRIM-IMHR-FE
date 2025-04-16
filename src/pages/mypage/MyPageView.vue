@@ -1,8 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useMemberStore } from '../../stores/useMemberStore'
 
 const router = useRouter()
+const memberStore = useMemberStore()
 const currentPage = ref(1)
 const perPage = 5
 
@@ -31,11 +33,19 @@ const paginatedActivities = computed(() =>
 )
 
 const goToChangePassword = () => router.push('/change-password')
-const logout = () => {
+const logout = async () => {
+  await memberStore.logout();
   alert('로그아웃 되었습니다.')
   router.push('/login')
 }
-const goToActivityDetail = () => router.push('/activity/all')
+const goToActivityDetail = (activityIdx, campaignIdx) => {
+  if(campaignIdx === '') {
+    router.push('/activeDetails/'+activityIdx)
+  } else if(activityIdx === '') {
+    router.push('/campaigndetail/'+campaignIdx)
+  }
+  
+}
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) currentPage.value = page
 }
@@ -43,10 +53,19 @@ const goToPage = (page) => {
 
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
+
+onMounted(async () => {
+  const infoResponse = await memberStore.myPageInfo();
+  const activityResponse = await memberStore.myActivity();
+  console.log(infoResponse);
+  console.log(activityResponse);
+  user.value = infoResponse.data.data;
+  activities.value = activityResponse.data.data.activities;
+})
 </script>
 
 <template>
-  <div class="flex h-screen bg-gray-50 text-slate-800" v-if="userRole !== 'manager'">
+  <div class="flex h-screen bg-gray-50 text-slate-800" v-if="!user.isAdmin">
     <!-- ✅ 좌측 유저 영역 -->
     <aside class="w-72 bg-white border-r border-gray-200 p-6 flex flex-col items-center">
       <h2 class="text-xl font-bold mb-6">마이페이지</h2>
@@ -99,7 +118,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
               v-for="(activity, idx) in paginatedActivities"
               :key="idx"
               class="border-t hover:bg-slate-50 cursor-pointer transition"
-              @click="goToActivityDetail"
+              @click="goToActivityDetail(activity.activityIdx, activity.campaignIdx)"
           >
             <td class="px-4 py-3">{{ activity.title }}</td>
             <td class="px-4 py-3 text-right">{{ activity.date }}</td>
@@ -141,14 +160,14 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
     </main>
   </div>
 
-  <div v-if="userRole === 'manager'">
+  <div v-if="user.isAdmin">
     <aside class="w-72 bg-white p-6 flex flex-col items-center">
       <h2 class="text-4xl font-bold mb-6">마이페이지</h2>
 
       <!-- 유저 아바타 -->
       <div
           class="w-20 h-20 rounded-full bg-yellow-400 text-white text-xl font-bold flex items-center justify-center mb-4">
-        홈
+        {{ user.name[0] }}
       </div>
 
       <!-- 유저 정보 -->

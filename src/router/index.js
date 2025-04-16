@@ -237,10 +237,10 @@ const routes = [
     props: true,
   },
 
-  // 마이페이지
+  // 마이 페이지
   {
     path: '/mypage',
-    name:  'mypage',
+    name: 'myPage',
     component: MyPageView,
   },
 ];

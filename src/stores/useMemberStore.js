@@ -34,6 +34,14 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.get("/api/member/detail/info/"+idx);
             return response;
         },
+        async myPageInfo() {
+            const response = await axios.post("/api/member/myinfo");
+            return response;
+        },
+        async myActivity() {
+            const response = await axios.post("/api/member/myactivity/list");
+            return response;
+        },
         async companySignup(formData) {
             const response = await axios.post("/api/member/signup/company", formData, {
                 headers: {

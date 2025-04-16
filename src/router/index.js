@@ -19,8 +19,8 @@ import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 // 활동
 import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
 import ActivityList from '../pages/esg/ActivityList.vue'
-import CampaignList from '../pages/esg/CampaignList.vue'
-import CampaignDetail from '../pages/esg/CampaignDetail.vue'
+import CampaignList from '../pages/esg/CampaignEventList.vue';
+import MemberList from '../pages/esg/CampaignMemberList.vue'
 
 // 교육
 import EducationList from '../pages/esg/EducationList.vue'
@@ -144,15 +144,18 @@ const routes = [
     name: 'allActivityDetails',
     component: AllActivityDetails
   },
+
+  // 캘린더
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: Calendar,
+    props: true,
+  },
   {
     path: '/campaignlist/1',
     name: 'activityCampaignList',
-    component: CampaignList
-  },
-  {
-    path: '/campaigndetail/1',
-    name: 'activityCampaignDetail',
-    component: CampaignDetail
+    component: MemberList
   },
 
   // 보고서
@@ -172,14 +175,6 @@ const routes = [
     path: '/educationList/1',
     name: 'EducationList',
     component: EducationList
-  },
-
-  // 캘린더
-  {
-    path: '/calendar',
-    name: 'calendar',
-    component: Calendar,
-    props: true,
   },
 
   // 파트너사

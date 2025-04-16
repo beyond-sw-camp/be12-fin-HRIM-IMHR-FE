@@ -5,42 +5,11 @@ import { useRoute } from 'vue-router';
 
 const memberStore = useMemberStore();
 const route = useRoute();
-const user = ref({
-  name: '홍길동',
-  email: 'admin@example.com',
-  department: '',
-  registeredAt: '2024.03.01',
-  permissions: [],
-})
+const user = ref({})
 
 let memberIdx = route.params.id;
 
 const departments = ref([]);
-
-// 각 권한 그룹에 대해 그룹명과 하위 권한 목록을 정의
-const permissionGroups = [
-  {
-    groupName: '관리자 권한',
-    permissions: ['관리자']
-  },
-  {
-    groupName: '인사 권한',
-    // 인사 권한은 하위 권한 항목이 많아 스크롤 영역에서 보여줍니다.
-    permissions: [
-      '인사',
-      '총무',
-      '품질관리',
-      '생산',
-      '개발',
-      '국내영업',
-      '해외영업'
-    ]
-  },
-  {
-    groupName: '경영 권한',
-    permissions: ['협력사 관리', '친환경 제품 추적']
-  }
-]
 
 const save = () => {
   alert('✅ 권한 저장 완료!')
@@ -80,7 +49,7 @@ onMounted(async () => {
               <option v-for="dept in departments" :key="dept">{{ dept }}</option>
             </select>
           </div>
-          <p class="text-sm text-gray-400 mt-2">등록일: {{ user.registeredAt }}</p>
+          <p class="text-sm text-gray-400 mt-2">등록일: {{ user.joinedAt }}</p>
         </div>
 
         <!-- 오른쪽: 접근 권한 섹션 -->

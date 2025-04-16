@@ -42,6 +42,10 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.post("/api/member/myactivity/list");
             return response;
         },
+        async adminMemberList() {
+            const response = await axios.post("/api/member/list");
+            return response;
+        },
         async companySignup(formData) {
             const response = await axios.post("/api/member/signup/company", formData, {
                 headers: {

@@ -116,7 +116,7 @@ const routes = [
 
   // 관리자
   {
-    path: '/staffSearch/1',
+    path: '/staffSearch',
     name: 'staffSearch',
     component: StaffSearch
   },

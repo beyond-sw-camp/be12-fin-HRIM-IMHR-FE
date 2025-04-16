@@ -92,8 +92,8 @@ export const useStompStore = defineStore('stomp', () => {
   const showNotification = (data) => {
     const notification = new Notification(data.title, {
       body: data.content,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_5vmjPA2SvagWqCNABAcAPnIrcw7vp4zk4A&s',
-      image: 'https://image.utoimage.com/preview/cp872722/2022/12/202212008555_206.jpg'
+      icon: '/src/assets/icon/알림.png',
+      image: '/src/assets/icon/imhr.png'
     });
   
     notification.addEventListener('click', () => {

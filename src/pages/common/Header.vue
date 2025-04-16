@@ -4,8 +4,11 @@ import { useMemberStore } from '../../stores/useMemberStore'
 import { useRouter } from 'vue-router'
 import { Menu, Bell } from 'lucide-vue-next'
 import { useStompStore } from '../../stores/useStompStore'
+import { useNotificationStore } from "../../stores/useNotificationStore"
 
 const memberStore = useMemberStore();
+const NotificationStore = useNotificationStore();
+
 const emit = defineEmits(['toggle-sidebar', 'toggle-noti']);
 
 const router = useRouter();
@@ -25,15 +28,17 @@ const handleLogout = async () => {
 const stomp = useStompStore()
 
 onMounted(() => {
-  const memberIdx=ref({});
+  const member=ref({});
   // memberIdx.value=memberStore.fetchMember();
   if(!memberStore.userInfo){
-    memberIdx.value=memberStore.fetchMember();
+    member.value=memberStore.fetchMember();
+    
   }else{
-    memberIdx.value=memberStore.userInfo
+    member.value=memberStore.userInfo
+    
   }
-  
-  stomp.connect(memberIdx.value)
+
+  stomp.connect(member.value)
 })
 </script>
 

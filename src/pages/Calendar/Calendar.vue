@@ -14,7 +14,7 @@ const calendarStore = useCalendarStore();
 const today = new Date();
 const year = ref(today.getFullYear());
 const month = ref(today.getMonth() + 1);
-const events = ref([]);
+const events = computed(() => calendarStore.monthevent);
 
 const showAddModal = ref(false);
 const showDetailModal = ref(false);
@@ -24,25 +24,23 @@ const showEventInfoModal = ref(false);
 // 특정 날짜의 이벤트 리스트 데이터 담기
 const dayEvents = computed(() => calendarStore.dayevent);
 
-// 일별로 데이터를 뿌리는 코드
+// 자동으로 events 변경 추적
 const normalizedEvents = computed(() => {
-  const result = [];
-
-  if (!Array.isArray(events.value)) return result;
-
-  for (const e of events.value) {
-    // startDate, endDate가 없는 경우 방지
-    if (!e.startDate || !e.endDate) continue;
+  return events.value.flatMap(e => {
+    if (!e.startDate || !e.endDate) return [];
+    
     const start = new Date(e.startDate);
     const end = new Date(e.endDate);
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      result.push({
+    const days = [];
+    
+    for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+      days.push({
         ...e,
-        date: d.toISOString().split("T")[0], // YYYY-MM-DD
+        date: d.toISOString().split('T')[0]
       });
     }
-  }
-  return result;
+    return days;
+  });
 });
 
 // 버튼 클릭시 실행 되어 데이터를 담는 코드
@@ -66,58 +64,33 @@ function handleEditEvent(event) {
   showEventInfoModal.value = false;
 }
 
-// 이벤트 생성 모달의 저장 or 수정 버튼 클릭시 저장과 수정되는 코드
+// 이벤트 추가/수정/삭제 시 store 액션 사용
 async function handleAddEvent(event) {
-  const isEdit = !!event.id;
-
-  if (isEdit) {
-    events.value = events.value.filter((e) => e.idx !== event.id);
+  try {
+    // store에 이벤트 추가 액션 호출
+    await calendarStore.regist(event); // store를 통해 데이터 관리
+    await calendarStore.monthevents(year.value, month.value); // 데이터 갱신
+  } catch (error) {
+    console.error("이벤트 추가 실패:", error);
   }
-
-  const start = new Date(event.startDate);
-  const end = new Date(event.endDate);
-  const newEvents = [];
-
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    const dateStr = d.toISOString().split("T")[0];
-    newEvents.push({
-      ...event,
-      date: dateStr,
-    });
-  }
-
-
-  events.value.push(...newEvents);
-  showAddModal.value = false;
-  selectedEvent.value = null;
-
-  await calendarStore.monthevents(year.value, month.value);
-  
-  events.value = calendarStore.monthevent;
 }
 
-  // date가 없으면 오늘 날짜로
+// date가 없으면 오늘 날짜로
 function openAddEvent(date = null) {
   selectedDate.value = date || new Date().toISOString().split("T")[0];
   showAddModal.value = true;
 }
 
 async function deleteEvent(event) {
-  events.value = events.value.filter((e) => {
-    return !(
-      e.startDate === event.startDate &&
-      e.endDate === event.endDate &&
-      e.title === event.title
-    );
-  });
-
-  showEventInfoModal.value = false;
-
-  await calendarStore.monthevents(year.value, month.value);
-  events.value = calendarStore.monthevent;
+  try {
+    await calendarStore.deleteEvent(event.idx); // store에 delete 액션 추가 필요
+    await calendarStore.monthevents(year.value, month.value);
+  } catch (error) {
+    console.error("이벤트 삭제 실패:", error);
+  }
 }
 
-// 저번달달
+// 저번달
 async function prevMonth() {
   if (month.value === 1) {
     month.value = 12;
@@ -126,7 +99,8 @@ async function prevMonth() {
     month.value--;
   }
   await calendarStore.monthevents(year.value, month.value);
-  events.value = calendarStore.monthevent;
+
+  console.log(month.value, " 월 달력 이벤트 리스트 : ", normalizedEvents.value);
 }
 
 // 다음달
@@ -138,17 +112,13 @@ async function nextMonth() {
     month.value++;
   }
   await calendarStore.monthevents(year.value, month.value);
-  events.value = calendarStore.monthevent;
+
+
+  console.log(month.value, " 월 달력 이벤트 리스트 : ", normalizedEvents.value);
 }
 
-// 데이터
 onMounted(async () => {
-  try {
-    await calendarStore.monthevents(year.value, month.value);
-    events.value = calendarStore.monthevent; // 직접 할당
-  } catch (error) {
-    console.error("초기 월별 일정 로딩 실패:", error);
-  }
+  await calendarStore.monthevents(year.value, month.value);
 });
 </script>
 
@@ -183,7 +153,7 @@ onMounted(async () => {
           selectedEvent = null;
         }
       "
-      @save="handleAddEvent"
+      @save="() => calendarStore.monthevents(year, month)" 
     />
 
     <EventByDateDetail

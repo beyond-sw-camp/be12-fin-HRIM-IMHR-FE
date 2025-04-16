@@ -35,7 +35,11 @@ export const useCalendarStore = defineStore('calendar', {
     async monthevents(year, month) {
       try {
         const response = await axios.get(`/api/event/month/list?year=${year}&month=${month}`);
+
+        console.log("응답데이터 : ", response.data.data);
+
         this.monthevent = response.data.data;
+        
       } catch (error) {
         console.error("월별 일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
       }

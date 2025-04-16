@@ -235,7 +235,14 @@ const routes = [
     name: 'productDetail',
     component: ProductDetailView,
     props: true,
-  }
+  },
+
+  // 마이페이지
+  {
+    path: '/mypage',
+    name:  'mypage',
+    component: MyPageView,
+  },
 ];
 
 const router = createRouter({

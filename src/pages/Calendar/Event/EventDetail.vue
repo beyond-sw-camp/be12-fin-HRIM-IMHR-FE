@@ -9,6 +9,7 @@ defineProps({
 
 defineEmits(['close'])
 
+// 권한 부여 하는 코드 
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

@@ -1,3 +1,64 @@
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { Search } from "lucide-vue-next";
+
+
+const search = ref("");
+const router = useRouter()
+const searchQuery = ref('')
+
+const selectedCampaignIndex = ref(null);
+const registerModule = ref(false);
+
+const deleteCampaign = () => {
+  if (selectedCampaignIndex.value !== null) {
+
+    selectedCampaignIndex.value = null;
+  }
+};
+
+const addCampain = (newPartners) => {
+  newPartners.forEach(partner => {
+    companies.value.push({
+      name: partner.name,
+
+    })
+  })
+  registerModule.value = false
+}
+
+const addPartners = (newPartners) => {
+  newPartners.forEach(partner => {
+    companies.value.push({
+      name: partner.name,
+      totalGrade: '-', environment: '-', social: '-', governance: '-', score: 0
+    })
+  })
+  registerModule.value = false
+}
+
+const campaigns = ref([
+  { title: 'ESG 캠페인 5', date: '2025.02.12' },
+  { title: 'ESG 캠페인 4', date: '2025.02.12' },
+  { title: 'ESG 캠페인 3', date: '2025.02.12' },
+  { title: 'ESG 캠페인 2', date: '2025.02.12' },
+  { title: 'ESG 캠페인 1', date: '2025.02.12' }
+])
+
+const filteredCampaigns = computed(() =>
+    campaigns.value.filter(c => c.title.includes(searchQuery.value))
+)
+
+const goToDetail = (item) => {
+  router.push({ path: '/campaigndetail/1', query: { title: item.title } })
+}
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
+</script>
+
+
 <template>
   <div class="px-8 py-10 bg-gray-50 min-h-screen">
     <!-- 페이지 제목 -->
@@ -21,6 +82,8 @@
         검색
       </button>
     </div>
+
+    
 
     <div class="flex justify-end max-w-4xl mx-auto" v-if="userRole === 'manager'">
       <button
@@ -60,33 +123,11 @@
       <button v-for="page in 5" :key="page" class="px-3 py-1 bg-slate-100 rounded hover:bg-slate-200">{{ page }}</button>
       <button class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900">다음 →</button>
     </div>
+
+    <CampaignRegist
+      :visible="registerModule"
+      @close="registerModule = false"
+      @confirm="addCampain"
+    />
   </div>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { Search } from "lucide-vue-next";
-
-const router = useRouter()
-const searchQuery = ref('')
-
-const campaigns = ref([
-  { title: 'ESG 캠페인 5', date: '2025.02.12' },
-  { title: 'ESG 캠페인 4', date: '2025.02.12' },
-  { title: 'ESG 캠페인 3', date: '2025.02.12' },
-  { title: 'ESG 캠페인 2', date: '2025.02.12' },
-  { title: 'ESG 캠페인 1', date: '2025.02.12' }
-])
-
-const filteredCampaigns = computed(() =>
-    campaigns.value.filter(c => c.title.includes(searchQuery.value))
-)
-
-const goToDetail = (item) => {
-  router.push({ path: '/campaigndetail/1', query: { title: item.title } })
-}
-
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
-</script>

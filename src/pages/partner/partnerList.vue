@@ -1,3 +1,116 @@
+<script setup>
+import { ref, computed } from "vue";
+import { Search } from "lucide-vue-next";
+import PartnerDelete from "./PartnerDelete.vue";
+import PartnerRegist from "./PartnerRegist.vue";
+
+const search = ref("");
+const page = ref(1);
+const perPage = 6;
+
+const deleteModal = ref(false);
+const selectedCompanyIndex = ref(null);
+const registerModule = ref(false);
+
+const openDeleteModal = (index) => {
+  selectedCompanyIndex.value = index;
+  deleteModal.value = true;
+};
+
+const deleteCompany = () => {
+  if (selectedCompanyIndex.value !== null) {
+    companies.value.splice(selectedCompanyIndex.value, 1);
+    selectedCompanyIndex.value = null;
+    deleteModal.value = false;
+  }
+};
+
+const addPartners = (newPartners) => {
+  newPartners.forEach(partner => {
+    companies.value.push({
+      name: partner.name,
+      totalGrade: '-', environment: '-', social: '-', governance: '-', score: 0
+    })
+  })
+  registerModule.value = false
+}
+
+
+const companies = ref([
+  {
+    name: "AJ네트웍스",
+    totalGrade: "B+",
+    environment: "C",
+    social: "A",
+    governance: "B+",
+    score: 70,
+  },
+  {
+    name: "AK홀딩스",
+    totalGrade: "A",
+    environment: "A",
+    social: "A+",
+    governance: "B+",
+    score: 72,
+  },
+  {
+    name: "BGF",
+    totalGrade: "A",
+    environment: "A",
+    social: "A+",
+    governance: "B+",
+    score: 75,
+  },
+  {
+    name: "BGF리테일",
+    totalGrade: "A",
+    environment: "A",
+    social: "A+",
+    governance: "A",
+    score: 80,
+  },
+  {
+    name: "BNK금융지주",
+    totalGrade: "A",
+    environment: "A+",
+    social: "A+",
+    governance: "A",
+    score: 80,
+  },
+  {
+    name: "BYC",
+    totalGrade: "D",
+    environment: "D",
+    social: "D",
+    governance: "C",
+    score: 60,
+  },
+]);
+
+const filteredData = computed(() => {
+  return companies.value.filter((company) =>
+    company.name.includes(search.value.trim())
+  );
+});
+
+const pagedData = computed(() => {
+  const start = (page.value - 1) * perPage;
+  return filteredData.value.slice(start, start + perPage);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredData.value.length / perPage);
+});
+
+const onSearch = () => {
+  console.log(`검색어: ${search.value}`);
+  page.value = 1;
+};
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
+</script>
+
 <template>
   <div class="p-8 bg-gray-50 min-h-screen">
     <h1 class="text-4xl font-bold text-slate-800 mb-8 text-center">
@@ -119,116 +232,3 @@
     />
   </div>
 </template>
-
-<script setup>
-import { ref, computed } from "vue";
-import { Search } from "lucide-vue-next";
-import PartnerDelete from "./PartnerDelete.vue";
-import PartnerRegist from "./PartnerRegist.vue";
-
-const search = ref("");
-const page = ref(1);
-const perPage = 6;
-
-const deleteModal = ref(false);
-const selectedCompanyIndex = ref(null);
-const registerModule = ref(false);
-
-const openDeleteModal = (index) => {
-  selectedCompanyIndex.value = index;
-  deleteModal.value = true;
-};
-
-const deleteCompany = () => {
-  if (selectedCompanyIndex.value !== null) {
-    companies.value.splice(selectedCompanyIndex.value, 1);
-    selectedCompanyIndex.value = null;
-    deleteModal.value = false;
-  }
-};
-
-const addPartners = (newPartners) => {
-  newPartners.forEach(partner => {
-    companies.value.push({
-      name: partner.name,
-      totalGrade: '-', environment: '-', social: '-', governance: '-', score: 0
-    })
-  })
-  registerModule.value = false
-}
-
-
-const companies = ref([
-  {
-    name: "AJ네트웍스",
-    totalGrade: "B+",
-    environment: "C",
-    social: "A",
-    governance: "B+",
-    score: 70,
-  },
-  {
-    name: "AK홀딩스",
-    totalGrade: "A",
-    environment: "A",
-    social: "A+",
-    governance: "B+",
-    score: 72,
-  },
-  {
-    name: "BGF",
-    totalGrade: "A",
-    environment: "A",
-    social: "A+",
-    governance: "B+",
-    score: 75,
-  },
-  {
-    name: "BGF리테일",
-    totalGrade: "A",
-    environment: "A",
-    social: "A+",
-    governance: "A",
-    score: 80,
-  },
-  {
-    name: "BNK금융지주",
-    totalGrade: "A",
-    environment: "A+",
-    social: "A+",
-    governance: "A",
-    score: 80,
-  },
-  {
-    name: "BYC",
-    totalGrade: "D",
-    environment: "D",
-    social: "D",
-    governance: "C",
-    score: 60,
-  },
-]);
-
-const filteredData = computed(() => {
-  return companies.value.filter((company) =>
-    company.name.includes(search.value.trim())
-  );
-});
-
-const pagedData = computed(() => {
-  const start = (page.value - 1) * perPage;
-  return filteredData.value.slice(start, start + perPage);
-});
-
-const totalPages = computed(() => {
-  return Math.ceil(filteredData.value.length / perPage);
-});
-
-const onSearch = () => {
-  console.log(`검색어: ${search.value}`);
-  page.value = 1;
-};
-
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
-</script>

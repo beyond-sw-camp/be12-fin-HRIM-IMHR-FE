@@ -9,17 +9,19 @@ const route = useRoute();
 const idx = route.params.idx;
 
 const detail = ref({});
+const member = ref({});
 
 const stomp = useStompStore()
 
 onMounted(async () => {
   detail.value=await activitySore.detail(idx);
+  member.value = detail.value.member
 })
 
 // 승인
 const agree=async()=>{
-  activitySore.agree(idx);
-  stomp.sendApprove("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",detail.value.member);
+  // activitySore.agree(idx);
+  stomp.sendApprove("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",member.value,"/activeDetails/"+idx);
   // window.location.reload();
   
 }
@@ -50,7 +52,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       <!-- 게시자 -->
       <div>
         <span class="font-semibold text-slate-700">게시자:</span>
-        <!-- <span class="text-slate-600 ml-2">{{ detail.member.name }}</span> -->
+        <span class="text-slate-600 ml-2">{{ member.name }}</span>
       </div>
 
       <!-- 제목 -->

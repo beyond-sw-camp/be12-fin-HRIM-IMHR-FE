@@ -80,6 +80,7 @@ const userRole = ref(
         <router-link
           @click="$emit('confirm', selected)"
           class="bg-slate-600 text-white px-6 py-2 rounded hover:bg-slate-700"
+          :to="`/memberadd/${campaign?.idx}`"
         >
           수정
         </router-link>

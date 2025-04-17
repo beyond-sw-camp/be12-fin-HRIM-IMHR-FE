@@ -74,6 +74,11 @@ const userRole = ref(
       >
         + 일정 추가
       </button>
+
+      <button @click="$emit('close')"
+        class="bg-slate-500 text-white ml-3 mt-3 px-2 py-1 rounded-lg hover:bg-slate-500">
+          닫기
+        </button>
     </div>
   </div>
 </template>

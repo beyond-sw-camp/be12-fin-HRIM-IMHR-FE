@@ -13,85 +13,56 @@ export const useCalendarStore = defineStore('calendar', {
 
   actions: {
     async regist(formData) {
-      try {
-        const response = await axios.post("/api/event/register", formData);
-        return response.data;
-      } catch (error) {
-        console.error("등록 실패:", error.response || error.message);
-        throw error; // 에러 발생 시 처리
-      }
+      const response = await axios.post("/api/event/register", formData);
+      console.log("Backend : ", response.data.message);
+      return response.data;
     },
 
     // 이벤트 수정
     async update(idx, formData) {
-      try {
-        const response = await axios.put(`/api/event/update/${idx}`, formData);
-        return response.data;
-      } catch (error) {
-        console.error("수정 실패:", error.response || error.message);
-        throw error;
-      }
+      const response = await axios.put(`/api/event/update/${idx}`, formData);
+      console.log("Backend : ", response.data.message);
+      return response.data;
     },
 
     // 캘린더 한달치 이벤트 끌고오기
     async monthevents(year, month) {
-      try {
-        const response = await axios.get(`/api/event/month/list?year=${year}&month=${month}`);
+      const response = await axios.get(`/api/event/month/list?year=${year}&month=${month}`);
 
-        // console.log("응답데이터 : ", response.data.data);
-
-        this.monthevent = response.data.data;
-
-      } catch (error) {
-        console.error("월별 일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
-      }
+      console.log("Backend : ", response.data.message);
+      this.monthevent = response.data.data;
+      return response.data.data;
     },
 
     async dayevents(date) {
-      try {
-        const response = await axios.get(`/api/event/date/list?date=${date}`);
-        this.dayevent = response.data.data;
-      } catch (error) {
-        console.error("일간 일정 데이터를 가져오는 중 오류 발생:", error.response || error.message);
-      }
+      const response = await axios.get(`/api/event/date/list?date=${date}`);
+      this.dayevent = response.data.data;
+      console.log("Backend : ", response.data.message);
+      return response.data.data;
     },
 
     async eventdelete(idx) {
-      try {
-        const response = await axios.delete(`/api/event/delete/${idx}`);
-        
-      } catch (error) {
-        console.error("일정 데이터 삭제중 오류 발생", error.response || error.message);
-      }
+      const response = await axios.delete(`/api/event/delete/${idx}`);
+      console.log("Backend : ", response.data.message);
+      return response;
     },
 
     // 회사 특정 이벤트 끌고 오기
     async eventdetial(idx) {
-      try {
-        const response = await axios.get(`/api/event/eventDetail/${idx}`);
-        
-        this.detailevent = response.data.data;
-        return response.data.data;
+      const response = await axios.get(`/api/event/eventDetail/${idx}`);
+      console.log("Backend : ", response.data.message);
 
-      } catch (error) {
-        console.error("이벤트 데이터 가저오는 중 오류 발생", error.response || error.message);
-        return null;
-      }
+      this.detailevent = response.data.data;
+      return response.data.data;
     },
 
     // 회사 이벤트 페이지만큼 
     async companyeventList(page, size) {
-      try {
-        const response = await axios.get(`/api/event/pageList?page=${page}&size=${size}`);
+      const response = await axios.get(`/api/event/pageList?page=${page}&size=${size}`);
+      console.log("Backend : ", response.data.message);
 
-        this.pageEventList = response.data.data.content;
-        return response.data.data.totalPages; // totalPages 반환해서 컴포넌트에서 활용
-
-      } catch (error) {
-        console.error("이벤트 데이터를 가저오는 중중 오류 발생", error.response || error.message);
-        return 0;
-      }
+      this.pageEventList = response.data.data.content;
+      return response.data.data.totalPages;
     },
-
   },
 });

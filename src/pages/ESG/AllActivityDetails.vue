@@ -25,9 +25,10 @@ onMounted(async () => {
 
 // 승인
 const agree=async()=>{
-  activitySore.agree(idx);
+  console.log(member.value.name)
+  // activitySore.agree(idx);
   stomp.sendApprove("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",member.value,"/activeDetails/"+idx);
-  window.location.reload();
+  // window.location.reload();
   
 }
 

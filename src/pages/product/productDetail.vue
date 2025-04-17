@@ -53,7 +53,7 @@
 
     <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
       <router-link
-        :to="{ path: '/productRegist', query: { mode: 'edit' , idx: `${product.productIdx}`}, params: { idx: product.idx } }"
+        :to="{ path: '/productRegist', query: { mode: 'edit' , idx: `${product.idx}`}, params: { idx: product.idx } }"
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
       >
         수정
@@ -79,13 +79,13 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
 
 const props = defineProps({
   company_idx: [String, Number],
-  product_idx: [String, Number],
+  idx: [String, Number],
 });
 
 const fetchProduct = async () => {
   try {
-    console.log("📦 props.product_idx:", props.product_idx);
-    const res = await axios.get(`/api/product/detail/${props.product_idx}`);
+    console.log("📦 props.product_idx:", props.idx);
+    const res = await axios.get(`/api/product/detail/${props.idx}`);
     console.log("✅ 응답 데이터:", res.data.data);
     product.value = res.data.data;
     console.log(product.value);
@@ -99,7 +99,7 @@ const handleDelete = async () => {
   if (confirm("정말 삭제하시겠습니까?")) {
     try {
       console.log("✅ 응답 데이터:", res.data.data);
-      await axios.delete(`/api/product/${props.product_idx}`);
+      await axios.delete(`/api/product/${props.idx}`);
       alert("삭제되었습니다.");
       router.push(`/productList/${props.company_idx}`);
     } catch (err) {

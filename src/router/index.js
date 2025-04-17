@@ -231,7 +231,7 @@ const routes = [
 
   // 제품 상세 (회사 idx + 제품 idx)
   {
-    path: '/productDetail/:product_idx',
+    path: '/productDetail/:idx',
     name: 'productDetail',
     component: ProductDetailView,
     props: true,

@@ -12,7 +12,7 @@ export const useCampaignStore = defineStore('campaign', {
     async register(formData) {
       try {
         const response = await axios.post("/api/campaign/register", formData);
-        console.log("전송데이터 : ", response.data);
+        console.log("Backend : ", response.data.message);
         return response.data;
       } catch (error) { 
         throw error;
@@ -23,6 +23,7 @@ export const useCampaignStore = defineStore('campaign', {
     async campaignlist() {
       try {
         const response = await axios.get('')
+        console.log("Backend : ", response.data.message);
       } catch (error) {
         throw error;
       }

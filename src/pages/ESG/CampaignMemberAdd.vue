@@ -43,9 +43,6 @@ const selectedUserIdxs = ref([]);
 
 // 추가 버튼 눌렀을 때
 const handleAddUsers = async () => {
-  console.log("선택된 유저:", selectedUserIdxs.value);
-  console.log("캠페인 ID:", Idx); // 디버깅용
-
   const formData = {
     eventIdx: Idx, // ✅ 여기에 이벤트 idx 포함
     memberIdxList: selectedUserIdxs.value,
@@ -53,7 +50,6 @@ const handleAddUsers = async () => {
 
   try {
     const result = await campaign.register(formData);
-    console.log("등록 성공:", result);
     alert("사원이 성공적으로 추가되었습니다.");
     router.back();
   } catch (error) {
@@ -75,7 +71,7 @@ onMounted(async () => {
   }
 
   myinfo.value = (await memberStore.myPageInfo()).data.data;
-  console.log(myinfo.value)
+
   if(myinfo.value.isAdmin) {
     const response = await memberStore.adminMemberList();
     users.value = response.data.data;

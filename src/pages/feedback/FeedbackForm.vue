@@ -47,6 +47,7 @@ const saveForm = async () => {
 onMounted(async () => {
   const response = await feedbackStore.fetchFeedbackTemplate();
   console.log(response);
+  questions.value = response.data.data.questions;
 })
 </script>
 
@@ -94,11 +95,11 @@ onMounted(async () => {
       <!-- 객관식 보기 항목 (객관식일 때만 표시) -->
       <div v-if="question.type === 'MULTIPLE_CHOICE'" class="mb-4">
         <label class="block font-medium mb-2">객관식 보기 항목</label>
-        <div v-for="(option, oIndex) in question.subItems" :key="oIndex" class="flex mb-2 space-x-2">
+        <div v-for="(option, oIndex) in question.choices" :key="oIndex" class="flex mb-2 space-x-2">
           <input
             type="text"
             class="border border-gray-300 p-2 rounded w-full"
-            v-model="question.subItems[oIndex]"
+            v-model="question.choices[oIndex]"
             placeholder="보기 항목 입력"
           />
           <button class="bg-red-500 w-20 text-white px-3 py-1 rounded" @click="removeOption(qIndex, oIndex)">삭제</button>

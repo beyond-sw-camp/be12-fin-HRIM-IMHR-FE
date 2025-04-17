@@ -23,7 +23,6 @@
             <th class="py-3">상태</th>
             <th>유저</th>
             <th>주제</th>
-            <th>내용</th>
             <th v-if="userRole !== 'manager'">삭제</th>
           </tr>
         </thead>
@@ -47,7 +46,7 @@
 
             <td>{{ activity.title }}</td>
 
-            <td>{{ activity.description }}</td>
+
 
 
             <td v-if="userRole !== 'manager'">

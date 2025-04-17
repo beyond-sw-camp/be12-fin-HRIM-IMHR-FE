@@ -1,35 +1,28 @@
 <script setup>
 import { X } from "lucide-vue-next";
-import { ref, computed } from "vue";
+import { ref, watch } from "vue";
+import { useCampaignStore } from "../../stores/useCampaignStore";
 
-const props = defineProps(["visible", "campaign"]);
 const emit = defineEmits(["close", "confirm"]);
+const props = defineProps(["visible", "campaign"]);
+const members = ref([]);
 
-const search = ref("");
-const selected = ref([]);
+const campaignStore = useCampaignStore();
 
-// 예시 데이터
-const allPartners = ref([
-  { id: 0, name: "test4" },
-  { id: 1, name: "test3" },
-  { id: 2, name: "test2" },
-  { id: 3, name: "test1" },
-  { id: 3, name: "test1" },
-  { id: 3, name: "test1" },
-  { id: 3, name: "test1" },
-  { id: 3, name: "test1" },
+watch(
+  () => props.campaign?.idx, // idx => eventIdx 임
+  async (newIdx) => {
+    if (newIdx !== undefined) {
+      try {
+        members.value = await campaignStore.campaignfetchMemberList(newIdx);
+      } catch (error) {
+        console.error("멤버 가져오기 실패", error);
+      }
+    }
+  },
+  { immediate: true }
+);
 
-]);
-
-const filteredPartners = computed(() => {
-  return allPartners.value.filter((partner) =>
-    partner.name.includes(search.value.trim())
-  );
-});
-
-const onSearch = () => {
-  // 필터링은 computed로 처리했기 때문에 따로 처리 안 해도 돼요.
-};
 const userRole = ref(
   JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
 );
@@ -54,49 +47,55 @@ const userRole = ref(
       <div class="mb-4 space-y-2 text-l text-gray-700">
         <p><strong>제목 : </strong> {{ campaign?.title || "내용 없음" }}</p>
         <p><strong>내용 : </strong> {{ campaign?.content || "내용 없음" }}</p>
-        <p><strong>기간 :  </strong> {{ campaign?.startDate || "-" }} ~ {{ campaign?.endDate || "-" }}</p>
+        <p>
+          <strong>기간 : </strong> {{ campaign?.startDate || "-" }} ~
+          {{ campaign?.endDate || "-" }}
+        </p>
       </div>
 
       <!-- 테이블 -->
       <!-- style="max-height: 200px;" -->
-      <div class="overflow-y-auto border-transparent border mb-4" style="max-height: 240px;">
-      <table class="w-full border text-l text-center mb-4">
-        <thead>
-          <tr class="bg-slate-100">
-            <th class="p-2 border">사원 이름</th>
-            <th class="p-2 border">사원 ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(partner, idx) in filteredPartners" :key="idx">
-            <td class="border p-2">{{ partner.name }}</td>
-            <td class="border p-2">{{ partner.id }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div
+        class="overflow-y-auto border-transparent border mb-4"
+        style="max-height: 240px"
+      >
+        <table class="w-full border text-l text-center mb-4">
+          <thead>
+            <tr class="bg-slate-100">
+              <th class="p-2 border">번호</th>
+              <th class="p-2 border">사원 이름</th>
+              <th class="p-2 border">사원 ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="members.length === 0">
+              <td colspan="3" class="text-center text-gray-400 py-4">
+                참여한 사원이 없습니다.
+              </td>
+            </tr>
+
+            <tr v-for="(user, idx) in members" :key="idx">
+              <td class="border p-2">{{ idx + 1 }}</td>
+              <td class="border p-2">{{ user.name }}</td>
+              <td class="border p-2">{{ user.memberId }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <!-- 버튼 -->
-      <div class="flex justify-center gap-4" v-if="userRole === 'manager'">
+      <div class="flex justify-center gap-4">
         <router-link
           @click="$emit('confirm', selected)"
           class="bg-slate-600 text-white px-6 py-2 rounded hover:bg-slate-700"
           :to="`/memberadd/${campaign?.idx}`"
+          v-if="userRole === 'manager'"
         >
-          수정
+          {{ members.length > 0 ? '수정' : '사원 추가' }}
         </router-link>
 
         <button
           @click="$emit('close')"
           class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-        >
-          삭제
-        </button>
-      </div>
-
-      <div class="flex justify-center gap-4" v-if="userRole !== 'manager'">
-        <button
-          @click="$emit('close')"
-          class="bg-slate-500 text-white px-6 py-2 rounded hover:bg-slate-600"
         >
           닫기
         </button>

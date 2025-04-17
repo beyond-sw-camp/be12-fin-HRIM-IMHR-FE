@@ -226,7 +226,8 @@ const routes = [
   {
     path: '/productList/:idx',
     name: 'ProductList',
-    component: ProductListView
+    component: ProductListView,
+    props: true,
   },
 
   // 제품 상세 (회사 idx + 제품 idx)

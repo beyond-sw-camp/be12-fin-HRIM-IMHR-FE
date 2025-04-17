@@ -26,10 +26,10 @@ const handleLogout = async () => {
 }
 
 const stomp = useStompStore()
-const member=ref({});
+const me=ref({});
 onMounted(async () => {
   // fetchMember가 비동기 함수라면 await 사용
-  member.value = await memberStore.fetchMember();
+  me.value = await memberStore.fetchMember();
   // if(!memberStore.userInfo){
   //   member.value=memberStore.fetchMember();
     
@@ -37,8 +37,7 @@ onMounted(async () => {
   //   member.value=memberStore.userInfo
   //   console.log("왜 있지?")
   // }
-
-  stomp.connect(member.value)
+  stomp.connect(me.value)
 })
 </script>
 
@@ -68,7 +67,7 @@ onMounted(async () => {
         to="/mypage"
         class="text-slate-700 text-base md:text-3xl font-medium hover:underline mr-2 font-semibold"
       >
-        {{ member.name }}
+        {{ me.name }}
       </router-link>
 
       <button @click="$emit('toggle-noti')" class="relative">

@@ -4,40 +4,45 @@ import axios from 'axios';
 export const useActivityStore = defineStore('activity', {
     state: () => (
         {
-            activityList:[],
+            activityList: [],
         }),
 
     actions: {
-        async regist(formData){
+        async regist(formData) {
             const response = await axios.post("/api/activity/regist", formData, {
                 headers: {
-                    "Content-Type" : "multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 }
             });
             return response;
         },
 
-        async list(page,size){
-            let response =null;
-            if(page===0 && size===5){
-                response=await axios("/api/activity/activityList?page="+1+"&size="+5);
+        async list(page, size) {
+            let response = null;
+            if (page === 0 && size === 5) {
+                response = await axios("/api/activity/activityList?page=" + 1 + "&size=" + 5);
             }
-            response = await axios("/api/activity/activityList?page="+page+"&size="+size);
-            this.activityList=response.data.data;
+            response = await axios("/api/activity/activityList?page=" + page + "&size=" + size);
+            this.activityList = response.data.data;
         },
 
-        async detail(idx){
-            const response =await axios("/api/activity/detail/"+idx);
+        async detail(idx) {
+            const response = await axios("/api/activity/detail/" + idx);
             return response.data.data;
         },
 
-        async agree(idx){
-            const response =await axios("/api/activity/ativityApproval/agree/"+idx);
+        async agree(idx) {
+            const response = await axios("/api/activity/ativityApproval/agree/" + idx);
         },
 
-        async oppose(idx){
-            const response =await axios("/api/activity/ativityApproval/oppose/"+idx);
+        async oppose(idx) {
+            const response = await axios("/api/activity/ativityApproval/oppose/" + idx);
         },
 
+
+        async delete(idx) {
+            const response = await axios.delete("/api/activity/delete/" + idx);
+            return response.data.isSuccess;
+        },
     },
 });

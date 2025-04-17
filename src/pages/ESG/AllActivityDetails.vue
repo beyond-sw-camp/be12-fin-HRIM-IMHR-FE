@@ -2,34 +2,40 @@
 import { ref,onMounted } from 'vue'
 import { useRouter,useRoute } from "vue-router";
 import { useActivityStore } from '../../stores/useActivityStore';
+import { useMemberStore } from '../../stores/useMemberStore'
 import { useStompStore } from '../../stores/useStompStore'
 
 const activitySore = useActivityStore()
+const memberStore = useMemberStore();
 const route = useRoute();
 const idx = route.params.idx;
 
 const detail = ref({});
 const member = ref({});
+const me = ref({});
 
 const stomp = useStompStore()
 
 onMounted(async () => {
+  me.value = await memberStore.fetchMember();
+
   detail.value=await activitySore.detail(idx);
   member.value = detail.value.member
 })
 
 // 승인
 const agree=async()=>{
-  // activitySore.agree(idx);
+  activitySore.agree(idx);
   stomp.sendApprove("승인 되었습니다.","["+detail.value.title+"] 활동이 승인 되었습니다.",member.value,"/activeDetails/"+idx);
-  // window.location.reload();
+  window.location.reload();
   
 }
 
 // 반려
 const oppose=async()=>{
   activitySore.oppose(idx);
-  // window.location.reload();
+  stomp.sendApprove("반려 되었습니다.","["+detail.value.title+"] 활동이 반려 되었습니다.",member.value,"/activeDetails/"+idx);
+  window.location.reload();
 }
 
 
@@ -86,7 +92,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
       </div>
 
       <!-- 버튼 -->
-      <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager' && detail.status==='PENDING'">
+      <div class="flex justify-end gap-3 pt-4" v-if="me.isAdmin && detail.status==='PENDING'">
         <button @click="agree"
           class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
         >

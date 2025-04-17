@@ -15,10 +15,9 @@ export const useCampaignStore = defineStore('campaign', {
       return response.data;
     },
 
-
-    async campaignlist(idx) {
+    async campaignfetchMemberList(idx) {
       try {
-        const response = await axios.get(`/api/campaignList/${idx}`)
+        const response = await axios.get(`/api/campaign/memberList/${idx}`)
         console.log("Backend : ", response.data.message);
         this.campaigns = response.data.data;
         return response.data.data;

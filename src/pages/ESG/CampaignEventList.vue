@@ -39,6 +39,7 @@ const selectedCampaign = ref(null);
 const openModal = (campaign) => {
   selectedCampaign.value = campaign;
   showModal.value = true;
+  console.log("캠페인:", selectedCampaign.value);
 };
 
 const closeModal = () => {

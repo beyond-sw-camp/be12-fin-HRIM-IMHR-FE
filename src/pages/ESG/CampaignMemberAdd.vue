@@ -5,6 +5,7 @@ import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
 import { useMemberStore } from "../../stores/useMemberStore";
 import { useCampaignStore } from "../../stores/useCampaignStore";
+import { data } from "autoprefixer";
 
 const route = useRoute();
 const router = useRouter();
@@ -21,7 +22,6 @@ const users = ref([]);
 const filteredUsers = computed(() => {
   return users.value.filter((u) => u.name.includes(searchText.value));
 });
-
 
 const searchUser = () => {
   console.log(`검색: ${searchText.value}`);
@@ -40,11 +40,10 @@ const endDate = ref("");
 // 선택된 유저 ID 목록
 const selectedUserIdxs = ref([]);
 
-
 // 추가 버튼 눌렀을 때
 const handleAddUsers = async () => {
   const formData = {
-    eventIdx: Idx, // ✅ 여기에 이벤트 idx 포함
+    eventIdx: Idx, // 여기에 이벤트 idx 포함
     memberIdxList: selectedUserIdxs.value,
   };
 
@@ -58,6 +57,14 @@ const handleAddUsers = async () => {
   }
 };
 
+// 참여자 분리
+const participatedMembers = ref([]);
+const nonParticipatedUsers = computed(() => {
+  const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
+  return users.value.filter((u) => !participatedIds.has(u.idx));
+});
+
+//
 onMounted(async () => {
   const result = await event.eventdetial(Idx);
 
@@ -66,18 +73,19 @@ onMounted(async () => {
     content.value = result.content;
     startDate.value = result.startDate;
     endDate.value = result.endDate;
-  } else {
-    console.error("상세 데이터를 불러오지 못했습니다.");
   }
 
   myinfo.value = (await memberStore.myPageInfo()).data.data;
 
-  if(myinfo.value.isAdmin) {
-    const response = await memberStore.adminMemberList();
-    users.value = response.data.data;
+  if (myinfo.value.isAdmin) {
+    const [userRes, memberRes] = await Promise.all([
+      memberStore.adminMemberList(),
+      campaign.campaignfetchMemberList(Idx),
+    ]);
 
     // 승인된 사원들만 필터
-    users.value = users.value.filter((u) => u.status == "APPROVED");
+    users.value = userRes.data.data.filter((u) => u.status == "APPROVED");
+    participatedMembers.value = memberRes;
   }
 });
 </script>
@@ -122,8 +130,101 @@ onMounted(async () => {
       </button>
     </div>
 
+    <div class="flex flex-col md:flex-row gap-4 max-w-6xl mx-auto mt-6">
+      <!-- ✅ 왼쪽: 참여자 테이블 (항상 표시) -->
+      <div
+        class="w-full md:w-1/2 bg-white rounded-lg shadow overflow-hidden p-4 mr-4"
+      >
+        <h2 class="text-lg font-semibold mb-2 text-slate-700">참여자 목록</h2>
+        <table class="w-full text-sm text-center">
+          <thead class="bg-slate-100">
+            <tr>
+              <th class="p-2">번호</th>
+              <th class="p-2">이름</th>
+              <th class="p-2">아이디</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-if="participatedMembers.length === 0"
+              class="text-gray-400 text-center"
+            >
+              <td colspan="3" class="py-4">참여한 사원이 없습니다.</td>
+            </tr>
+            <tr
+              v-for="(user, index) in participatedMembers"
+              :key="index"
+              class="hover:bg-slate-50"
+            >
+              <td class="p-2">{{ index + 1 }}</td>
+              <td class="p-2">{{ user.name }}</td>
+              <td class="p-2">{{ user.memberId }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ✅ 오른쪽: 참여하지 않은 사원 리스트 (항상 표시) -->
+      <div
+        class="w-full md:w-1/2 bg-white rounded-lg shadow overflow-hidden p-4"
+      >
+        <h2 class="text-lg font-semibold mb-2 text-slate-700">
+          참여하지 않은 사원
+        </h2>
+
+        <table class="w-full text-sm text-center">
+          <thead class="bg-slate-100">
+            <tr>
+              <th class="p-2">
+                <input
+                  type="checkbox"
+                  :checked="
+                    selectedUserIdxs.length === nonParticipatedUsers.length
+                  "
+                  @change="
+                    (e) => {
+                      selectedUserIdxs = e.target.checked
+                        ? nonParticipatedUsers.map((u) => u.idx)
+                        : [];
+                    }
+                  "
+                />
+              </th>
+              <th class="p-2">부서</th>
+              <th class="p-2">아이디</th>
+              <th class="p-2">이름</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-if="nonParticipatedUsers.length === 0"
+              class="text-gray-400 text-center"
+            >
+              <td colspan="4" class="py-4">참여 가능한 사원이 없습니다.</td>
+            </tr>
+            <tr
+              v-for="(user, index) in nonParticipatedUsers"
+              :key="index"
+              class="hover:bg-slate-50"
+            >
+              <td class="p-2">
+                <input
+                  type="checkbox"
+                  :value="user.idx"
+                  v-model="selectedUserIdxs"
+                />
+              </td>
+              <td class="p-2">{{ user.department }}</td>
+              <td class="p-2">{{ user.memberId }}</td>
+              <td class="p-2">{{ user.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- 참여자 테이블 -->
-    <div class="bg-white rounded-lg shadow overflow-hidden max-w-4xl mx-auto">
+    <!-- <div class="bg-white rounded-lg shadow overflow-hidden max-w-4xl mx-auto">
       <table class="min-w-full text-sm text-slate-800 text-center">
         <thead class="bg-slate-100 border-b border-gray-200">
           <tr>
@@ -166,7 +267,7 @@ onMounted(async () => {
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
 
     <div class="flex justify-end gap-3 pt-4">
       <button

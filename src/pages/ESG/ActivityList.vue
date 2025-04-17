@@ -51,7 +51,7 @@
 
             <td v-if="userRole !== 'manager'">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
-                @click.stop="activityDelete()">
+                @click.stop="activityDelete(activity.activityIdx)">
                 삭제
               </button>
             </td>
@@ -250,13 +250,23 @@ const submit = async () => {
 
     formData.append("file", file.value);
 
-    const response = await activitySore.regist(formData);
+    try {
+      await activitySore.regist(formData);
+      window.location.reload();
+    } catch (error) {
+      alert("활동 추가 실패 \n 관리자에게 문의 하시오.");
+    }
   }
 }
 
 
-const activityDelete=()=>{
-  console.log("test")
+const activityDelete=async (activicyIdx)=>{
+  const isSuccess=await activitySore.delete(activicyIdx);
+  if(isSuccess===true){
+    window.location.reload();
+  }else{
+    alert("삭제 실패");
+  }
 };
 
 

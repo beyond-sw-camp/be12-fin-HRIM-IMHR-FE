@@ -11,8 +11,6 @@ export const useStompStore = defineStore('stomp', () => {
   const NotificationStore = useNotificationStore();
 
   const connect = (member) => {
-    // member.value = member
-    console.log(member.idx)
 
     stompClient.value = new Client({
       brokerURL: 'ws://localhost:8080/ws',

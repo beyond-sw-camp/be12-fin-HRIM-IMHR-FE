@@ -84,7 +84,7 @@ export const useMemberStore = defineStore('member', {
         async fetchMember(idx) {
             const response = await axios.post("/api/member/info");
             
-            return response.data;
+            return response.data.data;
         },
 
 

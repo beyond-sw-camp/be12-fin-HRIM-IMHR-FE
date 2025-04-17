@@ -1,3 +1,58 @@
+<script setup>
+import { onMounted, ref } from 'vue'
+import { useFeedbackStore } from '../../stores/useFeedbackStore'
+
+const feedbackStore = useFeedbackStore();
+const questions = ref([
+  {
+    question: '',
+    type: '', // 'SUBJECTIVE' or 'MULTIPLE_CHOICE'
+    choices: []
+  }
+])
+
+const addQuestion = () => {
+  questions.value.push({
+    question: '',
+    type: '',
+    choices: []
+  })
+}
+
+const removeQuestion = (index) => {
+  questions.value.splice(index, 1)
+}
+
+const setType = (index, type) => {
+  questions.value[index].type = type
+  if (type === 'subjective') {
+    questions.value[index].choices = []
+  }
+}
+
+const addOption = (qIndex) => {
+  questions.value[qIndex].choices.push('')
+}
+
+const removeOption = (qIndex, oIndex) => {
+  questions.value[qIndex].choices.splice(oIndex, 1)
+}
+
+const saveForm = async () => {
+  console.log('폼 데이터 저장됨:', questions.value)
+  const response = await feedbackStore.createFeedbackTemplate({insertQuestions: questions.value});
+  console.log(response);
+}
+
+onMounted(async () => {
+  const response = await feedbackStore.fetchFeedbackTemplate();
+  console.log(response);
+})
+</script>
+
+<style scoped>
+</style>
+
 <template>
   <div class="bg-gray-50 p-8">
     <div v-for="(question, qIndex) in questions" :key="qIndex" class="mb-8 border-b pb-6">
@@ -18,8 +73,8 @@
           <input
             type="radio"
             class="form-radio h-5 w-5 text-blue-600"
-            :checked="question.type === 'subjective'"
-            @change="setType(qIndex, 'subjective')"
+            :checked="question.type === 'SUBJECTIVE'"
+            @change="setType(qIndex, 'SUBJECTIVE')"
           />
           <span class="text-gray-700 font-medium">주관식</span>
         </label>
@@ -29,15 +84,15 @@
           <input
             type="radio"
             class="form-radio h-5 w-5 text-blue-600"
-            :checked="question.type === 'objective'"
-            @change="setType(qIndex, 'objective')"
+            :checked="question.type === 'MULTIPLE_CHOICE'"
+            @change="setType(qIndex, 'MULTIPLE_CHOICE')"
           />
           <span class="text-gray-700 font-medium">객관식</span>
         </label>
       </div>
 
       <!-- 객관식 보기 항목 (객관식일 때만 표시) -->
-      <div v-if="question.type === 'objective'" class="mb-4">
+      <div v-if="question.type === 'MULTIPLE_CHOICE'" class="mb-4">
         <label class="block font-medium mb-2">객관식 보기 항목</label>
         <div v-for="(option, oIndex) in question.subItems" :key="oIndex" class="flex mb-2 space-x-2">
           <input
@@ -68,49 +123,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-const questions = ref([
-  {
-    question: '',
-    type: '', // 'subjective' or 'objective'
-    subItems: []
-  }
-])
-
-const addQuestion = () => {
-  questions.value.push({
-    question: '',
-    type: '',
-    subItems: []
-  })
-}
-
-const removeQuestion = (index) => {
-  questions.value.splice(index, 1)
-}
-
-const setType = (index, type) => {
-  questions.value[index].type = type
-  if (type === 'subjective') {
-    questions.value[index].subItems = []
-  }
-}
-
-const addOption = (qIndex) => {
-  questions.value[qIndex].subItems.push('')
-}
-
-const removeOption = (qIndex, oIndex) => {
-  questions.value[qIndex].subItems.splice(oIndex, 1)
-}
-
-const saveForm = () => {
-  console.log('폼 데이터 저장됨:', questions.value)
-}
-</script>
-
-<style scoped>
-</style>

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { Client } from '@stomp/stompjs'
 import { ref } from 'vue'
 import { useNotificationStore } from "./useNotificationStore"
+import { CodeSquare } from 'lucide-vue-next'
 
 export const useStompStore = defineStore('stomp', () => {
   const stompClient = ref(null)
@@ -19,18 +20,30 @@ export const useStompStore = defineStore('stomp', () => {
       onConnect: () => {
         connected.value = true
         console.log('🔌 STOMP 연결됨')
-
+        console.log(member.name)
         stompClient.value.subscribe(`/topic/notification/${member.idx}`, (msg) => {
           const data = JSON.parse(msg.body)
+
+
+         // window 알림
+          const showNotification = (data) => {
+            const notification = new Notification(data.title, {
+              body: data.content,
+              icon: '/src/assets/icon/알림.png',
+              image: '/src/assets/icon/imhr.png'
+            });
+
+            notification.addEventListener('click', () => {
+              window.open(data.url);
+            });
+          };
+
           NotificationStore.notifications.unshift(data)
 
-
-
-          
+          showNotification(data);
           if (Notification.permission === 'default') {
             Notification.requestPermission().then((permission) => {
               if (permission === 'granted') {
-                console.log("왜 안돼?")
                 showNotification(data);
               } else {
                 alert('알림 권한이 거부되었습니다.');
@@ -41,7 +54,7 @@ export const useStompStore = defineStore('stomp', () => {
           } else if (Notification.permission === 'denied') {
             alert('알림 권한이 거부되었습니다.');
           }
-          
+ 
 
 
 
@@ -63,14 +76,14 @@ export const useStompStore = defineStore('stomp', () => {
   //   }
   // }
 
-  const sendApprove = (title,content,member,url) => {
+  const sendApprove = (title, content, member, url) => {
     if (connected.value && stompClient.value) {
-      
+
       const payload = JSON.stringify({
-        member:member,
-        title: title, 
-        content:content,
-        url:url,
+        member: member,
+        title: title,
+        content: content,
+        url: url,
       });
 
       stompClient.value.publish({
@@ -86,18 +99,7 @@ export const useStompStore = defineStore('stomp', () => {
   }
 
 
-  // window 알림
-  const showNotification = (data) => {
-    const notification = new Notification(data.title, {
-      body: data.content,
-      icon: '/src/assets/icon/알림.png',
-      image: '/src/assets/icon/imhr.png'
-    });
-  
-    notification.addEventListener('click', () => {
-      window.open(data.url);
-    });
-  };
+
 
   return {
     stompClient,

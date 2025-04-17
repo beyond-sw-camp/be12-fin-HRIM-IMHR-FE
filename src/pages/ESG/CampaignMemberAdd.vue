@@ -1,21 +1,31 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
+import { useMemberStore } from "../../stores/useMemberStore";
+import { useCampaignStore } from "../../stores/useCampaignStore";
 
 const route = useRoute();
 const router = useRouter();
 const Idx = route.params.idx;
 const event = useCalendarStore();
+const campaign = useCampaignStore();
 
-const users = ref([
-  { id: "test4", name: "test4" },
-  { id: "test3", name: "test3" },
-  { id: "test2", name: "test2" },
-  { id: "test1", name: "test1" },
-  { id: "test", name: "test" },
-]);
+// 사원 검색
+const memberStore = useMemberStore();
+const searchText = ref("");
+const myinfo = ref([]);
+const users = ref([]);
+
+const filteredUsers = computed(() => {
+  return users.value.filter((u) => u.name.includes(searchText.value));
+});
+
+
+const searchUser = () => {
+  console.log(`검색: ${searchText.value}`);
+};
 
 const handleClose = () => {
   router.back();
@@ -28,12 +38,28 @@ const startDate = ref("");
 const endDate = ref("");
 
 // 선택된 유저 ID 목록
-const selectedUserIds = ref([]);
+const selectedUserIdxs = ref([]);
+
 
 // 추가 버튼 눌렀을 때
-const handleAddUsers = () => {
-  console.log("선택된 유저:", selectedUserIds.value);
-  // 👉 여기에 API 호출이나 로직 추가 가능
+const handleAddUsers = async () => {
+  console.log("선택된 유저:", selectedUserIdxs.value);
+  console.log("캠페인 ID:", Idx); // 디버깅용
+
+  const formData = {
+    eventIdx: Idx, // ✅ 여기에 이벤트 idx 포함
+    memberIdxList: selectedUserIdxs.value,
+  };
+
+  try {
+    const result = await campaign.register(formData);
+    console.log("등록 성공:", result);
+    alert("사원이 성공적으로 추가되었습니다.");
+    router.back();
+  } catch (error) {
+    console.error("등록 실패:", error);
+    alert("사원 추가 중 오류가 발생했습니다.");
+  }
 };
 
 onMounted(async () => {
@@ -46,6 +72,16 @@ onMounted(async () => {
     endDate.value = result.endDate;
   } else {
     console.error("상세 데이터를 불러오지 못했습니다.");
+  }
+
+  myinfo.value = (await memberStore.myPageInfo()).data.data;
+  console.log(myinfo.value)
+  if(myinfo.value.isAdmin) {
+    const response = await memberStore.adminMemberList();
+    users.value = response.data.data;
+
+    // 승인된 사원들만 필터
+    users.value = users.value.filter((u) => u.status == "APPROVED");
   }
 });
 </script>
@@ -78,11 +114,13 @@ onMounted(async () => {
       <input
         type="text"
         placeholder="이름을 입력해주세요."
+        v-model="searchText"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
 
       <button
         class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
+        @click="searchUser"
       >
         검색
       </button>
@@ -96,17 +134,18 @@ onMounted(async () => {
             <th class="py-3 px-6">
               <input
                 type="checkbox"
-                :checked="selectedUserIds.length === users.length"
+                :checked="selectedUserIdxs.length === users.length"
                 @change="
                   (e) => {
-                    selectedUserIds = e.target.checked
-                      ? users.map((u) => u.id)
+                    selectedUserIdxs = e.target.checked
+                      ? users.map((u) => u.idx)
                       : [];
                   }
                 "
               />
             </th>
 
+            <th class="py-3 px-6">부서</th>
             <th class="py-3 px-6">아이디</th>
             <th class="py-3 px-6">이름</th>
           </tr>
@@ -114,25 +153,22 @@ onMounted(async () => {
 
         <tbody>
           <tr
-            v-for="user in users"
-            :key="user.id"
+            v-for="(user, index) in filteredUsers"
+            :key="index"
             class="border-b hover:bg-slate-50 cursor-pointer transition"
           >
-
             <td class="py-3 px-2">
               <input
                 type="checkbox"
-                :value="user.id"
-                v-model="selectedUserIds"
+                :value="user.idx"
+                v-model="selectedUserIdxs"
               />
             </td>
-
-            <td class="py-3 px-2">{{ user.id }}</td>
+            <td class="py-3 px-2">{{ user.department }}</td>
+            <td class="py-3 px-2">{{ user.memberId }}</td>
             <td class="py-3 px-2">{{ user.name }}</td>
           </tr>
-
         </tbody>
-
       </table>
     </div>
 

@@ -55,16 +55,19 @@ const handleSubmit = async () => {
   if (!imageFile.value) return alert("이미지를 선택해주세요.");
 
   const dto = {
-    productName: form.name,
-    ecoCertified: form.isCertified,
-    certificationType: form.certType,
-    energyGrade: form.energyGrade,
-    recyclable: form.isRecyclable,
-    bioMaterial: form.isEcoMaterial,
-    lowCarbonProcess: form.hasLowCarbonProcess,
-    unitPrice: form.price,
-    salesQty: form.salesCount,
-    companyIdx: form.companyIdx
+    productIdx: idx, //제품 고유idx
+    productName: form.name, //제품명
+    ecoCertified: form.ecoCertified, //환경 인증 여부
+    certificationType: form.certificationType, //인증 종류
+    energyGrade: form.energyGrade, // 에너지 효율 등급
+    recyclable: form.recyclable, // 재활용 가능 여부
+    bioMaterial: form.bioMaterial, // 생분해성 소재 여부
+    lowCarbonProcess: form.lowCarbonProcess, // 탄소 저감형 공정 여부
+    unitPrice: form.unitPrice, // 단가
+    salesQty: form.salesQty, // 판매 수량
+    imgePath: form.imgePath, // 이미지 경로 (서버에서 처리)
+    companyIdx: form.companyIdx, // 회사 고유 idx
+    serialNumber: form.serialNumber, // 시리얼 넘버
   };
 
   const formData = new FormData();

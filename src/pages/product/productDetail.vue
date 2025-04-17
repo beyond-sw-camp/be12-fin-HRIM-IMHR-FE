@@ -77,8 +77,8 @@ import axios from 'axios';
 
 const route = useRoute();
 const router = useRouter();
-
-const idx = ref(route.query.idx || route.params.idx);           // 제품 idx
+console.log(route.params);
+const idx = ref( route.params.idx);           // 제품 idx
 const companyIdx = ref(route.query.company_idx || route.params.company_idx); // 회사 idx
 
 const product = ref({});

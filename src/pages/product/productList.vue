@@ -25,7 +25,7 @@
         <tbody>
           <tr v-for="(product, index) in filteredProducts" :key="product.idx"
           
-            class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.productIdx)">
+            class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.idx)">
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>
             <td class="p-3">{{ product.serialNumber }}</td>
@@ -85,14 +85,15 @@ const onSearch = () => {
 };
 
 // 상세 보기로 이동
-const goToDetail = (productIdx) => {
+const goToDetail = (idx) => {
   const company_idx = String(route.params.idx);  // ← 문자열로 변환
+  console.log(idx)
   console.log("상세보기 이동:", company_idx, idx);
   router.push({
     name: 'productDetail',
     params: {
       company_idx: String(company_idx),
-      product_idx: String(productIdx)
+      idx: String(idx)
     }
   });
 };

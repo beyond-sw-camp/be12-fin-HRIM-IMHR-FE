@@ -5,33 +5,44 @@ import { useFeedbackStore } from '../../stores/useFeedbackStore'
 const feedbackStore = useFeedbackStore();
 const questions = ref([
   {
+    questionIdx: null,
     question: '',
     type: '', // 'SUBJECTIVE' or 'MULTIPLE_CHOICE'
+    sortOrder: 0,
     choices: []
   }
 ])
 
 const addQuestion = () => {
   questions.value.push({
+    questionIdx: null,
     question: '',
     type: '',
+    sortOrder: questions.value.length,
     choices: []
   })
 }
 
 const removeQuestion = (index) => {
   questions.value.splice(index, 1)
+  // Update sortOrder for remaining questions
+  questions.value.forEach((q, idx) => {
+    q.sortOrder = idx
+  })
 }
 
 const setType = (index, type) => {
   questions.value[index].type = type
-  if (type === 'subjective') {
+  if (type === 'SUBJECTIVE') {
     questions.value[index].choices = []
   }
 }
 
 const addOption = (qIndex) => {
-  questions.value[qIndex].choices.push('')
+  questions.value[qIndex].choices.push({
+    choiceIdx: null,
+    text: ''
+  })
 }
 
 const removeOption = (qIndex, oIndex) => {
@@ -39,15 +50,41 @@ const removeOption = (qIndex, oIndex) => {
 }
 
 const saveForm = async () => {
-  console.log('폼 데이터 저장됨:', questions.value)
-  const response = await feedbackStore.createFeedbackTemplate({insertQuestions: questions.value});
+  const formData = {
+    templateIdx: null, // This should be set if modifying existing template
+    deleteQuestions: [], // This should be populated with questions to delete if modifying
+    insertQuestions: questions.value.map(question => ({
+      questionIdx: question.questionIdx,
+      question: question.question,
+      type: question.type,
+      sortOrder: question.sortOrder,
+      choices: question.choices.map(choice => ({
+        choiceIdx: choice.choiceIdx,
+        text: choice.text
+      }))
+    }))
+  }
+  
+  console.log('폼 데이터 저장됨:', formData)
+  const response = await feedbackStore.createFeedbackTemplate(formData);
   console.log(response);
 }
 
 onMounted(async () => {
   const response = await feedbackStore.fetchFeedbackTemplate();
   console.log(response);
-  questions.value = response.data.data.questions;
+  if (response.data && response.data.data && response.data.data.questions) {
+    questions.value = response.data.data.questions.map(q => ({
+      questionIdx: q.questionIdx,
+      question: q.question,
+      type: q.type,
+      sortOrder: q.sortOrder,
+      choices: q.choices ? q.choices.map(c => ({
+        choiceIdx: c.choiceIdx,
+        text: c.text
+      })) : []
+    }));
+  }
 })
 </script>
 
@@ -99,7 +136,7 @@ onMounted(async () => {
           <input
             type="text"
             class="border border-gray-300 p-2 rounded w-full"
-            v-model="question.choices[oIndex]"
+            v-model="option.text"
             placeholder="보기 항목 입력"
           />
           <button class="bg-red-500 w-20 text-white px-3 py-1 rounded" @click="removeOption(qIndex, oIndex)">삭제</button>

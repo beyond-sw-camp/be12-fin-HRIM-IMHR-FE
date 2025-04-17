@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 px-6 py-10">
     <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">친환경 제품 리스트</h1>
-    <pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>
+    <!--<pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>-->
     <!-- 검색창 -->
     <div class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8">
       <Search color="black" :size="30" />
@@ -25,7 +25,7 @@
         <tbody>
           <tr v-for="(product, index) in filteredProducts" :key="product.idx"
           
-            class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.productIdx)">
+            class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.idx)">
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>
             <td class="p-3">{{ product.serialNumber }}</td>
@@ -56,7 +56,7 @@ const router = useRouter();
 const route = useRoute();
 const search = ref('');
 const products = ref([]);
-const company_idx = route.params.idx || 1;
+const company_idx = route.params.idx;
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
 
 // 데이터 불러오기
@@ -86,12 +86,14 @@ const onSearch = () => {
 
 // 상세 보기로 이동
 const goToDetail = (idx) => {
-  const company_idx = String(route.params.idx || 1);  // ← 문자열로 변환
+  const company_idx = String(route.params.idx);  // ← 문자열로 변환
+  console.log(idx)
+  console.log("상세보기 이동:", company_idx, idx);
   router.push({
     name: 'productDetail',
     params: {
       company_idx: String(company_idx),
-      product_idx: String(idx)
+      idx: String(idx)
     }
   });
 };

@@ -12,18 +12,21 @@ const idx = route.query.idx;
 const mode = ref(route.query.mode || (idx ? "view" : "create"));
 
 const form = reactive({
+  idx: "",
   name: "",
-  serial: "",
-  isCertified: false,
+  ecoCertified: false,
   certType: "",
   energyGrade: "1등급",
-  isRecyclable: false,
-  isEcoMaterial: false,
-  hasLowCarbonProcess: false,
-  price: 0,
-  salesCount: 0,
-  growthRate: "",
-  companyIdx: 1
+  recyclable: false,
+  bioMaterial: false,
+  lowCarbonProcess: false,
+  unitPrice: 0,
+  salesQty: 0,
+  imagePath: "",
+  companyIdx: "",
+  serialNumber: "",
+  growthRate: 0,
+
 });
 
 const imageFile = ref(null);
@@ -35,16 +38,19 @@ onMounted(async () => {
       const res = await axios.get(`/api/product/detail/${idx}`);
       console.log(res.data.data);// Debugging line
       const data = res.data.data;
-      form.name = data.productName;
-      form.serial = data.productIdx;
-      form.isCertified = data.ecoCertified;
-      form.certType = data.certificationType;
-      form.energyGrade = data.energyGrade;
-      form.isRecyclable = data.recyclable;
-      form.isEcoMaterial = data.bioMaterial;
-      form.hasLowCarbonProcess = data.lowCarbonProcess;
-      form.price = data.unitPrice;
-      form.salesCount = data.salesQty;
+      form.name = data.productName;//제품명
+      form.idx = data.idx;//제품 고유idx
+      form.ecoCertified = data.ecoCertified;//환경 인증 여부
+      form.certificationType = data.certificationType;//인증 종류
+      form.energyGrade = data.energyGrade;// 에너지 효율 등급
+      form.recyclable = data.recyclable;// 재활용 가능 여부
+      form.bioMaterial = data.bioMaterial;// 생분해성 소재 여부
+      form.lowCarbonProcess = data.lowCarbonProcess;// 탄소 저감형 공정 여부
+      form.unitPrice = data.unitPrice;// 단가
+      form.salesQty = data.salesQty;// 판매 수량
+      form.imgePath = data.imgePath;// 이미지 경로 (서버에서 처리)
+      form.companyIdx = data.companyIdx;// 회사 고유 idx
+      form.serialNumber = data.serialNumber;// 시리얼 넘버
     } catch (err) {
       alert("데이터 불러오기 실패");
     }
@@ -99,7 +105,7 @@ const handleDelete = async () => {
     try {
       await axios.delete(`/api/product/${idx}`);
       alert("삭제 완료!");
-      router.push(`/productList/${form.companyIdx}`);
+      router.push(`/productList/${form.idx}`);
     } catch (err) {
       alert("삭제 실패");
     }
@@ -129,10 +135,10 @@ const handleDelete = async () => {
 
         <!-- 시리얼 넘버 -->
         <div>
-          <label class="block font-medium" for="serial">시리얼 넘버</label>
+          <label class="block font-medium" for="serialNumber">시리얼 넘버</label>
           <input
-            id="serial"
-            v-model="form.serial"
+            id="serialNumber"
+            v-model="form.serialNumber"
             :disabled="mode === 'view'"
             type="text"
             class="w-full border rounded px-3 py-2 mt-1"
@@ -142,15 +148,15 @@ const handleDelete = async () => {
         <!-- 환경 인증 여부 -->
         <div class="flex items-center gap-2">
           <label class="font-medium">환경 인증 여부</label>
-          <input v-model="form.isCertified" :disabled="mode === 'view'" type="checkbox" />
+          <input v-model="form.ecoCertified" :disabled="mode === 'view'" type="checkbox" />
         </div>
 
         <!-- 인증 타입 -->
         <div>
-          <label class="block font-medium" for="cert">환경 인증 타입</label>
+          <label class="block font-medium" for="certificationType">환경 인증 타입</label>
           <input
-            id="cert"
-            v-model="form.certType"
+            id="certificationType"
+            v-model="form.certificationType"
             :disabled="mode === 'view'"
             type="text"
             class="w-full border rounded px-3 py-2 mt-1"
@@ -176,13 +182,13 @@ const handleDelete = async () => {
         <!-- 재활용 가능 여부 -->
         <div class="flex items-center gap-2">
           <label class="font-medium">재활용 가능 여부</label>
-          <input v-model="form.isRecyclable" :disabled="mode === 'view'" type="checkbox" />
+          <input v-model="form.recyclable" :disabled="mode === 'view'" type="checkbox" />
         </div>
 
         <!-- 생분해/친환경 원료 -->
         <div class="flex items-center gap-2">
           <label class="font-medium">생분해/친환경 원료</label>
-          <input v-model="form.isEcoMaterial" :disabled="mode === 'view'" type="checkbox" />
+          <input v-model="form.bioMaterial" :disabled="mode === 'view'" type="checkbox" />
         </div>
 
         <!-- 탄소 저감형 공정 여부 -->
@@ -193,10 +199,10 @@ const handleDelete = async () => {
 
         <!-- 단가 -->
         <div>
-          <label class="block font-medium" for="price">단가</label>
+          <label class="block font-medium" for="unitPrice">단가</label>
           <input
-            id="price"
-            v-model.number="form.price"
+            id="unitPrice"
+            v-model.number="form.unitPrice"
             :disabled="mode === 'view'"
             type="number"
             class="w-full border rounded px-3 py-2 mt-1"
@@ -205,10 +211,10 @@ const handleDelete = async () => {
 
         <!-- 판매 수량 -->
         <div>
-          <label class="block font-medium" for="sales">판매 수량</label>
+          <label class="block font-medium" for="salesQty">판매 수량</label>
           <input
-            id="sales"
-            v-model.number="form.salesCount"
+            id="salesQty"
+            v-model.number="form.salesQty"
             :disabled="mode === 'view'"
             type="number"
             class="w-full border rounded px-3 py-2 mt-1"
@@ -260,7 +266,7 @@ const handleDelete = async () => {
           </button>
 
           <button
-            @click="$router.back()"
+            @click="$router.push('/productList')"
             class="border border-gray-400 px-4 py-2 rounded hover:bg-gray-100"
           >
             취소

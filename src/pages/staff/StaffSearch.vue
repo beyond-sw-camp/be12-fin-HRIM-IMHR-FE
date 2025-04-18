@@ -4,9 +4,22 @@ import { useMemberStore } from "../../stores/useMemberStore";
 
 const memberStore = useMemberStore();
 const searchText = ref("");
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 const myinfo = ref([]);
 const users = ref([]);
+
+// 페이지네이션을 위한 computed 속성들
+const totalPages = computed(() => {
+  return Math.ceil(filteredUsers.value.length / itemsPerPage.value);
+});
+
+const paginatedUsers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredUsers.value.slice(start, end);
+});
 
 const filteredUsers = computed(() => {
   return users.value.filter((u) => u.memberId.includes(searchText.value));
@@ -14,6 +27,25 @@ const filteredUsers = computed(() => {
 
 const searchUser = () => {
   console.log(`검색: ${searchText.value}`);
+  currentPage.value = 1; // 검색 시 첫 페이지로 이동
+};
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+};
+
+const goToPrevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const goToNextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
 };
 
 onMounted(async () => {
@@ -21,6 +53,10 @@ onMounted(async () => {
   console.log(myinfo.value)
   if(myinfo.value.isAdmin) {
     const response = await memberStore.adminMemberList();
+    console.log(response);
+    users.value = response.data.data;
+  } else {
+    const response = await memberStore.authMemberList();
     console.log(response);
     users.value = response.data.data;
   }
@@ -59,8 +95,8 @@ onMounted(async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user, index) in filteredUsers" :key="user.memberId" class="border-b hover:bg-slate-50 transition">
-            <td class="py-2 border">{{ index }}</td>
+          <tr v-for="(user, index) in paginatedUsers" :key="user.memberId" class="border-b hover:bg-slate-50 transition">
+            <td class="py-2 border">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
 
             <td class="border" v-if="myinfo.isAdmin">
               <span
@@ -85,10 +121,9 @@ onMounted(async () => {
               </router-link>
             </td>
 
-            <!-- ✅ 수정된 부분 -->
             <td class="border" v-if="!myinfo.isAdmin">
-              <router-link :to="`/feedback/${user.id}`">
-                {{ user.id }}
+              <router-link :to="`/feedback/${user.idx}`">
+                {{ user.memberId }}
               </router-link>
             </td>
 
@@ -96,6 +131,39 @@ onMounted(async () => {
           </tr>
         </tbody>
       </table>
+
+      <!-- 페이지네이션 컨트롤 -->
+      <div class="flex justify-center items-center gap-2 py-4">
+        <button
+          @click="goToPrevPage"
+          :disabled="currentPage === 1"
+          class="px-3 py-1 rounded border"
+          :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
+        >
+          이전
+        </button>
+        
+        <div class="flex gap-1">
+          <button
+            v-for="page in totalPages"
+            :key="page"
+            @click="goToPage(page)"
+            class="px-3 py-1 rounded border"
+            :class="{ 'bg-slate-800 text-white': currentPage === page }"
+          >
+            {{ page }}
+          </button>
+        </div>
+
+        <button
+          @click="goToNextPage"
+          :disabled="currentPage === totalPages"
+          class="px-3 py-1 rounded border"
+          :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+        >
+          다음
+        </button>
+      </div>
     </div>
   </div>
 </template>

@@ -34,6 +34,10 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.get("/api/member/detail/info/"+idx);
             return response;
         },
+        async staffShort(idx) {
+            const response = await axios.get("/api/member/detail/shortinfo/"+idx);
+            return response;
+        },
         async staffModify(idx, form) {
             const response = await axios.post("/api/member/detail/modify/"+idx, form);
             return response;
@@ -48,6 +52,10 @@ export const useMemberStore = defineStore('member', {
         },
         async adminMemberList() {
             const response = await axios.post("/api/member/list");
+            return response;
+        },
+        async authMemberList() {
+            const response = await axios.post("/api/member/list/partial");
             return response;
         },
         async companySignup(formData) {

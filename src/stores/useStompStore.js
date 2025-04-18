@@ -31,7 +31,7 @@ export const useStompStore = defineStore('stomp', {
             const data = JSON.parse(msg.body);
 
             let lastNotificationId = null;
-            
+
             const showNotification = (data) => {
               // 중복 확인
               if (lastNotificationId === data.id) return;
@@ -96,18 +96,37 @@ export const useStompStore = defineStore('stomp', {
       }
     },
 
-    signupApprove(title, content, conpanyCode) {
-      console.log("함수 실행");
+    signupApprove(title, content, companyCode) {
       if (this.connected && this.stompClient) {
-        console.log("동작");
+        
         const payload = JSON.stringify({
           title: title,
           content: content,
-          conpanyCode: conpanyCode,
         });
 
         this.stompClient.publish({
-          destination: `/app/notification/signup/${conpanyCode}`,
+          destination: `/app/notification/signup/${companyCode}`,
+          body: payload,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      } else {
+        console.warn('❗ STOMP 연결되지 않음');
+      }
+    },
+
+    activityApproveReq(title,content,companyIdx,activityIdx){
+      if (this.connected && this.stompClient) {
+        
+        const payload = JSON.stringify({
+          title: title,
+          content: content,
+          activityIdx:activityIdx,
+        });
+
+        this.stompClient.publish({
+          destination: `/app/notification/activityReq/${companyIdx}`,
           body: payload,
           headers: {
             'content-type': 'application/json',

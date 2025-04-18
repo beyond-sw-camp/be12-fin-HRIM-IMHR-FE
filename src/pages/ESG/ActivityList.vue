@@ -141,8 +141,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { Search } from "lucide-vue-next";
 import { useActivityStore } from '../../stores/useActivityStore';
+import { useStompStore } from '../../stores/useStompStore';
+import { useMemberStore } from '../../stores/useMemberStore';
 
 const activitySore = useActivityStore()
+const stomp = useStompStore();
+const memberStore = useMemberStore();
 const search = ref('')
 const currentPage = ref(1)
 const perPage = 5
@@ -251,7 +255,9 @@ const submit = async () => {
     formData.append("file", file.value);
 
     try {
-      await activitySore.regist(formData);
+      const response = await activitySore.regist(formData);
+
+      stomp.activityApproveReq("활동 승인 요청","["+response.title+"] 승인 요청이 왔습니다.",memberStore.myCompanyIdx,response.idx);
       window.location.reload();
     } catch (error) {
       alert("활동 추가 실패 \n 관리자에게 문의 하시오.");

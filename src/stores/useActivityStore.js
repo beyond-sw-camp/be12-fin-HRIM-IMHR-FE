@@ -14,7 +14,7 @@ export const useActivityStore = defineStore('activity', {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            return response;
+            return response.data.data;
         },
 
         async list(page, size) {

@@ -18,11 +18,7 @@ export const useActivityStore = defineStore('activity', {
         },
 
         async list(page, size) {
-            let response = null;
-            if (page === 0 && size === 5) {
-                response = await axios("/api/activity/activityList?page=" + 1 + "&size=" + 5);
-            }
-            response = await axios("/api/activity/activityList?page=" + page + "&size=" + size);
+            const response = await axios("/api/activity/activityList?page=" + page + "&size=" + size);
             this.activityList = response.data.data;
         },
 

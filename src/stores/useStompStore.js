@@ -1,111 +1,125 @@
 // src/stores/stompStore.js
-import { defineStore } from 'pinia'
-import { Client } from '@stomp/stompjs'
-import { ref } from 'vue'
-import { useNotificationStore } from "./useNotificationStore"
-import { CodeSquare } from 'lucide-vue-next'
+import { defineStore } from 'pinia';
+import { Client } from '@stomp/stompjs';
+import { useNotificationStore } from './useNotificationStore';
+import { useMemberStore } from './useMemberStore';
 
-export const useStompStore = defineStore('stomp', () => {
-  const stompClient = ref(null)
-  const connected = ref(false)
-  const receivedMessages = ref([])
-  const NotificationStore = useNotificationStore();
+export const useStompStore = defineStore('stomp', {
+  state: () => ({
+    stompClient: null,
+    connected: false,
+    receivedMessages: [],
+  }),
 
-  const connect = (member) => {
+  actions: {
+    connect(member) {
+      const NotificationStore = useNotificationStore();
+      const memberStore = useMemberStore();
 
-    stompClient.value = new Client({
-      brokerURL: 'ws://localhost:8080/ws',
-      connectHeaders: {},
-      reconnectDelay: 5000,
-      onConnect: () => {
-        connected.value = true
-        console.log('🔌 STOMP 연결됨')
-        console.log(member.name)
-        stompClient.value.subscribe(`/topic/notification/${member.idx}`, (msg) => {
-          const data = JSON.parse(msg.body)
+      this.stompClient = new Client({
+        brokerURL: 'ws://localhost:8080/ws',
+        connectHeaders: {},
+        reconnectDelay: 5000,
+        onConnect: () => {
+          this.connected = true;
+          console.log('🔌 STOMP 연결됨');
 
+          let webSocketIdx = 0;
+          if (member) webSocketIdx = member.idx;
 
-         // window 알림
-          const showNotification = (data) => {
-            const notification = new Notification(data.title, {
-              body: data.content,
-              icon: '/src/assets/icon/알림.png',
-              image: '/src/assets/icon/imhr.png'
-            });
+          this.stompClient.subscribe(`/topic/notification/${webSocketIdx}`, (msg) => {
+            const data = JSON.parse(msg.body);
 
-            notification.addEventListener('click', () => {
-              window.open(data.url);
-            });
-          };
+            let lastNotificationId = null;
+            
+            const showNotification = (data) => {
+              // 중복 확인
+              if (lastNotificationId === data.id) return;
 
-          NotificationStore.notifications.unshift(data)
+              // 새로운 알림으로 판단될 때만 진행
+              lastNotificationId = data.id;
 
-          showNotification(data);
-          if (Notification.permission === 'default') {
-            Notification.requestPermission().then((permission) => {
-              if (permission === 'granted') {
-                showNotification(data);
-              } else {
-                alert('알림 권한이 거부되었습니다.');
-              }
-            });
-          } else if (Notification.permission === 'granted') {
-            showNotification(data);
-          } else if (Notification.permission === 'denied') {
-            alert('알림 권한이 거부되었습니다.');
-          }
- 
+              const notification = new Notification(data.title, {
+                body: data.content,
+                icon: '/src/assets/icon/알림.png',
+                image: '/src/assets/icon/imhr.png',
+              });
 
+              notification.addEventListener('click', () => {
+                window.open(data.url);
+              });
+            };
 
+            NotificationStore.notifications.unshift(data);
 
-        })
-      },
-      onStompError: (frame) => {
-        console.error('❌ STOMP 오류:', frame)
-      },
-    })
-
-    stompClient.value.activate()
-  }
-
-  // const disconnect = () => {
-  //   if (stompClient.value && stompClient.value.active) {
-  //     stompClient.value.deactivate()
-  //     connected.value = false
-  //     console.log('🔌 STOMP 연결 해제됨')
-  //   }
-  // }
-
-  const sendApprove = (title, content, member, url) => {
-    if (connected.value && stompClient.value) {
-
-      const payload = JSON.stringify({
-        member: member,
-        title: title,
-        content: content,
-        url: url,
+            if (Notification.permission === 'default') {
+              Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                  showNotification(data);
+                } else {
+                  alert('알림 권한이 거부되었습니다.');
+                }
+              });
+            } else if (Notification.permission === 'granted') {
+              showNotification(data);
+            } else if (Notification.permission === 'denied') {
+              alert('알림 권한이 거부되었습니다.');
+            }
+          });
+        },
+        onStompError: (frame) => {
+          console.error('❌ STOMP 오류:', frame);
+        },
       });
 
-      stompClient.value.publish({
-        destination: `/app/notification/approve/${member.idx}`,
-        body: payload,
-        headers: {
-          'content-type': 'application/json', // 명시적 content-type (선택사항)
-        },
-      })
-    } else {
-      console.warn('❗ STOMP 연결되지 않음')
-    }
-  }
+      this.stompClient.activate();
+    },
 
+    activityApprove(title, content, member, url) {
+      if (this.connected && this.stompClient) {
+        const payload = JSON.stringify({
+          member: member,
+          title: title,
+          content: content,
+          url: url,
+        });
 
+        this.stompClient.publish({
+          destination: `/app/notification/activity/${member.idx}`,
+          body: payload,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      } else {
+        console.warn('❗ STOMP 연결되지 않음');
+      }
+    },
 
+    signupApprove(title, content, conpanyCode) {
+      console.log("함수 실행");
+      if (this.connected && this.stompClient) {
+        console.log("동작");
+        const payload = JSON.stringify({
+          title: title,
+          content: content,
+          conpanyCode: conpanyCode,
+        });
 
-  return {
-    stompClient,
-    connected,
-    receivedMessages,
-    connect,
-    sendApprove,
-  }
-})
+        this.stompClient.publish({
+          destination: `/app/notification/signup/${conpanyCode}`,
+          body: payload,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      } else {
+        console.warn('❗ STOMP 연결되지 않음');
+      }
+    },
+
+    test() {
+      console.log("test");
+    },
+  },
+});

@@ -2,9 +2,12 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useMemberStore } from '../../stores/useMemberStore';
-import LogoSection from '../common/LogoSection.vue'
+import { useStompStore } from '../../stores/useStompStore';
+import LogoSection from '../common/LogoSection.vue';
+
 
 const memberStore = useMemberStore();
+const stomp = useStompStore();
 const router = useRouter();
 
 const form = ref({
@@ -26,7 +29,10 @@ const submit = async () => {
   const response = await memberStore.personalSignup(form.value);
   console.log(response);
   if(response.data.isSuccess){
+    console.log("test")
+    stomp.test()
     alert('회원가입이 완료되었습니다!');
+    stomp.signupApprove("회원가입 요청","회원가입 요청이 있습니다.",response.data.data.companyCode);
     router.push("/login");
   }
 }

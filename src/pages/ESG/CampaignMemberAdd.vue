@@ -90,9 +90,8 @@ onMounted(async () => {
       memberStore.adminMemberList(),
       campaign.campaignfetchMemberList(Idx),
     ]);
-
     // 승인된 사원들만 필터
-    users.value = userRes.data.data.filter((u) => u.status === "APPROVED" && u.isAdmin === false );
+    users.value = userRes.data.data.filter((u) => u.status === "APPROVED" && u.isAdmin === false);
     participatedMembers.value = memberRes;
     selectedUserIdxs.value.push(...memberRes.map((m) => m.idx));
   }

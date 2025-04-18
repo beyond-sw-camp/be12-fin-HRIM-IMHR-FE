@@ -11,20 +11,21 @@ export const useCampaignStore = defineStore('campaign', {
   actions: {
     async register(formData) {
       const response = await axios.post("/api/campaign/register", formData);
-      console.log("Backend : ", response.data.message);
+      console.log(response.data.message);
       return response.data;
     },
 
     async campaignfetchMemberList(idx) {
-      try {
-        const response = await axios.get(`/api/campaign/memberList/${idx}`)
-        console.log("Backend : ", response.data.message);
-        this.campaigns = response.data.data;
-        return response.data.data;
-      } catch (error) {
-        console.error("조회회 실패:", error.response || error.message);
-        throw error;
-      }
+      const response = await axios.get(`/api/campaign/memberList/${idx}`)
+      console.log(response.data.message);
+      this.campaigns = response.data.data;
+      return response.data.data;
     },
+
+    async campaignMemberupdate(idx, formData) {
+      const response = await axios.put(`/api/campaign/update/${idx}`, formData);
+      console.log(response.data.message);
+      return response.data.data
+    }
   }
 });

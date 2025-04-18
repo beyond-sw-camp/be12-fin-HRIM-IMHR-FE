@@ -9,10 +9,10 @@ const currentPage = ref(1)
 const perPage = 5
 
 const user = ref({
-  name: '홍길동',
-  email: 'test_id@gmail.com',
-  company: '삼성',
-  department: '회계',
+  name: '',
+  email: '',
+  company: '',
+  department: '',
 })
 
 const activities = ref([
@@ -81,7 +81,7 @@ onMounted(async () => {
         <div class="text-lg font-semibold">{{ user.name }}</div>
         <div class="text-sm text-gray-600">{{ user.email }}</div>
         <div class="text-sm text-gray-400">{{ user.company }}</div>
-        <div class="text-sm text-gray-400">{{ user.department }}</div>
+        <div class="text-sm text-gray-400">{{ user.department.name }}</div>
       </div>
 
       <!-- 버튼 -->

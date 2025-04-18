@@ -1,11 +1,10 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
 import { useMemberStore } from "../../stores/useMemberStore";
 import { useCampaignStore } from "../../stores/useCampaignStore";
-import { data } from "autoprefixer";
 
 const route = useRoute();
 const router = useRouter();
@@ -41,19 +40,26 @@ const endDate = ref("");
 const selectedUserIdxs = ref([]);
 
 // 추가 버튼 눌렀을 때
-const handleAddUsers = async () => {
+const handleSubmit = async () => {
   const formData = {
-    eventIdx: Idx, // 여기에 이벤트 idx 포함
+    eventIdx: Idx,
     memberIdxList: selectedUserIdxs.value,
   };
 
   try {
-    const result = await campaign.register(formData);
-    alert("사원이 성공적으로 추가되었습니다.");
+    if (participatedMembers.value.length > 0) {
+      // 기존 참여자가 있다면 수정 API 호출
+      const result = await campaign.campaignMemberupdate(formData.eventIdx, formData);
+      alert("사원 정보가 성공적으로 수정되었습니다.");
+    } else {
+      // 없다면 추가 API 호출
+      const result = await campaign.register(formData);
+      alert("사원이 성공적으로 추가되었습니다.");
+    }
     router.back();
   } catch (error) {
-    console.error("등록 실패:", error);
-    alert("사원 추가 중 오류가 발생했습니다.");
+    console.error("처리 실패:", error);
+    alert("사원 정보 처리 중 오류가 발생했습니다.");
   }
 };
 
@@ -62,6 +68,12 @@ const participatedMembers = ref([]);
 const nonParticipatedUsers = computed(() => {
   const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
   return users.value.filter((u) => !participatedIds.has(u.idx));
+});
+
+// 참여한 사람인지 판단
+const isAllParticipatedSelected = computed(() => {
+  const participatedIds = participatedMembers.value.map((m) => m.idx);
+  return participatedIds.every((id) => selectedUserIdxs.value.includes(id));
 });
 
 //
@@ -86,6 +98,7 @@ onMounted(async () => {
     // 승인된 사원들만 필터
     users.value = userRes.data.data.filter((u) => u.status == "APPROVED");
     participatedMembers.value = memberRes;
+    selectedUserIdxs.value.push(...memberRes.map((m) => m.idx));
   }
 });
 </script>
@@ -117,7 +130,7 @@ onMounted(async () => {
 
       <input
         type="text"
-        placeholder="이름을 입력해주세요."
+        placeholder="미 참여자 이름을 입력해주세요."
         v-model="searchText"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
@@ -135,11 +148,35 @@ onMounted(async () => {
       <div
         class="w-full md:w-1/2 bg-white rounded-lg shadow overflow-hidden p-4 mr-4"
       >
-        <h2 class="text-lg font-semibold mb-2 text-slate-700">참여자 목록</h2>
+        <h2 class="text-lg font-semibold mb-2 text-slate-700">
+          참여한 사원 목록
+        </h2>
         <table class="w-full text-sm text-center">
           <thead class="bg-slate-100">
             <tr>
-              <th class="p-2">번호</th>
+              <th class="p-2">
+                <input
+                  type="checkbox"
+                  :checked="
+                    selectedUserIdxs.length === participatedMembers.length
+                  "
+                  @change="
+                    (e) => {
+                      const allIds = participatedMembers.map((m) => m.idx);
+                      if (e.target.checked) {
+                        selectedUserIdxs = [
+                          ...new Set([...selectedUserIdxs, ...allIds]),
+                        ];
+                      } else {
+                        selectedUserIdxs = selectedUserIdxs.filter(
+                          (id) => !allIds.includes(id)
+                        );
+                      }
+                    }
+                  "
+                />
+              </th>
+
               <th class="p-2">이름</th>
               <th class="p-2">아이디</th>
             </tr>
@@ -151,12 +188,20 @@ onMounted(async () => {
             >
               <td colspan="3" class="py-4">참여한 사원이 없습니다.</td>
             </tr>
+
             <tr
               v-for="(user, index) in participatedMembers"
-              :key="index"
+              :key="'p-' + index"
               class="hover:bg-slate-50"
             >
-              <td class="p-2">{{ index + 1 }}</td>
+              <td class="p-2">
+                <input
+                  type="checkbox"
+                  :value="user.idx"
+                  v-model="selectedUserIdxs"
+                />
+              </td>
+
               <td class="p-2">{{ user.name }}</td>
               <td class="p-2">{{ user.memberId }}</td>
             </tr>
@@ -191,8 +236,8 @@ onMounted(async () => {
                 />
               </th>
               <th class="p-2">부서</th>
-              <th class="p-2">아이디</th>
               <th class="p-2">이름</th>
+              <th class="p-2">아이디</th>
             </tr>
           </thead>
           <tbody>
@@ -215,66 +260,20 @@ onMounted(async () => {
                 />
               </td>
               <td class="p-2">{{ user.department }}</td>
-              <td class="p-2">{{ user.memberId }}</td>
               <td class="p-2">{{ user.name }}</td>
+              <td class="p-2">{{ user.memberId }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- 참여자 테이블 -->
-    <!-- <div class="bg-white rounded-lg shadow overflow-hidden max-w-4xl mx-auto">
-      <table class="min-w-full text-sm text-slate-800 text-center">
-        <thead class="bg-slate-100 border-b border-gray-200">
-          <tr>
-            <th class="py-3 px-6">
-              <input
-                type="checkbox"
-                :checked="selectedUserIdxs.length === users.length"
-                @change="
-                  (e) => {
-                    selectedUserIdxs = e.target.checked
-                      ? users.map((u) => u.idx)
-                      : [];
-                  }
-                "
-              />
-            </th>
-
-            <th class="py-3 px-6">부서</th>
-            <th class="py-3 px-6">아이디</th>
-            <th class="py-3 px-6">이름</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr
-            v-for="(user, index) in filteredUsers"
-            :key="index"
-            class="border-b hover:bg-slate-50 cursor-pointer transition"
-          >
-            <td class="py-3 px-2">
-              <input
-                type="checkbox"
-                :value="user.idx"
-                v-model="selectedUserIdxs"
-              />
-            </td>
-            <td class="py-3 px-2">{{ user.department }}</td>
-            <td class="py-3 px-2">{{ user.memberId }}</td>
-            <td class="py-3 px-2">{{ user.name }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
-
     <div class="flex justify-end gap-3 pt-4">
       <button
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
-        @click="handleAddUsers"
+        @click="handleSubmit"
       >
-        추가
+        {{ participatedMembers.length > 0 ? "수정" : "추가" }}
       </button>
 
       <button

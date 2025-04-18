@@ -35,7 +35,7 @@ const agree=async()=>{
 // 반려
 const oppose=async()=>{
   activitySore.oppose(idx);
-  stomp.sendApprove("반려 되었습니다.","["+detail.value.title+"] 활동이 반려 되었습니다.",member.value,"/activeDetails/"+idx);
+  stomp.activityApprove("반려 되었습니다.","["+detail.value.title+"] 활동이 반려 되었습니다.",member.value,"/activeDetails/"+idx);
   window.location.reload();
 }
 

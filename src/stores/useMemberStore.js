@@ -5,7 +5,8 @@ export const useMemberStore = defineStore('member', {
     state: () => (
         {
             userInfo: {},
-            isLogin: false
+            isLogin: false,
+            myCompanyIdx:null,
     }),
     persist: {
         storage: sessionStorage,
@@ -83,7 +84,8 @@ export const useMemberStore = defineStore('member', {
 
         async fetchMember(idx) {
             const response = await axios.post("/api/member/info");
-            
+            console.log(response.data.data.companyIdx)
+            this.myCompanyIdx=response.data.data.companyIdx;
             return response.data.data;
         },
 

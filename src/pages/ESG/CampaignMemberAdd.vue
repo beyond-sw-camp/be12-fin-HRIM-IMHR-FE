@@ -67,13 +67,9 @@ const handleSubmit = async () => {
 const participatedMembers = ref([]);
 const nonParticipatedUsers = computed(() => {
   const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
-  return users.value.filter((u) => !participatedIds.has(u.idx));
-});
-
-// 참여한 사람인지 판단
-const isAllParticipatedSelected = computed(() => {
-  const participatedIds = participatedMembers.value.map((m) => m.idx);
-  return participatedIds.every((id) => selectedUserIdxs.value.includes(id));
+  return users.value
+    .filter((u) => !participatedIds.has(u.idx))
+    .filter((u) => u.name.includes(searchText.value));
 });
 
 //

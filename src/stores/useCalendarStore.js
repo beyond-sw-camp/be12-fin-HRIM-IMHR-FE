@@ -64,10 +64,5 @@ export const useCalendarStore = defineStore('calendar', {
       this.pageEventList = response.data.data.content;
       return response.data.data.totalPages;
     },
-
-    // 반응형 console.log
-    // watch(selectedUserIdxs, (val) => {
-    //   console.log("선택된 사원 ID들 ->", val);
-    // });
   },
 });

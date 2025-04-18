@@ -54,7 +54,6 @@ const userRole = ref(
       </div>
 
       <!-- 테이블 -->
-      <!-- style="max-height: 200px;" -->
       <div
         class="overflow-y-auto border-transparent border mb-4"
         style="max-height: 240px"
@@ -82,7 +81,7 @@ const userRole = ref(
           </tbody>
         </table>
       </div>
-      <!-- 버튼 -->
+
       <div class="flex justify-center gap-4">
         <router-link
           @click="$emit('confirm', selected)"

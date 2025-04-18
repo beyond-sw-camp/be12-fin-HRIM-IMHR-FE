@@ -38,7 +38,7 @@ onMounted(async () => {
       const res = await axios.get(`/api/product/detail/${idx}`);
       console.log(res.data.data);// Debugging line
       const data = res.data.data;
-      form.name = data.productName;//제품명
+      form.productName = data.productName;//제품명
       form.idx = data.idx;//제품 고유idx
       form.ecoCertified = data.ecoCertified;//환경 인증 여부
       form.certificationType = data.certificationType;//인증 종류
@@ -62,7 +62,7 @@ const handleSubmit = async () => {
 
   const dto = {
     productIdx: idx, //제품 고유idx
-    productName: form.name, //제품명
+    productName: form.productName, //제품명
     ecoCertified: form.ecoCertified, //환경 인증 여부
     certificationType: form.certificationType, //인증 종류
     energyGrade: form.energyGrade, // 에너지 효율 등급
@@ -71,13 +71,17 @@ const handleSubmit = async () => {
     lowCarbonProcess: form.lowCarbonProcess, // 탄소 저감형 공정 여부
     unitPrice: form.unitPrice, // 단가
     salesQty: form.salesQty, // 판매 수량
-    imgePath: form.imgePath, // 이미지 경로 (서버에서 처리)
+    imgePath: form.imagePath, // 이미지 경로 (서버에서 처리)
     companyIdx: form.companyIdx, // 회사 고유 idx
     serialNumber: form.serialNumber, // 시리얼 넘버
   };
+  console.log("DTO:", dto); // Debugging line
+  console.log("Image File:", imageFile.value); // Debugging line
 
   const formData = new FormData();
   formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
+  console.log("FormData:", formData); // Debugging line
+  console.log("FormData Image File:", imageFile.value); // Debugging line
   formData.append("image", imageFile.value);
 
   try {
@@ -126,7 +130,7 @@ const handleDelete = async () => {
           <label class="block font-medium" for="name">제품 이름</label>
           <input
             id="name"
-            v-model="form.name"
+            v-model="form.productName"
             :disabled="mode === 'view'"
             type="text"
             class="w-full border rounded px-3 py-2 mt-1"

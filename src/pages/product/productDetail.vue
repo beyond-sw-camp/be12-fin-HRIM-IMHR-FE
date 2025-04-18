@@ -11,7 +11,7 @@
       <!-- 이미지 + 매출 -->
       <div class="flex flex-col items-center bg-white p-6 rounded shadow-md w-full md:w-1/3">
         <img 
-          :src="product.imagePath || 'https://via.placeholder.com/300x300?text=No+Image'"
+          :src="product.imagePath"
           alt="제품 이미지"
           class="w-full h-auto max-w-xs mb-4 rounded-md"
         />
@@ -55,7 +55,7 @@
     <!-- 버튼 영역 -->
     <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
       <router-link
-        :to="{ name: 'productRegist', query: { mode: 'edit', idx: idx.value } }"
+        :to="{ name: 'productRegist', query: { mode: 'edit', idx: `${idx}` } }"
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
       >
         수정
@@ -89,6 +89,7 @@ const fetchProduct = async () => {
   try {
     console.log("📦 요청 idx:", idx.value);
     const res = await axios.get(`/api/product/detail/${idx.value}`);
+    console.log("📦 응답 데이터:", res);
     product.value = res.data.data;
 
     // 매출 계산 (만 원 단위로 반올림)

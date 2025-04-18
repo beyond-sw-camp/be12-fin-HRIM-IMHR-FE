@@ -57,6 +57,10 @@ const route = useRoute();
 const search = ref('');
 const products = ref([]);
 const company_idx = route.params.idx;
+console.log("company_idx:", company_idx);
+console.log("route.params:", route.params);
+console.log("route.query:", route.query);
+console.log("userInfo:", JSON.parse(localStorage.getItem('userInfo')));
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
 
 // 데이터 불러오기

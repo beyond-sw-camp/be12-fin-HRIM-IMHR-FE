@@ -1,11 +1,9 @@
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
 import MemberList from "./CampaignMemberList.vue";
 
-const router = useRouter();
 const calendarStore = useCalendarStore();
 
 const currentPage = ref(0);
@@ -102,14 +100,14 @@ const userRole = ref(
               {{ event.title }}
             </td>
 
-            <td class="py-3 px-6 text-slate-500">
+            <td class="py-3 px-6 text-slate-500 whitespace-nowrap">
               {{ event.startDate }} ~ {{ event.endDate }}
             </td>
 
             <td class="py-3 px-6" v-if="userRole === 'manager'">
               <router-link
                 :to="`/memberadd/${event.idx}`"
-                class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
+                class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3 whitespace-nowrap"
               >
                 사원 추가
               </router-link>

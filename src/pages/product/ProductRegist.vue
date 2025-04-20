@@ -13,9 +13,9 @@ const mode = ref(route.query.mode || (idx ? "view" : "create"));
 
 const form = reactive({
   idx: "",
-  name: "",
+  productName: "",
   ecoCertified: false,
-  certType: "",
+  certificationType: "",
   energyGrade: "1등급",
   recyclable: false,
   bioMaterial: false,
@@ -61,7 +61,7 @@ const handleSubmit = async () => {
   if (!imageFile.value) return alert("이미지를 선택해주세요.");
 
   const dto = {
-    productIdx: idx, //제품 고유idx
+    productIdx: form.idx, //제품 고유idx
     productName: form.productName, //제품명
     ecoCertified: form.ecoCertified, //환경 인증 여부
     certificationType: form.certificationType, //인증 종류
@@ -77,15 +77,16 @@ const handleSubmit = async () => {
   };
   console.log("DTO:", dto); // Debugging line
   console.log("Image File:", imageFile.value); // Debugging line
-
+  console.log("Form:", form); // Debugging line
+  console.log("idx:", idx); // Debugging line
   const formData = new FormData();
   formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
   console.log("FormData:", formData); // Debugging line
   console.log("FormData Image File:", imageFile.value); // Debugging line
-  formData.append("image", imageFile.value);
+  //formData.append("image", imageFile.value);
 
   try {
-    await productStore.regist(formData);
+    await axios.put(`/api/product/${idx}`, form);
     alert("등록 완료!");
     router.push(`/productList/${form.companyIdx}`);
   } catch (err) {
@@ -127,9 +128,9 @@ const handleDelete = async () => {
       <form class="space-y-5" @submit.prevent="mode === 'edit' ? handleUpdate() : handleSubmit()">
         <!-- 제품 이름 -->
         <div>
-          <label class="block font-medium" for="name">제품 이름</label>
+          <label class="block font-medium" for="productName">제품 이름</label>
           <input
-            id="name"
+            id="productName"
             v-model="form.productName"
             :disabled="mode === 'view'"
             type="text"

@@ -1,4 +1,26 @@
 <template>
+  <!-- ESG 카드 영역 -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+    <!-- 게이지 -->
+    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+      <p class="text-sm text-gray-500">2022</p>
+      <p class="text-3xl font-bold text-green-600">74.6</p>
+      <p class="mt-2 font-semibold text-gray-800">환경 점수 (E)</p>
+    </div>
+
+    <!-- 라인 차트 -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <canvas id="scoreChart"></canvas>
+    </div>
+
+    <!-- 기준 대비 카드 -->
+    <div class="bg-green-100 rounded-lg shadow p-6 text-center">
+      <p class="text-sm text-gray-600">기준대비 +1.1%</p>
+      <p class="text-2xl font-bold text-green-800">55.2</p>
+      <p class="text-sm mt-1 text-gray-700">환경 Environmental</p>
+    </div>
+  </div>
+
   <div class="min-h-screen bg-gray-50 px-6 py-10">
     <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">친환경 제품 리스트</h1>
     <!--<pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>-->
@@ -24,7 +46,6 @@
         </thead>
         <tbody>
           <tr v-for="(product, index) in filteredProducts" :key="product.idx"
-          
             class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.idx)">
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>

@@ -1,20 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-50 px-6 md:px-24 py-16 flex flex-col text-slate-800">
     <!-- 제목 -->
-    <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">친환경 제품 상세 보기</h1>
-
-    <!-- 디버깅용 -->
-    <!-- <pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre> -->
+    <h1 class="text-2xl font-bold text-center mb-10">친환경 제품 상세 보기</h1>
 
     <!-- 상세 영역 -->
     <div class="flex flex-col md:flex-row gap-10 items-start justify-center">
       <!-- 이미지 + 매출 -->
       <div class="flex flex-col items-center bg-white p-6 rounded shadow-md w-full md:w-1/3">
-        <img 
-          :src="product.imagePath"
-          alt="제품 이미지"
-          class="w-full h-auto max-w-xs mb-4 rounded-md"
-        />
+        <img :src="product.imagePath" alt="제품 이미지" class="w-full h-auto max-w-xs mb-4 rounded-md" />
         <p class="text-lg font-semibold">
           친환경 제품 매출 :
           <span class="text-slate-400">{{ totalRevenue }} 만원</span>
@@ -55,15 +48,13 @@
     <!-- 버튼 영역 -->
     <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
       <router-link
-        :to="{ name: 'productRegist', query: { mode: 'edit', idx: `${idx}` } }"
-        class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
+        :to="{ path: '/productRegist', query: { mode: 'update', companyIdx: companyIdx, idx: product.idx } }"
       >
-        수정
+        <button class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+          수정
+        </button>
       </router-link>
-      <button
-        class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
-        @click="handleDelete"
-      >
+      <button class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50" @click="handleDelete">
         삭제
       </button>
     </div>
@@ -75,24 +66,26 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 
+// 라우터 객체들
 const route = useRoute();
 const router = useRouter();
-console.log(route.params);
-const idx = ref( route.params.idx);           // 제품 idx
-const companyIdx = ref(route.query.company_idx || route.params.company_idx); // 회사 idx
 
+// 파라미터/쿼리
+const idx = ref(route.params.idx);
+const companyIdx = ref(route.query.companyIdx || route.params.companyIdx);
+
+// 상태
 const product = ref({});
 const totalRevenue = ref(0);
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
 
+// 제품 상세 데이터 가져오기
 const fetchProduct = async () => {
   try {
-    console.log("📦 요청 idx:", idx.value);
     const res = await axios.get(`/api/product/detail/${idx.value}`);
-    console.log("📦 응답 데이터:", res);
     product.value = res.data.data;
 
-    // 매출 계산 (만 원 단위로 반올림)
+    // 매출 계산 (만원 단위 반올림)
     totalRevenue.value = Math.floor((product.value.unitPrice || 0) * (product.value.salesQty || 0) / 10000);
   } catch (err) {
     alert('❗ 제품 데이터를 불러오는 데 실패했습니다.');
@@ -100,20 +93,27 @@ const fetchProduct = async () => {
   }
 };
 
+// 삭제 기능
 const handleDelete = async () => {
   if (confirm("정말 삭제하시겠습니까?")) {
     try {
-      await axios.delete(`/api/product/${idx.value}`);
+      await axios.delete(`/api/product/delete/${idx.value}`);
       alert("삭제되었습니다.");
-      router.push(`/productList/${companyIdx.value}`);
+
+      const fallbackCompanyIdx = companyIdx.value || product.value.companyIdx;
+      if (!fallbackCompanyIdx) {
+        alert("이동할 회사 ID를 찾을 수 없습니다.");
+        return;
+      }
+
+      router.push(`/productList/${fallbackCompanyIdx}`);
     } catch (err) {
       alert("❗ 삭제 실패");
+      console.error(err);
     }
   }
 };
 
+
 onMounted(fetchProduct);
 </script>
-
-<style scoped>
-</style>

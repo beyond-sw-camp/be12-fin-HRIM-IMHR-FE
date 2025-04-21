@@ -1,19 +1,18 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
-import { useProductStore } from '../../stores/useProductStore';
+import { useProductStore } from "../../stores/useProductStore";
 
 const router = useRouter();
 const route = useRoute();
 const productStore = useProductStore();
 
-const idx = route.query.idx;//제품 idx
-const companyIdx = route.query.companyIdx;//회사 idx
+const idx = route.params.idx; // 제품 ID
+const companyIdx = route.query.companyIdx; // 회사 ID
 const mode = ref(route.query.mode || (idx ? "view" : "create"));
+const product = ref(route.query.product || {}); // 제품 정보
 
 const form = reactive({
-
   productName: "",
   ecoCertified: false,
   certificationType: "",
@@ -24,11 +23,14 @@ const form = reactive({
   unitPrice: 0,
   salesQty: 0,
   imagePath: "",
-  companyIdx: companyIdx, // 등록 시 필요
+  companyIdx: route.query.companyIdx,
   serialNumber: "",
   growthRate: 0,
 
 });
+console.log("form", form);
+console.log("companyIdx", companyIdx);
+console.log("idx", idx);
 
 const imageFile = ref(null);
 const handleFileChange = (e) => {
@@ -36,10 +38,12 @@ const handleFileChange = (e) => {
 };
 
 onMounted(async () => {
+  form.companyIdx = route.query.companyIdx;
+  console.log("✅ form.companyIdx 확인:", form.companyIdx);
   if (mode.value === "edit" && idx) {
     try {
       const res = await productStore.detail(idx);
-      Object.assign(form, res); // form에 값 넣기
+      Object.assign(form, res); // form에 데이터 덮어쓰기
     } catch (err) {
       alert("데이터 불러오기 실패");
     }
@@ -50,19 +54,20 @@ const handleSubmit = async () => {
   if (!imageFile.value) return alert("이미지를 선택해주세요.");
 
   const dto = {
-    productIdx: form.idx, //제품 고유idx
-    productName: form.productName, //제품명
-    ecoCertified: form.ecoCertified, //환경 인증 여부
-    certificationType: form.certificationType, //인증 종류
-    energyGrade: form.energyGrade, // 에너지 효율 등급
-    recyclable: form.recyclable, // 재활용 가능 여부
-    bioMaterial: form.bioMaterial, // 생분해성 소재 여부
-    lowCarbonProcess: form.lowCarbonProcess, // 탄소 저감형 공정 여부
-    unitPrice: form.unitPrice, // 단가
-    salesQty: form.salesQty, // 판매 수량
-    serialNumber: form.serialNumber, // 시리얼 넘버
+    productName: form.productName,
+    ecoCertified: form.ecoCertified,
+    certificationType: form.certificationType,
+    energyGrade: form.energyGrade,
+    recyclable: form.recyclable,
+    bioMaterial: form.bioMaterial,
+    lowCarbonProcess: form.lowCarbonProcess,
+    unitPrice: form.unitPrice,
+    salesQty: form.salesQty,
+    companyIdx: form.companyIdx,
+    serialNumber: form.serialNumber,
   };
 
+  console.log("🚀 최종 DTO:", dto);
   const formData = new FormData();
   formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
   formData.append("image", imageFile.value);
@@ -82,28 +87,19 @@ const handleSubmit = async () => {
   }
 };
 
-const handleUpdate = async () => {
+const handleDelete = async () => {
+  if (!confirm("정말 삭제하시겠습니까?")) return;
   try {
-    await axios.put(`/api/product/${idx}`, form);
-    alert("수정 완료!");
+    await productStore.delete(idx);
+    alert("삭제 완료!");
     router.push(`/productList/${form.companyIdx}`);
   } catch (err) {
-    alert("수정 실패");
-  }
-};
-
-const handleDelete = async () => {
-  if (confirm("정말 삭제하시겠습니까?")) {
-    try {
-      await axios.delete(`/api/product/${idx}`);
-      alert("삭제 완료!");
-      router.push(`/productList/${form.idx}`);
-    } catch (err) {
-      alert("삭제 실패");
-    }
+    alert("삭제 실패");
+    console.error(err);
   }
 };
 </script>
+
 <template>
   <div class="bg-gray-50 p-10 min-h-screen">
     <pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>

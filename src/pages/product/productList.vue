@@ -58,11 +58,13 @@
 
     <!-- 등록 버튼 -->
     <div class="max-w-5xl mx-auto flex justify-end mt-6">
-      <router-link v-if="userRole === 'manager'" :to="{ path: '/productRegist', query: { mode: 'create' } }">
+      <router-link v-if="userRole === 'manager'"
+        :to="{ path: '/productRegist', query: { mode: 'create', companyIdx: company_idx } }">
         <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">
           등록
         </button>
       </router-link>
+
     </div>
   </div>
 </template>

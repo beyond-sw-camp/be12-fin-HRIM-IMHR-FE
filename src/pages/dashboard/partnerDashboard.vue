@@ -57,31 +57,6 @@
         </div>
       </section>
 
-      <!-- 이달의 사원 -->
-      <div class="bg-white shadow p-4 rounded mb-6 mt-6">
-        <h2 class="text-lg font-semibold mb-4">이달의 사원</h2>
-        <div class="flex justify-between text-center">
-          <div style="display: flex; gap: 10px;">
-            <div>🥇</div>
-            <div>홍길동</div>
-            <div>코멘트 개수 :</div>
-            <div>100</div>
-          </div>
-          <div class="flex gap-2.5">
-            <div>🥈</div>
-            <div>임꺽정</div>
-            <div>코멘트 개수 :</div>
-            <div>99</div>
-          </div>
-          <div class="flex gap-2.5">
-            <div>🥉</div>
-            <div>너구리</div>
-            <div>코멘트 개수 :</div>
-            <div>98</div>
-          </div>
-        </div>
-      </div>
-
       <!-- 영역별 점수 변동 추이 -->
       <section class="mt-8">
         <h2 class="text-lg font-semibold mb-4">영역별 점수 변동 추이</h2>

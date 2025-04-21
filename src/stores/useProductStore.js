@@ -25,7 +25,7 @@ export const useProductStore = defineStore("product", {
     // ✅ 제품 수정
     async update(idx, formData) {
       try {
-        const res = await axios.put(`/api/product/${idx}`, formData, {
+        const res = await axios.put(`/api/product/update/${idx}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
         });
@@ -39,7 +39,7 @@ export const useProductStore = defineStore("product", {
     // ✅ 제품 삭제
     async delete(idx) {
       try {
-        const res = await axios.delete(`/api/product/${idx}`, {
+        const res = await axios.delete(`/api/product/delete/${idx}`, {
           withCredentials: true,
         });
         return res.data;

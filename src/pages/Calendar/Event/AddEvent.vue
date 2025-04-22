@@ -2,9 +2,13 @@
 import { ref, watch } from "vue";
 import { X } from "lucide-vue-next";
 import { useCalendarStore } from "../../../stores/useCalendarStore";
+import { useStompStore } from "../../../stores/useStompStore";
+import { useMemberStore } from "../../../stores/useMemberStore";
 
 const emit = defineEmits(["close", "save", "add-event"]);
 const calendarStore = useCalendarStore();
+const stomp= useStompStore();
+const memberStore=useMemberStore();
 
 const props = defineProps({
   visible: Boolean,
@@ -68,8 +72,10 @@ async function save() {
       emit("save", { id: props.event.idx, ...form.value });
     } else {
       // 추가 모드
-      await calendarStore.regist({ ...form.value });
-      emit("save", { ...form.value });
+      console.log({...form.value});
+      stomp.eventRegist({...form.value},memberStore.myCompanyIdx)
+      // await calendarStore.regist({ ...form.value });
+      // emit("save", { ...form.value });
     }
 
     emit("close");

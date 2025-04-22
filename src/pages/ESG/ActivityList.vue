@@ -23,7 +23,7 @@
             <th class="py-3">상태</th>
             <th>유저</th>
             <th>주제</th>
-            <th v-if="userRole !== 'manager'">삭제</th>
+            <th>삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +49,7 @@
 
 
 
-            <td v-if="userRole !== 'manager'">
+            <td v-if="memberStore.myIdx===activity.memberIdx">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
                 @click.stop="activityDelete(activity.activityIdx)">
                 삭제
@@ -150,6 +150,7 @@ const memberStore = useMemberStore();
 const search = ref('')
 const currentPage = ref(1)
 const perPage = 5
+const listDeleteBTN=ref(false);
 
 // const activities = 
 // ref([
@@ -187,7 +188,7 @@ const newActivity = ref({ topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {
-  const response = await activitySore.list((currentPage.value - 1), perPage);
+  await activitySore.list((currentPage.value - 1), perPage);
   // 여기에 후속 처리 코드도 작성 가능
 })
 

@@ -7,6 +7,7 @@ export const useMemberStore = defineStore('member', {
             userInfo: {},
             isLogin: false,
             myCompanyIdx:null,
+            myIdx:null,
     }),
     persist: {
         storage: sessionStorage,
@@ -94,6 +95,7 @@ export const useMemberStore = defineStore('member', {
             const response = await axios.post("/api/member/info");
             console.log(response.data.data.companyIdx)
             this.myCompanyIdx=response.data.data.companyIdx;
+            this.myIdx = response.data.data.idx;
             return response.data.data;
         },
 

@@ -10,8 +10,8 @@ export const useCompanyStore = defineStore('company', {
     async list() {
       const response = await axios.post("/api/company/list");
 
-      console.log("백 -> store ", response.data.data);
-      this.companys = response.data.data;
+      console.log("백 -> store ", response.data.data.content);
+      this.companys = response.data.data.content;
       return this.companys;
     }
   }

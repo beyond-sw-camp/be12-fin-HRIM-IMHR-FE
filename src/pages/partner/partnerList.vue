@@ -26,15 +26,18 @@ const deleteCompany = () => {
 };
 
 const addPartners = (newPartners) => {
-  newPartners.forEach(partner => {
+  newPartners.forEach((partner) => {
     companies.value.push({
       name: partner.name,
-      totalGrade: '-', environment: '-', social: '-', governance: '-', score: 0
-    })
-  })
-  registerModule.value = false
-}
-
+      totalGrade: "-",
+      environment: "-",
+      social: "-",
+      governance: "-",
+      score: 0,
+    });
+  });
+  registerModule.value = false;
+};
 
 const companies = ref([
   {
@@ -107,7 +110,9 @@ const onSearch = () => {
   page.value = 1;
 };
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+const userRole = ref(
+  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
+);
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
@@ -125,12 +130,14 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
 
       <input
         type="text"
+        v-model="search"
         placeholder="검색어를 입력하세요"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
 
       <button
         class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
+        @click="onSearch"
       >
         검색
       </button>
@@ -153,7 +160,9 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
             <th class="p-3 border" rowspan="2">회사명</th>
             <th class="p-3 border" colspan="4">KCGS</th>
             <th class="p-3 border">IMHR</th>
-            <th class="p-3 border" rowspan="2" v-if="userRole === 'manager'">삭제</th>
+            <th class="p-3 border" rowspan="2" v-if="userRole === 'manager'">
+              삭제
+            </th>
           </tr>
           <tr>
             <th class="p-2 border">종합등급</th>
@@ -169,9 +178,11 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
             :key="index"
             class="hover:bg-slate-50 border-b"
           >
-            <router-link to="/partner/1">
-              <td class="p-2">{{ company.name }}</td>
-            </router-link>
+            <td class="p-2">
+              <router-link to="/partner/1">
+                {{ company.name }}
+              </router-link>
+            </td>
 
             <td class="p-2">{{ company.totalGrade }}</td>
             <td class="p-2">{{ company.environment }}</td>

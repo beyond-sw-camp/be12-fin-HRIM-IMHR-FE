@@ -1,4 +1,31 @@
-<!-- PartnerRegist.vue -->
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps(['visible'])
+const emit = defineEmits(['close', 'confirm'])
+
+const search = ref('')
+const selected = ref([])
+
+// 예시 데이터
+const allPartners = ref([
+  { id: 0, name: 'test4' },
+  { id: 1, name: 'test3' },
+  { id: 2, name: 'test2' },
+  { id: 3, name: 'test1' }
+])
+
+const filteredPartners = computed(() => {
+  return allPartners.value.filter(partner =>
+    partner.name.includes(search.value.trim())
+  )
+})
+
+const onSearch = () => {
+  // 필터링은 computed로 처리했기 때문에 따로 처리 안 해도 돼요.
+}
+</script>
+
 <template>
   <div v-if="visible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-[500px] max-h-[80vh] overflow-auto shadow-lg">
@@ -57,31 +84,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue'
-
-const props = defineProps(['visible'])
-const emit = defineEmits(['close', 'confirm'])
-
-const search = ref('')
-const selected = ref([])
-
-// 예시 데이터
-const allPartners = ref([
-  { id: 0, name: 'test4' },
-  { id: 1, name: 'test3' },
-  { id: 2, name: 'test2' },
-  { id: 3, name: 'test1' }
-])
-
-const filteredPartners = computed(() => {
-  return allPartners.value.filter(partner =>
-    partner.name.includes(search.value.trim())
-  )
-})
-
-const onSearch = () => {
-  // 필터링은 computed로 처리했기 때문에 따로 처리 안 해도 돼요.
-}
-</script>

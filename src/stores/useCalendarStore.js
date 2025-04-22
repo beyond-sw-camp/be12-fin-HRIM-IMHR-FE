@@ -14,7 +14,7 @@ export const useCalendarStore = defineStore('calendar', {
   actions: {
     async regist(formData) {
       const response = await axios.post("/api/event/register", formData);
-      console.log("Backend : ", response.data.message);
+
       return response.data;
     },
 

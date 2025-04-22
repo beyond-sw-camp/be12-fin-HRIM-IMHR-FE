@@ -184,7 +184,7 @@ const routes = [
 
   // 파트너사
   {
-    path: '/partnerList/1',
+    path: '/partnerList',
     name: 'partnerList',
     component: PartnerListView
   },

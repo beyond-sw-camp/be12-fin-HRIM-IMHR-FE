@@ -5,12 +5,14 @@ import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
 import { useMemberStore } from "../../stores/useMemberStore";
 import { useCampaignStore } from "../../stores/useCampaignStore";
+import { useStompStore } from "../../stores/useStompStore";
 
 const route = useRoute();
 const router = useRouter();
 const Idx = route.params.idx;
 const event = useCalendarStore();
 const campaign = useCampaignStore();
+const stomp = useStompStore();
 
 // 사원 검색
 const memberStore = useMemberStore();
@@ -56,7 +58,9 @@ const handleSubmit = async () => {
       const result = await campaign.register(formData);
       alert("사원이 성공적으로 추가되었습니다.");
     }
-    router.back();
+
+    stomp.campaignMemberAdd("캠페인 참여 승인 되었습니다.",title.value,formData);
+    // router.back();
   } catch (error) {
     console.error("처리 실패:", error);
     alert("사원 정보 처리 중 오류가 발생했습니다.");

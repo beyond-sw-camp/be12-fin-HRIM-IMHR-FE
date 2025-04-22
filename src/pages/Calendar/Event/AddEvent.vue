@@ -73,9 +73,9 @@ async function save() {
     } else {
       // 추가 모드
       console.log({...form.value});
+      await calendarStore.regist({ ...form.value });
+      emit("save", { ...form.value });
       stomp.eventRegist({...form.value},memberStore.myCompanyIdx)
-      // await calendarStore.regist({ ...form.value });
-      // emit("save", { ...form.value });
     }
 
     emit("close");

@@ -385,7 +385,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="mt-8">
+    <!-- <div class="mt-8">
       <button
         @click="showKPI = !showKPI"
         class="flex items-center gap-1 text-sm text-slate-600 underline mb-2"
@@ -419,7 +419,8 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-    </div>
+    </div> -->
+    
     <div class="mt-10">
       <button
         @click="showEval = !showEval"

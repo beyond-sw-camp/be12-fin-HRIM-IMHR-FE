@@ -154,6 +154,7 @@ const userRole = ref(
       v-if="showModal"
       :campaign="selectedCampaign"
       @close="closeModal"
+      @confirm="handleConfirm"
     />
   </div>
 </template>

@@ -1,29 +1,26 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useCompanyStore } from '../../stores/useCompanyStore'
 
 const props = defineProps(['visible'])
 const emit = defineEmits(['close', 'confirm'])
 
 const search = ref('')
 const selected = ref([])
+const companyStore = useCompanyStore();
+const companys = ([]);
 
-// 예시 데이터
-const allPartners = ref([
-  { id: 0, name: 'test4' },
-  { id: 1, name: 'test3' },
-  { id: 2, name: 'test2' },
-  { id: 3, name: 'test1' }
-])
+console.log("vue : ", campaigns);
 
-const filteredPartners = computed(() => {
-  return allPartners.value.filter(partner =>
-    partner.name.includes(search.value.trim())
-  )
+const filteredCompanys = computed(() => {
+  return allPartners.value.filter(company =>
+  company.name.includes(search.value.trim())
+  ) 
 })
 
-const onSearch = () => {
-  // 필터링은 computed로 처리했기 때문에 따로 처리 안 해도 돼요.
-}
+onMounted(async () => {
+  companys.values = companyStore.list();
+});
 </script>
 
 <template>
@@ -56,12 +53,12 @@ const onSearch = () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(partner, idx) in filteredPartners" :key="idx">
+          <tr v-for="(company, idx) in filteredCompanys" :key="idx">
             <td class="border p-2">
-              <input type="checkbox" v-model="selected" :value="partner" />
+              <input type="checkbox" v-model="selected" :value="company" />
             </td>
-            <td class="border p-2">{{ partner.id }}</td>
-            <td class="border p-2">{{ partner.name }}</td>
+            <td class="border p-2">{{ company.id }}</td>
+            <td class="border p-2">{{ company.name }}</td>
           </tr>
         </tbody>
       </table>

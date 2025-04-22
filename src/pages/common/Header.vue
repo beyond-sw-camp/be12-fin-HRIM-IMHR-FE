@@ -28,20 +28,12 @@ const handleLogout = async () => {
 const stomp = useStompStore()
 const me = ref({});
 onMounted(async () => {
-  // fetchMember가 비동기 함수라면 await 사용
   try {
     me.value = await memberStore.fetchMember();
 
   } catch (error) {
     router.push('/login')
   }
-  // if(!memberStore.userInfo){
-  //   member.value=memberStore.fetchMember();
-
-  // }else{
-  //   member.value=memberStore.userInfo
-  //   console.log("왜 있지?")
-  // }
   stomp.connect(me.value)
 })
 </script>
@@ -49,9 +41,9 @@ onMounted(async () => {
 <template>
   <header class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-20">
     <div class="flex items-center gap-3">
-      <router-link to="/" class="text-slate-800 font-bold text-2xl md:text-5xl ml-2 mb-1">IMHR</router-link>
+      <router-link to="/" class="text-slate-800 font-bold text-5xl md:text-5xl ml-2 mb-1">IMHR</router-link>
 
-      <button @click="emit('toggle-sidebar')" class="p-3 rounded hover:bg-slate-100 transition" aria-label="사이드바 열기">
+      <button @click="emit('toggle-sidebar')" class="p-3 rounded  transition" aria-label="사이드바 열기">
         <Menu class="w-11 h-11 text-slate-800 mt-0.5" />
       </button>
     </div>
@@ -69,7 +61,7 @@ onMounted(async () => {
 
       <!-- 로그아웃 버튼 -->
       <button @click="handleLogout" type="button"
-        class="hidden md:inline-block border-2 border-slate-800 py-1.5 px-4 text-sm text-slate-800 rounded hover:bg-slate-100 transition font-semibold">
+        class="inline-block border-2 border-slate-800 py-1.5 px-4 text-sm text-slate-800 rounded hover:bg-slate-100 transition font-semibold">
         로그아웃
       </button>
     </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useCompanyStore } from '../../stores/useCompanyStore'
 
 const props = defineProps(['visible'])
@@ -8,18 +8,18 @@ const emit = defineEmits(['close', 'confirm'])
 const search = ref('')
 const selected = ref([])
 const companyStore = useCompanyStore();
-const companys = ([]);
-
-console.log("vue : ", campaigns);
+const companys = ref([]);
 
 const filteredCompanys = computed(() => {
-  return allPartners.value.filter(company =>
+  return companys.value.filter(company =>
   company.name.includes(search.value.trim())
   ) 
-})
+});
+
 
 onMounted(async () => {
-  companys.values = companyStore.list();
+  const companyList = await companyStore.list();
+  companys.value = companyList; 
 });
 </script>
 
@@ -35,12 +35,6 @@ onMounted(async () => {
           placeholder="회사명을 입력하세요"
           class="flex-1 border px-3 py-2 rounded"
         />
-        <button
-          @click="onSearch"
-          class="bg-slate-600 text-white px-4 rounded hover:bg-slate-700"
-        >
-          검색
-        </button>
       </div>
 
       <!-- 테이블 -->
@@ -57,7 +51,7 @@ onMounted(async () => {
             <td class="border p-2">
               <input type="checkbox" v-model="selected" :value="company" />
             </td>
-            <td class="border p-2">{{ company.id }}</td>
+            <td class="border p-2">{{ idx + 1 }}</td>
             <td class="border p-2">{{ company.name }}</td>
           </tr>
         </tbody>

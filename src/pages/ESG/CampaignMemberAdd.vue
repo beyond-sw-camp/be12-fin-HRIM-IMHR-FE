@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
@@ -258,7 +258,7 @@ onMounted(async () => {
                   v-model="selectedUserIdxs"
                 />
               </td>
-              <td class="p-2">{{ user.department }}</td>
+              <td class="p-2">{{ user.department.name }}</td>
               <td class="p-2">{{ user.name }}</td>
               <td class="p-2">{{ user.memberId }}</td>
             </tr>

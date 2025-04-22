@@ -137,6 +137,25 @@ export const useStompStore = defineStore('stomp', {
       }
     },
 
+    eventRegist(data,companyIdx){
+      if (this.connected && this.stompClient) {
+        
+        const payload = JSON.stringify({
+          title: data.title,
+        });
+        console.log(payload)
+        this.stompClient.publish({
+          destination: `/app/notification/eventRegist/${companyIdx}`,
+          body: payload,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      } else {
+        console.warn('❗ STOMP 연결되지 않음');
+      }
+    },
+
     test() {
       console.log("test");
     },

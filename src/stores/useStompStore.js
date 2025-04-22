@@ -156,6 +156,27 @@ export const useStompStore = defineStore('stomp', {
       }
     },
 
+    campaignMemberAdd(title,content,data){
+      if (this.connected && this.stompClient) {
+        
+        const payload = JSON.stringify({
+          title: title,
+          content:content,
+          memberIdxs:data.memberIdxList,
+        });
+
+        this.stompClient.publish({
+          destination: `/app/notification/eventcampaignMemberAdd/${data.eventIdx}`,
+          body: payload,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      } else {
+        console.warn('❗ STOMP 연결되지 않음');
+      }
+    },
+
     test() {
       console.log("test");
     },

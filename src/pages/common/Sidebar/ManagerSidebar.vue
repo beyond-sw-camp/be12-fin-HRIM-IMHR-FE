@@ -11,7 +11,7 @@ const menuItems = [
   { path: "/activityList", label: "ESG 기타 활동 관리" },
   { path: "/campaignlist", label: "ESG 사내 캠페인 관리" },
   { path: "/productList/1", label: "친환경 제품 관리" },
-  { path: "/partnerList/1", label: "협력사 관리" },
+  { path: "/partnerList", label: "협력사 관리" },
   { path: "/staffSearch", label: "사원 관리" },
   { path: "/calendar", label: "캘린더 관리" },
   { path: "/departmentSetting/1", label: "부서 설정" },

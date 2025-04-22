@@ -20,7 +20,6 @@ const filteredCompanys = computed(() =>
 
 const fetchCompanies = async () => {
   totalPages.value = await companyStore.list(currentPage.value, 5);
-
 };
 
 watch(currentPage, fetchCompanies);

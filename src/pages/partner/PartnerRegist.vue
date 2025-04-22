@@ -1,31 +1,40 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useCompanyStore } from '../../stores/useCompanyStore'
+import { ref, computed, onMounted, watch } from "vue";
+import { useCompanyStore } from "../../stores/useCompanyStore";
 
-const props = defineProps(['visible'])
-const emit = defineEmits(['close', 'confirm'])
+const props = defineProps(["visible"]);
+const emit = defineEmits(["close", "confirm"]);
 
-const search = ref('')
-const selected = ref([])
+const currentPage = ref(0);
+const totalPages = ref(0); // 응갑 받은 총 페이지 수
+const searchQuery = ref(""); // 검색
+const search = ref("");
+const selected = ref([]);
 const companyStore = useCompanyStore();
-const companys = ref([]);
 
-const filteredCompanys = computed(() => {
-  return companys.value.filter(company =>
-  company.name.includes(search.value.trim())
-  ) 
-});
+const filteredCompanys = computed(() => 
+  companyStore.companys.filter((c) =>
+    (c.name || "").toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
 
+const fetchCompanies = async () => {
+  totalPages.value = await companyStore.list(currentPage.value, 5);
 
-onMounted(async () => {
-  const companyList = await companyStore.list();
-  companys.value = companyList; 
-});
+};
+
+watch(currentPage, fetchCompanies);
+onMounted(fetchCompanies);
 </script>
 
 <template>
-  <div v-if="visible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-[500px] max-h-[80vh] overflow-auto shadow-lg">
+  <div
+    v-if="visible"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+  >
+    <div
+      class="bg-white rounded-lg p-6 w-[500px] max-h-[80vh] overflow-auto shadow-lg"
+    >
       <h2 class="text-xl font-bold mb-4 text-center">협력사 추가</h2>
 
       <!-- 검색 -->
@@ -51,11 +60,43 @@ onMounted(async () => {
             <td class="border p-2">
               <input type="checkbox" v-model="selected" :value="company" />
             </td>
-            <td class="border p-2">{{ idx + 1 }}</td>
+            <td class="border p-2">{{ currentPage * 5 + idx + 1 }}</td>
             <td class="border p-2">{{ company.name }}</td>
           </tr>
         </tbody>
       </table>
+
+      <div class="flex justify-center mt-8 space-x-2 text-sm mb-2">
+        <button
+          class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900"
+          :disabled="currentPage === 0"
+          @click="currentPage--"
+        >
+          ← 이전
+        </button>
+
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="currentPage = page - 1"
+          :class="[
+            'px-3 py-1 rounded',
+            currentPage === page - 1
+              ? 'bg-slate-800 text-white'
+              : 'bg-slate-100 hover:bg-slate-200',
+          ]"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          class="px-3 py-1 bg-slate-700 text-white rounded hover:bg-slate-900"
+          :disabled="currentPage === totalPages - 1"
+          @click="currentPage++"
+        >
+          다음 →
+        </button>
+      </div>
 
       <!-- 버튼 -->
       <div class="flex justify-center gap-4">

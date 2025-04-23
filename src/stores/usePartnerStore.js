@@ -14,7 +14,7 @@ export const usePartnerStore = defineStore('partner', {
       const response = await axios.get(`/api/partner/pageList?page=${page}&size=${size}`);
 
       this.partners = response.data.data.partners.content;
-      console.log("store", response.data.data.partners.content);
+
       this.mycompanyIdx = response.data.data.companyIdx;
       return response.data.data.partners.totalPages;
     },
@@ -23,6 +23,12 @@ export const usePartnerStore = defineStore('partner', {
       const response = await axios.post("/api/partner/add", payload);
 
       return response.data;
-    }
+    },
+
+    async delete(partnerIdx) {
+      const response = await axios.delete(`/api/partner/delete/${partnerIdx}`);
+
+      return response.data.data;
+    },
   }
 })

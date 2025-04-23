@@ -16,6 +16,11 @@ const deleteModal = ref(false);
 const selectedPartneryIndex = ref(null);
 const companyId = ref(null);
 
+const onSearch = async () => {
+  currentPage.value = 0;
+  await fetchCompanies(); // 키워드로 백엔드 검색
+};
+
 const openRegistModal = () => {
   companyId.value = mycompanyIdx;
   registerModule.value = true;
@@ -36,18 +41,23 @@ const registPartner = async () => {
   await fetchCompanies();
   registerModule.value = false;
   alert("협력사 추가가 성공적으로 되었습니다.");
-}
+};
 
 const filteredPartners = computed(() =>
   partnerStore.partners.filter((p) =>
-    (p.companyName || "").toLowerCase().includes(search.value.toLowerCase())
+    (p.companyName || "").toLowerCase().includes(search.value.toLowerCase()) 
   )
 );
 
-const fetchCompanies = async () => {
-  totalPages.value = await partnerStore.pagelist(currentPage.value, 8);
-};
 
+
+const fetchCompanies = async () => {
+  totalPages.value = await partnerStore.pagelist(
+    currentPage.value,
+    8,
+    search.value
+  );
+};
 
 watch(currentPage, fetchCompanies);
 onMounted(fetchCompanies);
@@ -114,7 +124,7 @@ const userRole = ref(
             <th class="p-2 border">총점</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="partnerStore.partners.length > 0">
           <tr
             v-for="(partner, idx) in filteredPartners"
             :key="idx"
@@ -139,6 +149,14 @@ const userRole = ref(
               >
                 삭제
               </button>
+            </td>
+          </tr>
+        </tbody>
+
+        <tbody v-else>
+          <tr>
+            <td class="p-4 text-center text-gray-500" colspan="7">
+              검색 결과가 없습니다.
             </td>
           </tr>
         </tbody>
@@ -168,7 +186,7 @@ const userRole = ref(
       >
         {{ page }}
       </button>
-      
+
       <button
         class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="currentPage === totalPages - 1"

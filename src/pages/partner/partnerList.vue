@@ -4,12 +4,14 @@ import { Search } from "lucide-vue-next";
 import PartnerDelete from "./PartnerDelete.vue";
 import PartnerRegist from "./PartnerRegist.vue";
 import { usePartnerStore } from "../../stores/usePartnerStore";
+import { useCompanyStore } from "../../stores/useCompanyStore";
 
 const partnerStore = usePartnerStore();
 const search = ref("");
 const currentPage = ref(0);
 const totalPages = ref(0);
 const mycompanyIdx = computed(() => partnerStore.mycompanyIdx);
+const companyStore = useCompanyStore();
 
 const registerModule = ref(false);
 const deleteModal = ref(false);
@@ -21,7 +23,8 @@ const onSearch = async () => {
   await fetchCompanies(); // 키워드로 백엔드 검색
 };
 
-const openRegistModal = () => {
+const openRegistModal = async () => {
+  await companyStore.list(0, 5);
   companyId.value = mycompanyIdx;
   registerModule.value = true;
 };

@@ -8,11 +8,10 @@ const props = defineProps({
   mycompanyIdx: Number,
 });
 
-const emit = defineEmits(['close', 'confirm']);
+const emit = defineEmits(["close", "confirm"]);
 
 const currentPage = ref(0);
 const totalPages = ref(0); // 응갑 받은 총 페이지 수
-const searchQuery = ref(""); // 검색
 const search = ref("");
 const selected = ref([]);
 const companyStore = useCompanyStore();
@@ -20,12 +19,21 @@ const partnerStore = usePartnerStore();
 
 const filteredCompanys = computed(() =>
   companyStore.companys.filter((c) =>
-    (c.name || "").toLowerCase().includes(searchQuery.value.toLowerCase())
+    (c.name || "").toLowerCase().includes(search.value.toLowerCase())
   )
 );
 
+const onSearch = async () => {
+  currentPage.value = 0;
+  await fetchCompanies();
+};
+
 const fetchCompanies = async () => {
-  totalPages.value = await companyStore.list(currentPage.value, 5);
+  totalPages.value = await companyStore.list(
+    currentPage.value,
+    5,
+    search.value
+  );
 };
 
 watch(currentPage, fetchCompanies);
@@ -68,6 +76,13 @@ const handleSubmit = async () => {
           placeholder="회사명을 입력하세요"
           class="flex-1 border px-3 py-2 rounded"
         />
+
+        <button
+          class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
+          @click="onSearch"
+        >
+          검색
+        </button>
       </div>
 
       <!-- 테이블 -->

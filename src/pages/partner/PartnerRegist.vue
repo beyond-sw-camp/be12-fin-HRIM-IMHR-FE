@@ -1,9 +1,14 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useCompanyStore } from "../../stores/useCompanyStore";
+import { usePartnerStore } from "../../stores/usePartnerStore";
 
-const props = defineProps(["visible"]);
-const emit = defineEmits(["close", "confirm"]);
+const props = defineProps({
+  visible: Boolean,
+  mycompanyIdx: Number,
+});
+
+const emit = defineEmits(["close"]);
 
 const currentPage = ref(0);
 const totalPages = ref(0); // 응갑 받은 총 페이지 수
@@ -11,8 +16,9 @@ const searchQuery = ref(""); // 검색
 const search = ref("");
 const selected = ref([]);
 const companyStore = useCompanyStore();
+const partnerStore = usePartnerStore();
 
-const filteredCompanys = computed(() => 
+const filteredCompanys = computed(() =>
   companyStore.companys.filter((c) =>
     (c.name || "").toLowerCase().includes(searchQuery.value.toLowerCase())
   )
@@ -22,8 +28,34 @@ const fetchCompanies = async () => {
   totalPages.value = await companyStore.list(currentPage.value, 5);
 };
 
+// watch(selected, (val) =>
+// {
+//   console.log("선택", val);
+// });
+
 watch(currentPage, fetchCompanies);
 onMounted(fetchCompanies);
+
+const handleSubmit = async () => {
+  const payload = {
+  companyIdx: props.mycompanyIdx,
+  partnerList: selected.value.map(c => ({
+    idx: c.idx,
+    name: c.name,
+    has_esg_data: c.has_esg_data,
+    member: c.member
+  }))
+};
+
+  console.log("보 ", payload.partnerList);
+  if (selected.value.length > 0) {
+    const result = await partnerStore.add(payload);
+    alert("협력사 추가가 성공적으로 추가 되었습니다.");
+    emit('close');
+  } else {
+    emit('close');
+  }
+};
 </script>
 
 <template>
@@ -100,7 +132,7 @@ onMounted(fetchCompanies);
       <!-- 버튼 -->
       <div class="flex justify-center gap-4">
         <button
-          @click="$emit('confirm', selected)"
+          @click="handleSubmit"
           class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
         >
           확인

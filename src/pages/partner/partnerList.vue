@@ -9,6 +9,7 @@ const partnerStore = usePartnerStore();
 const search = ref("");
 const currentPage = ref(0);
 const totalPages = ref(0);
+const myCompanyIdx = computed(() => partnerStore.mycompanyIdx);
 
 const deleteModal = ref(false);
 const selectedCompanyIndex = ref(null);
@@ -27,11 +28,9 @@ const deleteCompany = () => {
   }
 };
 
-
-
-const filteredPartners = computed(() => 
-  partnerStore.partners.filter((p) => 
-    (p.name || "").toLowerCase().includes(search.value.toLowerCase())
+const filteredPartners = computed(() =>
+  partnerStore.partners.filter((p) =>
+    (p.companyName || "").toLowerCase().includes(search.value.toLowerCase())
   )
 );
 
@@ -41,7 +40,7 @@ const fetchCompanies = async () => {
 
 const onSearch = () => {
   console.log(`검색어: ${search.value}`);
-  page.value = 1;
+  // page.value = 1;
 };
 
 watch(currentPage, fetchCompanies);
@@ -117,7 +116,7 @@ const userRole = ref(
           >
             <td class="p-2">
               <router-link to="/partner/1">
-                {{ partner.name }}
+                {{ partner.companyName }}
               </router-link>
             </td>
 
@@ -144,23 +143,29 @@ const userRole = ref(
     <div class="flex justify-center items-center mt-6 space-x-2 text-sm">
       <button
         class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
-        :disabled="page === 1"
-        @click="page--"
+        :disabled="currentPage === 1"
+        @click="currentPage--"
       >
         ← 이전
       </button>
+
       <button
-        v-for="p in currentPage"
-        :key="p"
-        class="px-3 py-1 border rounded"
-        :class="{ 'font-bold bg-slate-800 text-white': p === page }"
-        @click="currentPage = p"
+        v-for="page in totalPages"
+        :key="page"
+        @click="currentPage = page - 1"
+        :class="[
+          'px-3 py-1 rounded',
+          currentPage === page - 1
+            ? 'bg-slate-800 text-white'
+            : 'bg-slate-100 hover:bg-slate-200',
+        ]"
       >
-        {{ p }}
+        {{ page }}
       </button>
+      
       <button
         class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
-        :disabled="currentPage === totalPages -1"
+        :disabled="currentPage === totalPages - 1"
         @click="currentPage++"
       >
         다음 →
@@ -175,8 +180,11 @@ const userRole = ref(
 
     <PartnerRegist
       :visible="registerModule"
+      :companyIdx="myCompanyIdx"
       @close="registerModule = false"
-      @confirm="addPartners"
+      
     />
+
+    <!-- @confirm="addPartners" -->
   </div>
 </template>

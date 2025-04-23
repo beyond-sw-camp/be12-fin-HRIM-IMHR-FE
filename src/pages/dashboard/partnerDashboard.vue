@@ -1,19 +1,32 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { useScoreStore } from '../../stores/useScoreStore'
 import Chart from 'chart.js/auto'
+
 
 const donutChart = ref(null)
 const scoreChart = ref(null)
+const score = useScoreStore();
 
-onMounted(() => {
+onMounted(async() => {
+  const response=await score.dashboard();
+
+
+  let yearList=[]
+  let scoreList=[]
+  response.chageScoreRsp.forEach(item => {
+    yearList.push(item.year);
+    scoreList.push(item.score);
+  });
+
   new Chart(scoreChart.value.getContext('2d'), {
     type: 'line',
     data: {
-      labels: ['2021', '2022.1분기', '2022.2분기', '2022.3분기', '2022'],
+      labels: yearList,
       datasets: [{
         label: 'ESG 점수',
-        data: [66.1, 70.2, 70.1, 72.0, 74.6],
+        data: scoreList,
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,

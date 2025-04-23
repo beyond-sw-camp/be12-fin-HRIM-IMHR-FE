@@ -6,8 +6,8 @@ export const useCompanyStore = defineStore('company', {
     companys: []
   }),
   actions: {
-    async list(page, size) {
-      const response = await axios.get(`/api/company/list?page=${page}&size=${size}`,
+    async list(page, size, keyword = "") {
+      const response = await axios.get(`/api/company/list?page=${page}&size=${size}&keyword=${keyword}`,
       );
       this.companys = response.data.data.content;
       

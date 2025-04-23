@@ -10,8 +10,8 @@ export const usePartnerStore = defineStore('partner', {
   ),
 
   actions: {
-    async pagelist(page, size) {
-      const response = await axios.get(`/api/partner/pageList?page=${page}&size=${size}`);
+    async pagelist(page, size, keyword = "") {
+      const response = await axios.get(`/api/partner/pageList?page=${page}&size=${size}&keyword=${keyword}`);
 
       this.partners = response.data.data.partners.content;
 

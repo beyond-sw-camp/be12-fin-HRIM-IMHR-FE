@@ -9,24 +9,34 @@ const partnerStore = usePartnerStore();
 const search = ref("");
 const currentPage = ref(0);
 const totalPages = ref(0);
-const myCompanyIdx = computed(() => partnerStore.mycompanyIdx);
+const mycompanyIdx = computed(() => partnerStore.mycompanyIdx);
 
-const deleteModal = ref(false);
-const selectedCompanyIndex = ref(null);
 const registerModule = ref(false);
+const deleteModal = ref(false);
+const selectedPartneryIndex = ref(null);
+const companyId = ref(null);
 
-const openDeleteModal = (index) => {
-  selectedCompanyIndex.value = index;
+const openRegistModal = () => {
+  companyId.value = mycompanyIdx;
+  registerModule.value = true;
+};
+
+const openDeleteModal = (idx) => {
+  selectedPartneryIndex.value = idx;
   deleteModal.value = true;
 };
 
-const deleteCompany = () => {
-  if (selectedCompanyIndex.value !== null) {
-    companies.value.splice(selectedCompanyIndex.value, 1);
-    selectedCompanyIndex.value = null;
-    deleteModal.value = false;
-  }
+const deletePartner = async () => {
+  await fetchCompanies(); // 최신 리스트 다시 불러오기
+  deleteModal.value = false;
+  alert("협력사 삭제가 성공적으로 되었습니다.");
 };
+
+const registPartner = async () => {
+  await fetchCompanies();
+  registerModule.value = false;
+  alert("협력사 추가가 성공적으로 되었습니다.");
+}
 
 const filteredPartners = computed(() =>
   partnerStore.partners.filter((p) =>
@@ -38,10 +48,6 @@ const fetchCompanies = async () => {
   totalPages.value = await partnerStore.pagelist(currentPage.value, 8);
 };
 
-const onSearch = () => {
-  console.log(`검색어: ${search.value}`);
-  // page.value = 1;
-};
 
 watch(currentPage, fetchCompanies);
 onMounted(fetchCompanies);
@@ -81,7 +87,7 @@ const userRole = ref(
 
     <div class="flex justify-end" v-if="userRole === 'manager'">
       <button
-        @click="registerModule = true"
+        @click="openRegistModal"
         class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
       >
         협력사 추가
@@ -174,15 +180,16 @@ const userRole = ref(
 
     <PartnerDelete
       :visible="deleteModal"
+      :partnerIdx="selectedPartneryIndex"
       @close="deleteModal = false"
-      @confirm="deleteCompany"
+      @confirm="deletePartner"
     />
 
     <PartnerRegist
       :visible="registerModule"
-      :companyIdx="myCompanyIdx"
+      :companyIdx="companyId"
       @close="registerModule = false"
-      
+      @confirm="registPartner"
     />
 
     <!-- @confirm="addPartners" -->

@@ -8,7 +8,7 @@ const props = defineProps({
   mycompanyIdx: Number,
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close', 'confirm']);
 
 const currentPage = ref(0);
 const totalPages = ref(0); // 응갑 받은 총 페이지 수
@@ -28,32 +28,25 @@ const fetchCompanies = async () => {
   totalPages.value = await companyStore.list(currentPage.value, 5);
 };
 
-// watch(selected, (val) =>
-// {
-//   console.log("선택", val);
-// });
-
 watch(currentPage, fetchCompanies);
 onMounted(fetchCompanies);
 
 const handleSubmit = async () => {
   const payload = {
-  companyIdx: props.mycompanyIdx,
-  partnerList: selected.value.map(c => ({
-    idx: c.idx,
-    name: c.name,
-    has_esg_data: c.has_esg_data,
-    member: c.member
-  }))
-};
+    companyIdx: props.mycompanyIdx,
+    partnerList: selected.value.map((c) => ({
+      idx: c.idx,
+      name: c.name,
+      has_esg_data: c.has_esg_data,
+      member: c.member,
+    })),
+  };
 
-  console.log("보 ", payload.partnerList);
   if (selected.value.length > 0) {
-    const result = await partnerStore.add(payload);
-    alert("협력사 추가가 성공적으로 추가 되었습니다.");
-    emit('close');
+    await partnerStore.add(payload);
+    emit("confirm");
   } else {
-    emit('close');
+    emit("close");
   }
 };
 </script>

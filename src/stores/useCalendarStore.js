@@ -57,8 +57,8 @@ export const useCalendarStore = defineStore('calendar', {
     },
 
     // 회사 이벤트 페이지만큼 
-    async companyeventList(page, size) {
-      const response = await axios.get(`/api/event/pageList?page=${page}&size=${size}`);
+    async companyeventList(page, size, keyword) {
+      const response = await axios.get(`/api/event/pageList?page=${page}&size=${size}&keyword=${keyword}`);
 
       this.pageEventList = response.data.data.content;
       return response.data.data.totalPages;

@@ -13,9 +13,12 @@ const searchQuery = ref(""); // 검색
 // 이벤트 가져오기
 const fetchCampaigns = async () => {
   totalPages.value = await calendarStore.companyeventList(
-    currentPage.value,
-    10
-  );
+    currentPage.value, 10, searchQuery.value );
+};
+
+const onSearch = async () => {
+  currentPage.value = 0;
+  await fetchCampaigns(); // 키워드로 백엔드 검색
 };
 
 // 페이지가 바뀌거나 처음 로딩될 때 데이터 가져오기
@@ -74,6 +77,7 @@ const userRole = ref(
 
       <button
         class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
+        @click="onSearch"
       >
         검색
       </button>

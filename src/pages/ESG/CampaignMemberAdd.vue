@@ -48,23 +48,25 @@ const handleSubmit = async () => {
     memberIdxList: selectedUserIdxs.value,
   };
 
-  try {
-    if (participatedMembers.value.length > 0) {
-      // 기존 참여자가 있다면 수정 API 호출
-      const result = await campaign.campaignMemberupdate(formData.eventIdx, formData);
-      alert("사원 정보가 성공적으로 수정되었습니다.");
-    } else {
-      // 없다면 추가 API 호출
-      const result = await campaign.register(formData);
-      alert("사원이 성공적으로 추가되었습니다.");
-    }
-
-    stomp.campaignMemberAdd("캠페인 참여 승인 되었습니다.",title.value,formData);
-    // router.back();
-  } catch (error) {
-    console.error("처리 실패:", error);
-    alert("사원 정보 처리 중 오류가 발생했습니다.");
+  if (participatedMembers.value.length > 0) {
+    // 기존 참여자가 있다면 수정 API 호출
+    const result = await campaign.campaignMemberupdate(
+      formData.eventIdx,
+      formData
+    );
+    alert("사원 정보가 성공적으로 수정되었습니다.");
+  } else {
+    // 없다면 추가 API 호출
+    const result = await campaign.register(formData);
+    alert("사원이 성공적으로 추가되었습니다.");
   }
+
+  stomp.campaignMemberAdd(
+    "캠페인 참여 승인 되었습니다.",
+    title.value,
+    formData
+  );
+  // router.back();
 };
 
 // 참여자 분리
@@ -73,7 +75,9 @@ const nonParticipatedUsers = computed(() => {
   const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
   return users.value
     .filter((u) => !participatedIds.has(u.idx))
-    .filter((u) => u.name.includes(searchText.value));
+    .filter((u) => u.name.includes(searchText.value)
+    .filter((u) => u.department)
+  );
 });
 
 //
@@ -95,7 +99,9 @@ onMounted(async () => {
       campaign.campaignfetchMemberList(Idx),
     ]);
     // 승인된 사원들만 필터
-    users.value = userRes.data.data.filter((u) => u.status === "APPROVED" && u.isAdmin === false);
+    users.value = userRes.data.data.filter(
+      (u) => u.status === "APPROVED" && u.isAdmin === false
+    );
     participatedMembers.value = memberRes;
     selectedUserIdxs.value.push(...memberRes.map((m) => m.idx));
   }

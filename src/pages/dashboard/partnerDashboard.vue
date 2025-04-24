@@ -1,7 +1,7 @@
 <script setup>
 document.body.style.overflow = 'hidden';
 import { useRoute } from "vue-router";
-import { onMounted, ref,computed } from 'vue'
+import { onMounted, ref,onUnmounted } from 'vue'
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { useScoreStore } from '../../stores/useScoreStore'
 import Chart from 'chart.js/auto'
@@ -25,7 +25,9 @@ const currentScore = ref(0)
 const currentEnvironment = ref(0)
 const currentSocial=ref(0)
 const currentGovernance=ref(0)
-
+onUnmounted(()=>{
+  document.body.style.overflow = 'auto';
+})
 onMounted(async () => {
   const response = await score.dashboard(idx);
 

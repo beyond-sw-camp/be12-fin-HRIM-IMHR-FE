@@ -127,7 +127,7 @@ const routes = [
     props: true
   },
   {
-    path: '/permissionSetting/:id',
+    path: '/permissionSetting',
     name: 'permissionSetting',
     component: PermissionSetting,
     props: true
@@ -165,12 +165,12 @@ const routes = [
 
   // 보고서
   {
-    path: '/reportsList/1',
+    path: '/reportsList',
     name: 'reportList',
     component: ReportListView
   },
   {
-    path: '/reports/1',
+    path: '/reports/:idx',
     name: 'reportDetail',
     component: ReportDetailView
   },
@@ -197,7 +197,7 @@ const routes = [
 
   // 부서 설정
   {
-    path: '/departmentSetting/1',
+    path: '/departmentSetting',
     name: 'DepartmentSetting',
     component: DepartmentSetting
   },

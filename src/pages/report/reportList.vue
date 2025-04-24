@@ -1,9 +1,10 @@
 <script setup>
 import { reactive, ref, computed, onMounted } from 'vue';
 import { useMemberStore } from '../../stores/useMemberStore';
+import { useRouter } from 'vue-router';
 
 const memberStore = useMemberStore();
-
+const router = useRouter();
 const filters = reactive({
   startDate: new Date().toISOString().split('T')[0],
   endDate: new Date().toISOString().split('T')[0]
@@ -17,6 +18,7 @@ const reports = ref([]);
 const filteredReports = computed(() => {
   return reports.value.filter(report => {
     const value = report[searchField.value]?.toLowerCase() || '';
+    console.log(value);
     return value.includes(searchKeyword.value.toLowerCase());
   });
 });
@@ -25,10 +27,18 @@ function search() {
   console.log('검색 조건:', searchField.value, searchKeyword.value, filters);
 }
 
+function goToReportDetail(idx) {
+  router.push({ name: 'reportDetail', params: { idx: idx }, query: { startDate: filters.startDate, endDate: filters.endDate } });
+}
+
+
 onMounted(async () => {
   const response = await memberStore.authMemberList();
   console.log(response);
-  reports.value = response.data.data;
+  reports.value = response.data.data.map(member => ({
+    ...member,
+    department: member.department.name
+  }));
 });
 </script>
 
@@ -52,7 +62,8 @@ onMounted(async () => {
           <label>검색 항목</label>
           <select v-model="searchField" class="border rounded p-2 w-full">
             <option value="name">직원 이름</option>
-            <option value="id">아이디</option>
+            <option value="memberId">아이디</option>
+            <option value="department">부서</option>
             <!-- <option value="code">사원코드</option> -->
           </select>
         </div>
@@ -79,10 +90,11 @@ onMounted(async () => {
           <tr v-for="(report, index) in filteredReports" :key="index">
             <td class="border px-4 py-2">{{ report.name }}</td>
             <td class="border px-4 py-2">{{ report.memberId }}</td>
-            <td class="border px-4 py-2">{{ report.department.name }}</td>
+            <td class="border px-4 py-2">{{ report.department }}</td>
             <!-- <td class="border px-4 py-2">{{ report.period }}</td> -->
             <td class="border px-4 py-2">
-              <router-link :to="`/reports/${report.idx}`" class="text-blue-500 hover:underline">상세보기</router-link>
+              <!-- <router-link :to="{ path: 'reports', params: { idx: 1 } }" class="text-blue-500 hover:underline">상세보기</router-link> -->
+              <button class="text-blue-500 hover:underline" @click="goToReportDetail(report.idx)">상세보기</button>
             </td>
           </tr>
         </tbody>

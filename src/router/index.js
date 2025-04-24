@@ -189,7 +189,7 @@ const routes = [
     component: PartnerListView
   },
   {
-    path: '/partner/1',
+    path: '/partner/:idx',
     name: 'partnerDashboard',
     component: PartnerDashboard,
     props: true

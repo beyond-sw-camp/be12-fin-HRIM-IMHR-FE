@@ -1,6 +1,6 @@
 <script setup>
 document.body.style.overflow = 'hidden';
-
+import { useRoute } from "vue-router";
 import { onMounted, ref,computed } from 'vue'
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { useScoreStore } from '../../stores/useScoreStore'
@@ -11,6 +11,8 @@ const donutChart = ref(null)
 const scoreChart = ref(null)
 const score = useScoreStore();
 const company = ref("")
+const route = useRoute();
+const idx = route.params.idx;
 
 const yearList = ref([])
 const scoreList = ref([])
@@ -25,7 +27,7 @@ const currentSocial=ref(0)
 const currentGovernance=ref(0)
 
 onMounted(async () => {
-  const response = await score.dashboard();
+  const response = await score.dashboard(idx);
 
   company.value = response.companyName;
   response.chageScoreRsp.forEach(item => {
@@ -123,7 +125,7 @@ const nextYear = () => {
 </script>
 
 <template>
-  <div class="flex mt-14">
+  <div class="flex mt-2">
 
     <!-- Main Content -->
     <main class="flex-1 p-6">

@@ -1,4 +1,9 @@
 <script setup>
+import { useMemberStore } from '../../../stores/useMemberStore'
+
+
+const memberStore = useMemberStore()
+
 const props = defineProps({
   isOpen: Boolean,
 });
@@ -9,7 +14,10 @@ const menuItems = [
   { path: "/educationList/1", label: "ESG 교육 활동" },
   { path: "/activityList", label: "ESG 기타 활동" },
   { path: "/campaignlist", label: "ESG 사내 캠페인 활동" },
-  { path: "/productList/1", label: "친환경 제품" },
+  {
+    path: `/productList/${memberStore.myCompanyIdx || 0}`,
+    label: '친환경 제품',
+  },
   { path: "/reportsList/1", label: "사원 리포트" },
   { path: "/partnerList", label: "협력사" },
   { path: "/staffSearch", label: "피드백" },

@@ -38,8 +38,8 @@ import ProductRegistView from '../pages/product/ProductRegist.vue'
 import Calendar from '../pages/Calendar/Calendar.vue';
 
 // 대시보드 & 파트너
-import DashboardView from '../pages/dashboard/Dashboard.vue';
-import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
+import DashboardView from '../pages/dashboard/CompanyDashboard.vue';
+import PartnerDashboard from '../pages/dashboard/DepartmentDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 피드백

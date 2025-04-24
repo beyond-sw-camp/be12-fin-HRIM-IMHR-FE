@@ -8,9 +8,8 @@ export const useScoreStore = defineStore('score', {
         }),
 
         actions: {
-            async dashboard() {
-                const response = await axios.post("/api/score/dashboard", {
-                });
+            async dashboard(idx) {
+                const response = await axios.post(`/api/score/dashboard/${idx}`);
                 
                 return response.data.data;
             },    

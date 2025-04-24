@@ -1,11 +1,12 @@
 <script setup>
-
+import { useMemberStore } from '../../../stores/useMemberStore'
+const memberStore = useMemberStore()
 const props = defineProps({
   isOpen: Boolean,
 });
 
 const menuItems = [
-  { path: "/partner", label: "기업 ESG 현황" },
+  { path: `/partner/${memberStore.myCompanyIdx}`, label: "기업 ESG 현황" },
   // { path: '/dashboard', label: '부서서 ESG 현황' },
   { path: "/educationList/1", label: "ESG 교육 활동 관리" },
   { path: "/activityList", label: "ESG 기타 활동 관리" },
@@ -25,20 +26,17 @@ const menuItems = [
     :class="{
       '-translate-x-full': !isOpen,
       'translate-x-0': isOpen,
-    }"
-  >
+    }">
     <nav class="mt-5">
       <ul class="p-4 space-y-1">
         <li v-for="item in menuItems" :key="item.path">
-          <router-link
-            :to="item.path"
+          <router-link :to="item.path"
             class="block px-4 py-2 rounded-md transition duration-200 hover:bg-slate-700 hover:shadow-md hover:scale-[1.01] border-l-4"
             :class="{
               'border-emerald-400 bg-slate-700 font-semibold':
                 $route.path === item.path,
               'border-transparent': $route.path !== item.path,
-            }"
-          >
+            }">
             {{ item.label }}
           </router-link>
         </li>

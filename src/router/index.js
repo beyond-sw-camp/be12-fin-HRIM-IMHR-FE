@@ -54,8 +54,12 @@ const routes = [
     path: '/',
     name: 'homeRedirect',
     beforeEnter: (to, from, next) => {
-      
-      next('/partner');
+      const companyId = 1;
+      if (companyId) {
+        next(`/partner/${companyId}`);
+      } else {
+        next(`/partner/${companyId}`); // 또는 next('/login')
+      }
     }
   },
   {
@@ -185,7 +189,7 @@ const routes = [
     component: PartnerListView
   },
   {
-    path: '/partner',
+    path: '/partner/:idx',
     name: 'partnerDashboard',
     component: PartnerDashboard,
     props: true

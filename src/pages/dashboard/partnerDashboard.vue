@@ -11,7 +11,7 @@ const score = useScoreStore();
 
 onMounted(async() => {
   const response=await score.dashboard();
-
+  console.log("onMounted ", response);
 
   let yearList=[]
   let scoreList=[]

@@ -1,29 +1,28 @@
 <template>
-  <!-- ESG 카드 영역 -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-    <!-- 게이지 -->
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-      <p class="text-sm text-gray-500">2022</p>
-      <p class="text-3xl font-bold text-green-600">74.6</p>
-      <p class="mt-2 font-semibold text-gray-800">환경 점수 (E)</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto py-8">
+    <!-- 환경 점수 카드 -->
+    <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center transition hover:scale-105 hover:shadow-lg">
+      <p class="text-sm text-gray-500 mb-1">2022</p>
+      <p class="text-4xl font-bold text-green-600 mb-2">74.6</p>
+      <p class="text-base font-medium text-slate-700">환경 점수 (E)</p>
     </div>
 
-    <!-- 라인 차트 -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <canvas id="scoreChart"></canvas>
+    <!-- 환경 점수 변화 차트 -->
+    <div class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center transition hover:scale-105 hover:shadow-lg">
+      <canvas ref="chartRef" class="w-full h-40"></canvas>
     </div>
 
     <!-- 기준 대비 카드 -->
-    <div class="bg-green-100 rounded-lg shadow p-6 text-center">
-      <p class="text-sm text-gray-600">기준대비 +1.1%</p>
-      <p class="text-2xl font-bold text-green-800">55.2</p>
-      <p class="text-sm mt-1 text-gray-700">환경 Environmental</p>
+    <div class="bg-green-100 rounded-2xl shadow-md p-8 text-center transition hover:scale-105 hover:shadow-lg">
+      <p class="text-sm text-gray-600 mb-1">기준대비 <span class="text-green-600 font-semibold">+1.1%</span></p>
+      <p class="text-3xl font-bold text-green-800 mb-2">55.2</p>
+      <p class="text-sm text-slate-700">환경 Environmental</p>
     </div>
   </div>
 
   <div class="min-h-screen bg-gray-50 px-6 py-10">
     <h1 class="text-2xl font-bold text-center text-slate-800 mb-10">친환경 제품 리스트</h1>
-    <!--<pre class="bg-gray-100 p-4 rounded mt-10 text-sm">{{ product }}</pre>-->
+
     <!-- 검색창 -->
     <div class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8">
       <Search color="black" :size="30" />
@@ -50,7 +49,6 @@
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>
             <td class="p-3">{{ product.serialNumber }}</td>
-
           </tr>
         </tbody>
       </table>
@@ -59,70 +57,86 @@
     <!-- 등록 버튼 -->
     <div class="max-w-5xl mx-auto flex justify-end mt-6">
       <router-link v-if="userRole === 'manager'"
-        :to="{ path: '/productRegist', query: { mode: 'create', companyIdx: company_idx } }">
+        :to="{ path: '/productRegist', query: { mode: 'create', companyIdx: companyIdx } }">
         <button class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-900 transition">
           등록
         </button>
       </router-link>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
-import { Search } from 'lucide-vue-next';
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { Search, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import Chart from 'chart.js/auto'
+import { useProductStore, calculateScore } from '../../stores/useProductStore'
 
-const router = useRouter();
-const route = useRoute();
-const search = ref('');
-const products = ref([]);
-const company_idx = route.params.idx;
-console.log("company_idx:", company_idx);
-console.log("route.params:", route.params);
-console.log("route.query:", route.query);
-console.log("userInfo:", JSON.parse(localStorage.getItem('userInfo')));
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager');
+const chartRef = ref(null)
+const search = ref('')
+const store = useProductStore()
+const route = useRoute()
+const router = useRouter()
+const companyIdx = route.params.idx
+const userRole = 'manager' // 실제 상황에 맞게 변경 필요
 
-// 데이터 불러오기
 onMounted(async () => {
-  try {
-    const res = await axios.get(`/api/product/company/${company_idx}`);
-    products.value = res.data.data;
-    console.log("제품 목록 조회 성공:", products.value);
-  } catch (err) {
-    console.error("제품 목록 조회 실패:", err);
-    alert("제품 목록 조회 중 오류가 발생했습니다.");
-  }
-});
+  await store.listByCompany(companyIdx)
 
-// 검색 필터
+  const labels = store.productList.map(p => p.productName)
+  const scores = store.productList.map(p => calculateScore(p))
+
+  new Chart(chartRef.value, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: '환경 점수',
+        data: scores,
+        backgroundColor: '#16a34a'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '점수'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom'
+        }
+      }
+    }
+  })
+})
+
 const filteredProducts = computed(() => {
-  return products.value.filter(
+  return store.productList.filter(
     (p) =>
       p.productName?.toLowerCase().includes(search.value.toLowerCase()) ||
       String(p.idx).includes(search.value)
-  );
-});
+  )
+})
 
 const onSearch = () => {
-  console.log("🔍 검색어:", search.value);
-};
+  console.log("🔍 검색어:", search.value)
+}
 
-// 상세 보기로 이동
 const goToDetail = (idx) => {
-  const company_idx = String(route.params.idx);  // ← 문자열로 변환
-  console.log(idx)
-  console.log("상세보기 이동:", company_idx, idx);
   router.push({
     name: 'productDetail',
     params: {
-      company_idx: String(company_idx),
+      company_idx: String(companyIdx),
       idx: String(idx)
     }
-  });
-};
-
+  })
+}
 </script>

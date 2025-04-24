@@ -2,6 +2,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
+
 export const useProductStore = defineStore("product", {
   state: () => ({
     productList: [],
@@ -73,3 +74,16 @@ export const useProductStore = defineStore("product", {
     },
   },
 });
+
+// ✅ 제품 점수 계산
+function calculateScore(product) {
+  let score = 0
+  if (product.eco_certified === 1) score += 40
+  if (product.bio_material === 1) score += 20
+  if (product.low_carbon === 1) score += 20
+  if (product.energy_grade?.includes("1등급")) score += 20
+  else if (product.energy_grade?.includes("2등급")) score += 10
+  return score
+}
+
+export { calculateScore }

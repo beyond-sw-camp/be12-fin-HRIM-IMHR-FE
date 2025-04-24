@@ -45,12 +45,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(product, index) in filteredProducts" :key="product.idx"
+          <tr v-for="(product, index) in filteredProducts" :key="index"
             class="border-b hover:bg-slate-50 transition cursor-pointer" @click="goToDetail(product.idx)">
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>
             <td class="p-3">{{ product.serialNumber }}</td>
-
           </tr>
         </tbody>
       </table>

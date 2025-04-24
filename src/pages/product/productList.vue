@@ -1,14 +1,16 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto py-8">
     <!-- 환경 점수 카드 -->
-    <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center transition hover:scale-105 hover:shadow-lg">
+    <div
+      class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center transition hover:scale-105 hover:shadow-lg">
       <p class="text-sm text-gray-500 mb-1">2022</p>
       <p class="text-4xl font-bold text-green-600 mb-2">74.6</p>
       <p class="text-base font-medium text-slate-700">환경 점수 (E)</p>
     </div>
 
     <!-- 환경 점수 변화 차트 -->
-    <div class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center transition hover:scale-105 hover:shadow-lg">
+    <div
+      class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center transition hover:scale-105 hover:shadow-lg">
       <canvas ref="chartRef" class="w-full h-40"></canvas>
     </div>
 
@@ -82,41 +84,109 @@ const companyIdx = route.params.idx
 const userRole = 'manager' // 실제 상황에 맞게 변경 필요
 
 onMounted(async () => {
+  if (!companyIdx) {
+    console.warn("❗ companyIdx 없음. 제품 리스트 불러오기 실패")
+    return
+  }
+
   await store.listByCompany(companyIdx)
 
   const labels = store.productList.map(p => p.productName)
-  const scores = store.productList.map(p => calculateScore(p))
+  const scores = store.productList.map(p => {
+    const score = calculateScore(p)
+    console.log(`📊 ${p.productName} 점수:`, score)
+    return score ?? 0 // 혹시 null이면 0으로 대체
+  })
 
-  new Chart(chartRef.value, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        label: '환경 점수',
-        data: scores,
-        backgroundColor: '#16a34a'
-      }]
+  // 차트 렌더링은 데이터가 있을 때만
+  if (chartRef.value && scores.length > 0) {
+    new Chart(chartRef.value, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: '환경 점수',
+          data: scores,
+          backgroundColor: ['#4ade80', '#86efac', '#bbf7d0'], // 그라데이션 느낌
+          borderRadius: 8,
+          barThickness: 40, // 바 두께 조정
+        }]
+      },
+      options: {
+    responsive: true,
+    layout: {
+      padding: 20,
     },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: '점수'
-          }
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 14,
+            weight: 'bold',
+          },
+          color: '#334155',
+        },
+        grid: {
+          display: false,
         }
       },
-      plugins: {
-        legend: {
+      y: {
+        beginAtZero: true,
+        title: {
           display: true,
-          position: 'bottom'
+          text: '점수',
+          font: {
+            size: 16,
+            weight: 'bold',
+          },
+        },
+        ticks: {
+          stepSize: 20,
+          color: '#64748b'
+        },
+        grid: {
+          color: '#e2e8f0',
+          borderDash: [5, 5],
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false // 점수 레이블은 숨겨도 OK
+      },
+      tooltip: {
+        backgroundColor: '#1e293b',
+        titleColor: '#fff',
+        bodyColor: '#e2e8f0',
+        padding: 10,
+        borderRadius: 8,
+        titleFont: {
+          weight: 'bold',
+        },
+        bodyFont: {
+          size: 14,
+        }
+      },
+      title: {
+        display: true,
+        text: '제품별 친환경 점수',
+        font: {
+          size: 18,
+          weight: 'bold',
+        },
+        color: '#0f172a',
+        padding: {
+          bottom: 20
         }
       }
     }
-  })
+  }
 })
+  } else {
+    console.warn("차트를 생성할 데이터가 없습니다.")
+  }
+})
+
 
 const filteredProducts = computed(() => {
   return store.productList.filter(

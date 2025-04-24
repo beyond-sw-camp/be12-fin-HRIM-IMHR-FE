@@ -66,24 +66,51 @@ export const useProductStore = defineStore("product", {
     // ✅ 회사별 리스트
     async listByCompany(companyIdx) {
       try {
-        const res = await axios.get(`/api/product/company/${companyIdx}`);
-        this.productList = res.data.data;
+        this.productList = []; // 기존 리스트 초기화
+        const res = await axios.get(`/api/product/company/${companyIdx}`, {
+          withCredentials: true,
+        });
+        
+        // 응답 구조 확인 후 할당
+        this.productList = res.data?.data || res.data;
+        
       } catch (err) {
         console.error("제품 리스트 조회 실패", err);
+        this.productList = []; // 실패 시도 리스트 초기화 (선택)
       }
     },
   },
 });
 
 // ✅ 제품 점수 계산
-function calculateScore(product) {
-  let score = 0
-  if (product.eco_certified === 1) score += 40
-  if (product.bio_material === 1) score += 20
-  if (product.low_carbon === 1) score += 20
-  if (product.energy_grade?.includes("1등급")) score += 20
-  else if (product.energy_grade?.includes("2등급")) score += 10
-  return score
-}
+const calculateScore = (product) => {
+  let score = 0;
+
+  // 재활용 가능
+  if (product.recyclable == 1) score += 30;
+
+  // 친환경 원료
+  if (product.bioMaterial == 1) score += 20;
+
+  // 저탄소 공정
+  if (product.lowCarbonProcess == 1) score += 25;
+
+  // 에너지 등급: 1등급 > 3등급 높은 점수
+  const gradeMap = {
+    "1등급": 20,
+    "2등급": 10,
+    "3등급": 5,
+  };
+  score += gradeMap[product.energyGrade] || 0;
+
+  // 단가가 낮을수록 친환경이라 가정
+  if (product.unitPrice > 0) {
+    const priceScore = Math.max(0, (100000 - product.unitPrice) / 1000); // 단가 1000당 1점
+    score += priceScore;
+  }
+
+  return Math.max(0, Math.round(score));
+};
+
 
 export { calculateScore }

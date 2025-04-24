@@ -9,7 +9,7 @@ const props = defineProps({
 });
 
 const menuItems = [
-  { path: "/partner/1", label: "기업 ESG 현황" },
+  { path: "/partner", label: "기업 ESG 현황" },
   { path: "/dashboard/1", label: "부서 ESG 현황" },
   { path: "/educationList/1", label: "ESG 교육 활동" },
   { path: "/activityList", label: "ESG 기타 활동" },

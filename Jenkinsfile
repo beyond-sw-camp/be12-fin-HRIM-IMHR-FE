@@ -67,7 +67,7 @@ pipeline {
                            usernamePassword(credentialsId: 'IUCH_GIT', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_PASSWORD'),
 //                            string(credentialsId: 'github_username', variable: 'GITHUB_USERNAME'),
 //                            string(credentialsId: 'github_token', variable: 'GITHUB_TOKEN'),
-                           string(credentialsId: 'IMHR_GIT_URL', variable: 'GITHUB_URL')
+                           string(credentialsId: 'IMHR_FRONT_GIT_URL', variable: 'GITHUB_URL')
                        ]) {
                           sh """
                           git add .

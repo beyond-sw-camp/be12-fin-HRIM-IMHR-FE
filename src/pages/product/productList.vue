@@ -1,24 +1,21 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto py-8">
-    <!-- 환경 점수 카드 -->
-    <div
-      class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center transition hover:scale-105 hover:shadow-lg">
-      <p class="text-sm text-gray-500 mb-1">2022</p>
-      <p class="text-4xl font-bold text-green-600 mb-2">74.6</p>
-      <p class="text-base font-medium text-slate-700">환경 점수 (E)</p>
-    </div>
+  <div class="px-96 grid grid-cols-1 md:grid-cols-1 gap-8 max-w-6xl mx-auto py-8">
+
 
     <!-- 환경 점수 변화 차트 -->
-    <div
+    <!-- <div
       class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center transition hover:scale-105 hover:shadow-lg">
       <canvas ref="chartRef" class="w-full h-40"></canvas>
-    </div>
+    </div> -->
 
     <!-- 기준 대비 카드 -->
     <div class="bg-green-100 rounded-2xl shadow-md p-8 text-center transition hover:scale-105 hover:shadow-lg">
-      <p class="text-sm text-gray-600 mb-1">기준대비 <span class="text-green-600 font-semibold">+1.1%</span></p>
-      <p class="text-3xl font-bold text-green-800 mb-2">55.2</p>
-      <p class="text-sm text-slate-700">환경 Environmental</p>
+      <!-- <p class="text-sm text-gray-600 mb-1">기준대비 <span class="text-green-600 font-semibold">+1.1%</span></p> -->
+      <div class="flex flex-col items-center">
+        <!-- <p class="text-sm text-gray-600 mb-1">기준대비 <span class="text-green-600 font-semibold">+1.1%</span></p> -->
+        <p class="text-3xl font-bold text-green-800 mb-2">{{ eScore }} 등급</p>
+        <p class="text-sm text-slate-700">환경 Environmental</p>
+      </div>
     </div>
   </div>
 
@@ -74,6 +71,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Search, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import Chart from 'chart.js/auto'
 import { useProductStore, calculateScore } from '../../stores/useProductStore'
+import { useScoreStore } from '../../stores/useScoreStore'
 
 const chartRef = ref(null)
 const search = ref('')
@@ -82,8 +80,10 @@ const route = useRoute()
 const router = useRouter()
 const companyIdx = route.params.idx
 const userRole = 'manager' // 실제 상황에 맞게 변경 필요
-
+const scoreStore=useScoreStore();
+const eScore=ref(null);
 onMounted(async () => {
+  eScore.value = await scoreStore.eScore(companyIdx);
   if (!companyIdx) {
     console.warn("❗ companyIdx 없음. 제품 리스트 불러오기 실패")
     return
@@ -113,75 +113,75 @@ onMounted(async () => {
         }]
       },
       options: {
-    responsive: true,
-    layout: {
-      padding: 20,
-    },
-    scales: {
-      x: {
-        ticks: {
-          font: {
-            size: 14,
-            weight: 'bold',
+        responsive: true,
+        layout: {
+          padding: 20,
+        },
+        scales: {
+          x: {
+            ticks: {
+              font: {
+                size: 14,
+                weight: 'bold',
+              },
+              color: '#334155',
+            },
+            grid: {
+              display: false,
+            }
           },
-          color: '#334155',
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: '점수',
+              font: {
+                size: 16,
+                weight: 'bold',
+              },
+            },
+            ticks: {
+              stepSize: 20,
+              color: '#64748b'
+            },
+            grid: {
+              color: '#e2e8f0',
+              borderDash: [5, 5],
+            }
+          }
         },
-        grid: {
-          display: false,
-        }
-      },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: '점수',
-          font: {
-            size: 16,
-            weight: 'bold',
+        plugins: {
+          legend: {
+            display: false // 점수 레이블은 숨겨도 OK
           },
-        },
-        ticks: {
-          stepSize: 20,
-          color: '#64748b'
-        },
-        grid: {
-          color: '#e2e8f0',
-          borderDash: [5, 5],
+          tooltip: {
+            backgroundColor: '#1e293b',
+            titleColor: '#fff',
+            bodyColor: '#e2e8f0',
+            padding: 10,
+            borderRadius: 8,
+            titleFont: {
+              weight: 'bold',
+            },
+            bodyFont: {
+              size: 14,
+            }
+          },
+          title: {
+            display: true,
+            text: '제품별 친환경 점수',
+            font: {
+              size: 18,
+              weight: 'bold',
+            },
+            color: '#0f172a',
+            padding: {
+              bottom: 20
+            }
+          }
         }
       }
-    },
-    plugins: {
-      legend: {
-        display: false // 점수 레이블은 숨겨도 OK
-      },
-      tooltip: {
-        backgroundColor: '#1e293b',
-        titleColor: '#fff',
-        bodyColor: '#e2e8f0',
-        padding: 10,
-        borderRadius: 8,
-        titleFont: {
-          weight: 'bold',
-        },
-        bodyFont: {
-          size: 14,
-        }
-      },
-      title: {
-        display: true,
-        text: '제품별 친환경 점수',
-        font: {
-          size: 18,
-          weight: 'bold',
-        },
-        color: '#0f172a',
-        padding: {
-          bottom: 20
-        }
-      }
-    }
-  }
-})
+    })
   } else {
     console.warn("차트를 생성할 데이터가 없습니다.")
   }

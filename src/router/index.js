@@ -12,8 +12,8 @@ import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
 import PermissionSetting from '../pages/staff/PermissionSetting.vue';
-import StaffSearch from '../pages/Staff/staffSearch.vue';
-import StaffDetail from '../pages/Staff/staffDetail.vue';
+import StaffSearch from '../pages/staff/staffSearch.vue';
+import StaffDetail from '../pages/staff/staffDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 // 활동

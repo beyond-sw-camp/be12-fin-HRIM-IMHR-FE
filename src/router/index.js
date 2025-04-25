@@ -17,10 +17,10 @@ import StaffDetail from '../pages/staff/StaffDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 // 활동
-import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
-import ActivityList from '../pages/esg/ActivityList.vue'
-import CampaignList from '../pages/esg/CampaignEventList.vue';
-import CampaignMemberAdd from '../pages/esg/CampaignMemberAdd.vue';
+import AllActivityDetails from '../pages/ESG/AllActivityDetails.vue'
+import ActivityList from '../pages/ESG/ActivityList.vue'
+import CampaignList from '../pages/ESG/CampaignEventList.vue';
+import CampaignMemberAdd from '../pages/ESG/CampaignMemberAdd.vue';
 
 // 교육
 import EducationList from '../pages/ESG/EducationList.vue'

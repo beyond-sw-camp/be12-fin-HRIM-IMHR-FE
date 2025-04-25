@@ -359,6 +359,7 @@ const evalTable = [
             <h3 class="font-bold text-lg">전체 참여율</h3>
           
           </div>
+
           <div class="flex flex-col items-center">
             <div class="w-48 h-48 relative mb-4">
               <canvas
@@ -370,11 +371,11 @@ const evalTable = [
               >
                 {{ totalData }}
               </div>
-              {{ totalData }}
             </div>
             <div class="w-full h-40">
               <canvas id="barChart"></canvas>
             </div>
+            
           </div>
         </div>
       </div>

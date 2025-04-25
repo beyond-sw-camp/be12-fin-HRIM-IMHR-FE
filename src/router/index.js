@@ -55,19 +55,6 @@ import MyPageView from '../pages/mypage/MyPageView.vue';
 
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'homeRedirect',
-  //   beforeEnter: (to, from, next) => {
-  //     const companyId = idx;
-  //     console.log(idx)
-  //     if (companyId) {
-  //       next(`/partner/${companyId}`);
-  //     } else {
-  //       next(`/partner/${companyId}`); // 또는 next('/login')
-  //     }
-  //   }
-  // },
   {
     path: '/departmentdashboard',
     name: 'dashboard-no-department',

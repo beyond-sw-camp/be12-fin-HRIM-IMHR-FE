@@ -190,6 +190,11 @@ onMounted(() => {
     if (gaugeCtx) {
       createGaugeChart(gaugeCtx, 74.6, "#86EFAC"); // 전체 참여율
     }
+
+    const barCtx = document.getElementById("barChart");
+    if (barCtx) {
+      createBarChart(barCtx);
+    }
   });
 });
 
@@ -217,6 +222,67 @@ function createGaugeChart(ctx, value, color) {
       responsive: true,
       maintainAspectRatio: false,
     },
+  });
+}
+
+function createBarChart(ctx) {
+  const labels = ['1월', '2월', '3월', '4월', '5월', '6월'];
+  
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'E(환경)',
+          data: departmentScoreData.value?.monthlyEScores || [1, 3, 2, 4, 5, 6],
+          backgroundColor: '#D1FAE5',
+          borderRadius: 5,
+        },
+        {
+          label: 'S(사회)',
+          data: departmentScoreData.value?.monthlySScores || [1, 3, 2, 4, 5, 6],
+          backgroundColor: '#DBEAFE',
+          borderRadius: 5,
+        },
+        {
+          label: 'G(지배구조)',
+          data: departmentScoreData.value?.monthlyGScores || [1, 3, 2, 4, 5, 6],
+          backgroundColor: '#EDE9FE',
+          borderRadius: 5,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: {
+              size: 12
+            }
+          }
+        },
+        title: {
+          display: true,
+          text: '월별 ESG 점수 추이',
+          font: {
+            size: 14
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 10,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
+    }
   });
 }
 
@@ -271,22 +337,25 @@ const evalTable = [
     <h1 class="text-3xl font-bold mb-6">
       {{ companyName }} ESG
 
-      <span class="items-center space-x-4 time-center text-gray-500 font-semibold">
+      <span
+        class="items-center space-x-4 time-center text-gray-500 font-semibold"
+      >
         <button @click="changeMonth(-1)" class="hover:text-black transition">
-          <ChevronLeft class="w-6 h-6 align-middle"/>
+          <ChevronLeft class="w-6 h-6 align-middle" />
         </button>
 
         <span class="text-3xl text-gray-500">
-          {{ year }}.{{ month < 10 ? '0' + month : month }}
+          {{ year }}.{{ month < 10 ? "0" + month : month }}
         </span>
 
-        <button @click="changeMonth(1)" class=" w-6 h-6 hover:text-black transition">
-          <ChevronRight/>
+        <button
+          @click="changeMonth(1)"
+          class="w-6 h-6 hover:text-black transition"
+        >
+          <ChevronRight />
         </button>
       </span>
     </h1>
-    
-    
 
     <!-- ESG 요약 -->
     <div class="grid grid-cols-3 gap-4 mb-6">
@@ -315,14 +384,12 @@ const evalTable = [
           :key="idx"
           style="display: flex; gap: 10px"
         >
-          <span class="text-xl"> 
-            {{ idx + 1 }}위
-          </span>
+          <span class="text-xl"> {{ idx + 1 }}위 </span>
 
-          <span class="mt-0.5">"{{ member.memberName }}"의 ESG 평균 점수 : {{ member.averageScore }}
-
+          <span class="mt-0.5"
+            >"{{ member.memberName }}"의 ESG 평균 점수 :
+            {{ member.averageScore }}
           </span>
-           
         </div>
       </div>
     </div>
@@ -342,14 +409,16 @@ const evalTable = [
               :key="idx"
               class="px-3 py-2 hover:bg-gray-50 flex items-center gap-2"
             >
-              <router-link  :to="{
-                name: 'dashboard-with-department',
-                params: {
-                  departmentName: dept.name,
-                  yearMonth: `${year}-${month < 10 ? '0' + month : month}`,
-                }}">
-
-              📁 {{ dept.name }}
+              <router-link
+                :to="{
+                  name: 'dashboard-with-department',
+                  params: {
+                    departmentName: dept.name,
+                    yearMonth: `${year}-${month < 10 ? '0' + month : month}`,
+                  },
+                }"
+              >
+                📁 {{ dept.name }}
               </router-link>
             </li>
           </ul>
@@ -381,7 +450,6 @@ const evalTable = [
         <div>
           <div class="flex items-center justify-between mb-4">
             <h3 class="font-bold text-lg">부서 ESG 평균 점수</h3>
-          
           </div>
 
           <div class="flex flex-col items-center">
@@ -393,14 +461,12 @@ const evalTable = [
               <div
                 class="absolute inset-0 flex items-end justify-center pb-10 text-lg font-semibold text-green-600"
               >
-              점수 : {{ totalData }}
+                점수 : {{ totalData }}
               </div>
-              
             </div>
             <div class="w-full h-40">
               <canvas id="barChart"></canvas>
             </div>
-            
           </div>
         </div>
       </div>
@@ -422,7 +488,7 @@ const evalTable = [
         </div>
       </div>
     </div>
-    
+
     <div class="mt-10">
       <button
         @click="showEval = !showEval"

@@ -9,9 +9,21 @@ import ExecutiveSidebar from "./pages/common/Sidebar/ExecutiveSidebar.vue";
 import NotificationDetail from "./pages/common/Notification/NotificationDetail.vue";
 import NotificationList from "./pages/common/Notification/NotificationList.vue";
 
-const isSidebarOpen = ref(true);
-const toggleSidebar = () => {
+const isSidebarOpen = ref(false);
+const toggleSidebar = async () => {
   isSidebarOpen.value = !isSidebarOpen.value;
+  const memberStore = useMemberStore();
+  const response = await memberStore.fetchMember();
+  const memberInfo = response;
+  console.log(response);
+  
+  if (memberInfo?.isAdmin) {
+    localStorage.setItem("userInfo", JSON.stringify({ role: "manager" }));
+    role.value = "manager";
+  } else {
+    localStorage.setItem("userInfo", JSON.stringify({ role: "executive" }));
+    role.value = "executive"; 
+  }
 };
 
 const route = useRoute();
@@ -25,17 +37,7 @@ import { onMounted } from "vue";
 import { useMemberStore } from "./stores/useMemberStore";
 
 onMounted(async () => {
-  const memberStore = useMemberStore();
-  const response = await memberStore.fetchMember();
-  const memberInfo = response.data;
   
-  if (memberInfo?.isAdmin) {
-    localStorage.setItem("userInfo", JSON.stringify({ role: "manager" }));
-    role.value = "manager";
-  } else {
-    localStorage.setItem("userInfo", JSON.stringify({ role: "executive" }));
-    role.value = "executive"; 
-  }
 });
 
 

@@ -15,6 +15,7 @@ const user = ref({
   email: '',
   company: '',
   department: '',
+  isAdmin: true,
 })
 
 // ✅ 활동 내역 데이터 (type 속성 포함)

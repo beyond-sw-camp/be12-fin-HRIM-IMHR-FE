@@ -29,10 +29,11 @@ onUnmounted(()=>{
   document.body.style.overflow = 'auto';
 })
 onMounted(async () => {
+console.log(idx)
   const response = await score.dashboard(idx);
-
+  console.log(response)
   company.value = response.companyName;
-  response.chageScoreRsp.forEach(item => {
+  response.changeScoreRsp.forEach(item => {
     yearList.value.push(item.year);
     scoreList.value.push(item.score);
     environmentList.value.push(item.environmentScore);

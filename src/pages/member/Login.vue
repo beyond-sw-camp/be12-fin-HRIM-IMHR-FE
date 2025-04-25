@@ -20,9 +20,10 @@ const goToEmployeeRegister = () => router.push("/employeeSignup");
 const login = async () => {
   console.log("login clicked")
   const response = await memberStore.login(form.value);
+  const me = await memberStore.fetchMember();
   console.log(response);
   if (response.status == 200) {
-    router.push("/")
+    router.push(`/partner/${memberStore.myCompanyIdx}`);
   } else {
     alert("계정이 존재하지 않거나 비밀번호가 틀렸습니다.")
   }

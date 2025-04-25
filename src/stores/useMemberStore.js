@@ -91,11 +91,11 @@ export const useMemberStore = defineStore('member', {
             await axios.post("/api/member/logout");
         },
 
-        async fetchMember(idx) {
+        async fetchMember() {
             const response = await axios.post("/api/member/info");
-            console.log(response.data.data.companyIdx)
             this.myCompanyIdx=response.data.data.companyIdx;
             this.myIdx = response.data.data.idx;
+            
             return response.data.data;
         },
 

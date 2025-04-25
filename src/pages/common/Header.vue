@@ -21,6 +21,7 @@ const handleLogout = async () => {
   } finally {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('userInfo')
+    emit('toggle-sidebar')
     router.push('/login')
   }
 }
@@ -30,7 +31,7 @@ const me = ref({});
 onMounted(async () => {
   try {
     me.value = await memberStore.fetchMember();
-
+    console.log("memberStore.userInfo", memberStore.userInfo)
   } catch (error) {
     router.push('/login')
   }

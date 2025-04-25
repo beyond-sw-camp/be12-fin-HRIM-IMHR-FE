@@ -23,6 +23,8 @@ const login = async () => {
   const me = await memberStore.fetchMember();
   console.log(response);
   if (response.status == 200) {
+    const memberResponse = await memberStore.fetchMember();
+    memberStore.userInfo = memberResponse;
     router.push(`/partner/${memberStore.myCompanyIdx}`);
   } else {
     alert("계정이 존재하지 않거나 비밀번호가 틀렸습니다.")

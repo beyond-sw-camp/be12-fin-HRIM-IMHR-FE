@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 import Header from "./pages/common/Header.vue";
 import ManagerSidebar from "./pages/common/Sidebar/ManagerSidebar.vue";
@@ -37,10 +37,13 @@ import { onMounted } from "vue";
 import { useMemberStore } from "./stores/useMemberStore";
 
 onMounted(async () => {
-  
+  const saved = localStorage.getItem('isSidebarOpen')
+  if (saved !== null) isSidebarOpen.value = JSON.parse(saved)
 });
 
-
+watch(isSidebarOpen, (val) => {
+  localStorage.setItem('isSidebarOpen', JSON.stringify(val))
+})
 
 const sidebarComponent = computed(() => {
   switch (role.value) {

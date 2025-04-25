@@ -11,19 +11,19 @@ import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-import PermissionSetting from '../pages/Staff/PermissionSetting.vue';
-import StaffSearch from '../pages/Staff/StaffSearch.vue';
-import StaffDetail from '../pages/Staff/StaffDetail.vue';
+import PermissionSetting from '../pages/staff/PermissionSetting.vue';
+import StaffSearch from '../pages/Staff/staffSearch.vue';
+import StaffDetail from '../pages/Staff/staffDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 // 활동
-import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
-import ActivityList from '../pages/esg/ActivityList.vue'
-import CampaignList from '../pages/esg/CampaignEventList.vue';
-import CampaignMemberAdd from '../pages/esg/CampaignMemberAdd.vue';
+import AllActivityDetails from '../pages/ESG/AllActivityDetails.vue'
+import ActivityList from '../pages/ESG/ActivityList.vue'
+import CampaignList from '../pages/ESG/CampaignEventList.vue';
+import CampaignMemberAdd from '../pages/ESG/CampaignMemberAdd.vue';
 
 // 교육
-import EducationList from '../pages/esg/EducationList.vue'
+import EducationList from '../pages/ESG/EducationList.vue'
 
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'

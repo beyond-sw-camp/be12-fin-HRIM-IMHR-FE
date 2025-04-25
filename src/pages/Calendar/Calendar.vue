@@ -72,8 +72,6 @@ function openAddEvent(date = null) {
     selectedDate.value = date;
   } 
   showAddModal.value = true;
-
-  console.log("openAddEvent - 최종 selectedDate:", selectedDate.value);
 }
 
 async function deleteEvent(event) {

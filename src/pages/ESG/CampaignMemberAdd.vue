@@ -50,7 +50,7 @@ const handleSubmit = async () => {
 
   if (participatedMembers.value.length > 0) {
     // 기존 참여자가 있다면 수정 API 호출
-    const result = await campaign.campaignMemberupdate(
+    await campaign.campaignMemberupdate(
       formData.eventIdx,
       formData
     );
@@ -58,7 +58,7 @@ const handleSubmit = async () => {
     window.location.reload();
   } else {
     // 없다면 추가 API 호출
-    const result = await campaign.register(formData);
+    await campaign.register(formData);
     alert("사원이 성공적으로 추가되었습니다.");
   }
 
@@ -78,7 +78,7 @@ const nonParticipatedUsers = computed(() => {
   return users.value
     .filter((u) => !participatedIds.has(u.idx))
     .filter((u) => u.name.includes(searchText.value))
-    .filter((u) => u.department.name)
+    .filter((u) => u.department && u.department.name);
 });
 
 //

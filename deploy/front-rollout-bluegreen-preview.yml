@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: front-rollout-bluegreen-preview
+spec:
+  type: LoadBalancer
+  selector:
+    app: front-bluegreen
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30083
+    - protocol: TCP
+      name: https
+      port: 443
+      targetPort: 443
+      nodePort: 30084  

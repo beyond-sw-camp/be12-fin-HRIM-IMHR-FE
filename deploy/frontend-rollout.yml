@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: frontend-rollout
+spec:
+  replicas: 2
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: front-bluegreen
+  template:
+    metadata:
+      labels:
+        app: front-bluegreen
+    spec:
+      containers:
+        - name: imhr-front
+          image: imhrkr/imhr-frontend:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            # - name: nginx-vol
+            #   mountPath: /usr/share/nginx/html
+            - name: config
+              mountPath: /etc/nginx/conf.d/
+      volumes:
+        # - name: nginx-vol
+        #   persistentVolumeClaim:
+        #     claimName: nginx-pvc
+        - name: config
+          configMap:
+            name: nginx-config
+
+  strategy:
+    blueGreen:
+      #activeService는 현재 운영중인 Blue 서비스
+      activeService: front-rollout-bluegreen-active
+
+      #previewService는 새롭게 배포될 Green 서비스
+      previewService: front-rollout-bluegreen-preview

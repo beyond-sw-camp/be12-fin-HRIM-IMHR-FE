@@ -55,6 +55,7 @@ const handleSubmit = async () => {
       formData
     );
     alert("사원 정보가 성공적으로 수정되었습니다.");
+    window.location.reload();
   } else {
     // 없다면 추가 API 호출
     const result = await campaign.register(formData);
@@ -77,7 +78,7 @@ const nonParticipatedUsers = computed(() => {
   return users.value
     .filter((u) => !participatedIds.has(u.idx))
     .filter((u) => u.name.includes(searchText.value))
-    .filter((u) => u.department.name);
+    .filter((u) => u.department.name)
 });
 
 //

@@ -12,6 +12,12 @@ export const useScoreStore = defineStore('score', {
                 const response = await axios.post(`/api/score/dashboard/${idx}`);
                 
                 return response.data.data;
+            },  
+
+            async eScore(idx) {
+                const response = await axios.post(`/api/score/eScore/${idx}`);
+                
+                return response.data.data;
             },    
         },
 })

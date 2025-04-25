@@ -21,6 +21,25 @@ const role = ref(
   JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
 );
 
+import { onMounted } from "vue";
+import { useMemberStore } from "./stores/useMemberStore";
+
+onMounted(async () => {
+  const memberStore = useMemberStore();
+  const response = await memberStore.fetchMember();
+  const memberInfo = response.data;
+  
+  if (memberInfo?.isAdmin) {
+    localStorage.setItem("userInfo", JSON.stringify({ role: "manager" }));
+    role.value = "manager";
+  } else {
+    localStorage.setItem("userInfo", JSON.stringify({ role: "executive" }));
+    role.value = "executive"; 
+  }
+});
+
+
+
 const sidebarComponent = computed(() => {
   switch (role.value) {
     case "manager":

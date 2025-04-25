@@ -39,7 +39,7 @@ import Calendar from '../pages/Calendar/Calendar.vue';
 
 // 대시보드 & 파트너
 import DashboardView from '../pages/dashboard/CompanyDashboard.vue';
-import PartnerDashboard from '../pages/dashboard/DepartmentDashboard.vue';
+import PartnerDashboard from '../pages/dashboard/partnerDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 피드백
@@ -48,20 +48,23 @@ import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
 // 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
-
+// import { useRoute } from "vue-router";
+// const route = useRoute();
+// const idx = route.params.idx;
 const routes = [
-  {
-    path: '/',
-    name: 'homeRedirect',
-    beforeEnter: (to, from, next) => {
-      const companyId = 1;
-      if (companyId) {
-        next(`/partner/${companyId}`);
-      } else {
-        next(`/partner/${companyId}`); // 또는 next('/login')
-      }
-    }
-  },
+  // {
+  //   path: '/',
+  //   name: 'homeRedirect',
+  //   beforeEnter: (to, from, next) => {
+  //     const companyId = idx;
+  //     console.log(idx)
+  //     if (companyId) {
+  //       next(`/partner/${companyId}`);
+  //     } else {
+  //       next(`/partner/${companyId}`); // 또는 next('/login')
+  //     }
+  //   }
+  // },
   {
     path: '/dashboard/1',
     name: 'dashboard',

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import {
   ChevronDown,
   ChevronUp,
@@ -52,15 +52,22 @@ function changeMonth(diff) {
 }
 
 async function fetchData() {
-  const companyScoreData = await companyStore.companyScore(
-    year.value,
-    month.value
-  );
-
+  const companyScoreData = await companyStore.companyScore(year.value, month.value);
   memberscores.value = companyScoreData.memberScores;
   departmentList.value = companyScoreData.departments;
   companyName.value = companyScoreData.companyName;
 
+  // 현재 부서명에 해당하는 idx 찾기
+  const matchedDept = departmentList.value.find(
+    (dept) => dept.name === route.params.departmentName
+  );
+  if (matchedDept) {
+    departmentStore.departmentIdx = matchedDept.idx;
+  } else {
+    departmentStore.departmentIdx = null;
+  }
+
+  // departmentIdx가 있으면 파라미터에 포함
   const params = {
     year: year.value,
     month: month.value,
@@ -68,7 +75,6 @@ async function fetchData() {
       departmentIdx: departmentStore.departmentIdx,
     }),
   };
-
   const departmentMonthData = await departmentStore.departmentmonth(params);
   departmentScoreData.value = departmentMonthData;
 }
@@ -151,6 +157,24 @@ function prevPage() {
 function nextPage() {
   if (currentPage.value < totalPages.value) currentPage.value++;
 }
+
+watch(
+  () => [route.params.departmentName, route.params.yearMonth],
+  ([newDept, newYearMonth], [oldDept, oldYearMonth]) => {
+    // 파라미터가 바뀌면 데이터 다시 불러오기
+    if (newDept !== oldDept || newYearMonth !== oldYearMonth) {
+      // year, month 값을 파싱해서 세팅
+      if (newYearMonth) {
+        const [y, m] = newYearMonth.split("-").map(Number);
+        year.value = y;
+        month.value = m;
+      }
+      // 부서명도 세팅
+      fetchData();
+    }
+  }
+);
+
 
 onMounted(() => {
   fetchData().then(() => {

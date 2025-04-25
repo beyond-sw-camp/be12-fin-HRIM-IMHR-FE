@@ -4,6 +4,7 @@ import axios from 'axios';
 export const useDepartmentStore = defineStore('department', {
     state: () => (
         {
+            departmentIdx: null,
             departmentlist:[],
             departmentmonths: [],
         }),

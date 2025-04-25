@@ -38,8 +38,13 @@ import ProductRegistView from '../pages/product/ProductRegist.vue'
 import Calendar from '../pages/Calendar/Calendar.vue';
 
 // 대시보드 & 파트너
+<<<<<<< Updated upstream
 import DashboardView from '../pages/dashboard/Dashboard.vue';
 import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
+=======
+import PartnerDashboard from '../pages/dashboard/partnerDashboard.vue';
+import DepartmentDashboard from '../pages/dashboard/DepartmentDashboard.vue';
+>>>>>>> Stashed changes
 import PartnerListView from '../pages/partner/partnerList.vue';
 
 // 피드백
@@ -48,6 +53,8 @@ import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
 // 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
+
+
 
 const routes = [
   {
@@ -63,9 +70,22 @@ const routes = [
     }
   },
   {
-    path: '/dashboard/1',
-    name: 'dashboard',
-    component: DashboardView
+    path: '/departmentdashboard',
+    name: 'dashboard-no-department',
+    component: DepartmentDashboard,
+    props: route => ({
+      departmentName: null,
+      yearMonth: null,
+    })
+  },
+  {
+    path: '/departmentdashboard/:departmentName/:yearMonth',
+    name: 'dashboard-with-department',
+    component: DepartmentDashboard,
+    props: route => ({
+      departmentName: route.params.departmentName,
+      yearMonth: route.params.yearMonth,
+    })
   },
 
   // 로그인 & 인증

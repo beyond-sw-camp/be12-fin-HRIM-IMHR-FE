@@ -1,7 +1,6 @@
 <script setup>
 import { useMemberStore } from '../../../stores/useMemberStore'
 
-
 const memberStore = useMemberStore()
 
 const props = defineProps({
@@ -10,7 +9,7 @@ const props = defineProps({
 
 const menuItems = [
   { path: `/partner/${memberStore.myCompanyIdx}`, label: "기업 ESG 현황" },
-  { path: "/dashboard/1", label: "부서 ESG 현황" },
+  { path: `/departmentdashboard`, label: "부서 ESG 현황" },
   { path: "/educationList/1", label: "ESG 교육 활동" },
   { path: "/activityList", label: "ESG 기타 활동" },
   { path: "/campaignlist", label: "ESG 사내 캠페인 활동" },

@@ -35,6 +35,7 @@ const saveForm = async () => {
 onMounted(async () => { 
   const response = await departmentStore.fetchDepartments();
   departments.value = response.data.data.departments;
+  ;
 })
 </script>
 

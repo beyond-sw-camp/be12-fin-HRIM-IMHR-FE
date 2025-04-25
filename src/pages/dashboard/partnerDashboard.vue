@@ -1,5 +1,4 @@
 <script setup>
-document.body.style.overflow = 'hidden';
 import { useRoute } from "vue-router";
 import { onMounted, ref,computed } from 'vue'
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
@@ -30,7 +29,7 @@ onMounted(async () => {
   const response = await score.dashboard(idx);
 
   company.value = response.companyName;
-  response.chageScoreRsp.forEach(item => {
+  response.chageScoreRsp.array.forEach(item => {
     yearList.value.push(item.year);
     scoreList.value.push(item.score);
     environmentList.value.push(item.environmentScore);

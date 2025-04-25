@@ -46,6 +46,8 @@ export const useMemberStore = defineStore('member', {
         },
         async myPageInfo() {
             const response = await axios.post("/api/member/myinfo");
+            this.myCompanyName = response.company;
+
             return response;
         },
         async myActivity() {
@@ -98,8 +100,5 @@ export const useMemberStore = defineStore('member', {
             
             return response.data.data;
         },
-
-
-        
     }
 })

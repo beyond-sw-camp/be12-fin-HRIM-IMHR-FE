@@ -1,5 +1,4 @@
 <script setup>
-document.body.style.overflow = 'hidden';
 import { useRoute } from "vue-router";
 import { onMounted, ref,onUnmounted } from 'vue'
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";

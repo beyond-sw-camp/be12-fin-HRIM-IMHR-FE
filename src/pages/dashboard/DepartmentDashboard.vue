@@ -77,12 +77,12 @@ async function fetchData() {
   };
   const departmentMonthData = await departmentStore.departmentmonth(params);
   departmentScoreData.value = departmentMonthData;
+  console.log(departmentScoreData.value.departmentTotalScore);
 }
 
 const totalData = computed(() => {
-  if (!departmentScoreData.value) return [];
-
-  departmentScoreData.value.departmentTotalScore.toFixd;
+  if (!departmentScoreData.value) return "";
+  return departmentScoreData.value.departmentTotalScore ?? "";
 });
 
 const esgData = computed(() => {
@@ -145,10 +145,10 @@ const totalPages = computed(() =>
   Math.ceil(departmentList.length / itemsPerPage)
 );
 
-const paginatedDepartments = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  return departmentList.slice(start, start + itemsPerPage);
-});
+// const paginatedDepartments = computed(() => {
+//   const start = (currentPage.value - 1) * itemsPerPage;
+//   return departmentList.slice(start, start + itemsPerPage);
+// });
 
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
@@ -380,7 +380,7 @@ const evalTable = [
       >
         <div>
           <div class="flex items-center justify-between mb-4">
-            <h3 class="font-bold text-lg">전체 참여율</h3>
+            <h3 class="font-bold text-lg">부서 ESG 평균 점수</h3>
           
           </div>
 
@@ -393,8 +393,9 @@ const evalTable = [
               <div
                 class="absolute inset-0 flex items-end justify-center pb-10 text-lg font-semibold text-green-600"
               >
-                {{ totalData }}
+              점수 : {{ totalData }}
               </div>
+              
             </div>
             <div class="w-full h-40">
               <canvas id="barChart"></canvas>

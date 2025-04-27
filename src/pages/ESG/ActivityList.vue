@@ -1,3 +1,132 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { Search } from "lucide-vue-next";
+import { useActivityStore } from '../../stores/useActivityStore';
+import { useStompStore } from '../../stores/useStompStore';
+import { useMemberStore } from '../../stores/useMemberStore';
+import { useRouter } from 'vue-router'
+
+const activitySore = useActivityStore()
+const stomp = useStompStore();
+const memberStore = useMemberStore();
+const search = ref('')
+const currentPage = ref(1)
+const perPage = 5
+const listDeleteBTN = ref(false);
+const totalPages = ref(0);
+const router = useRouter()
+
+
+const pagedActivities = computed(() => {
+  const start = (currentPage.value - 1) * perPage
+  return filteredActivities.value.slice(start, start + perPage)
+})
+
+const goToPage = async(page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+    router.push({
+      path: '/activityList',
+      query: {
+        page: page
+      }
+    })
+    await activitySore.list(page-1);
+  }
+}
+
+const newActivity = ref({ topic: '', file: null })
+
+// 리스트 관련
+onMounted(async () => {
+  totalPages.value =await activitySore.list((currentPage.value - 1));
+})
+
+
+// 이미지 관련
+const previewImage = ref(null);
+const file = ref(null);
+const fileInput = ref(null);
+const formRef = ref(null)
+
+const handleFileUpload = (event) => {
+  file.value = event.target.files[0];
+  if (file.value) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImage.value = e.target.result;
+    };
+    reader.readAsDataURL(file.value);
+  }
+}
+
+// 프리뷰 제거
+const previewImageClose = () => {
+  console.log(file.value);
+  previewImage.value = null;
+  file.value = null;
+  if (fileInput.value) {
+    fileInput.value.value = null;
+  }
+}
+
+// form 데이터 전송
+const submit = async () => {
+  let formData = new FormData(formRef.value);
+
+
+
+  if (!formData.get('title')) {
+    alert("제목을 입력하여 주십시오.")
+  }
+  else if (!newActivity.value.topic) {
+    alert("주제를 선택하여 주십시오.")
+  }
+  else if (!formData.get("performance")) {
+    alert("활동 시간이나 금액을 입력하여 주십시오.")
+  } else if (file.value === null) {
+    alert("파일을 첨부하여 주십시오.")
+  } else if (!formData.get('description')) {
+    alert("내용을 입력하여 주십시오.")
+  } else {
+    const dto = {
+      type: newActivity.value.topic,
+      title: formData.get("title"),
+      description: formData.get("description"),
+      performance: formData.get('performance')
+    };
+
+    // formData=null;
+    formData = new FormData();
+    formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
+
+    formData.append("file", file.value);
+
+    try {
+      const response = await activitySore.regist(formData);
+
+      stomp.activityApproveReq("활동 승인 요청", "[" + response.title + "] 승인 요청이 왔습니다.", memberStore.myCompanyIdx, response.idx);
+      window.location.reload();
+    } catch (error) {
+      alert("활동 추가 실패 \n 관리자에게 문의 하시오.");
+    }
+  }
+}
+
+
+const activityDelete = async (activicyIdx) => {
+  const isSuccess = await activitySore.delete(activicyIdx);
+  if (isSuccess === true) {
+    window.location.reload();
+  } else {
+    alert("삭제 실패");
+  }
+};
+
+
+const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
+// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
+</script>
 <template>
   <div class="min-h-screen bg-gray-50 p-10">
     <!-- 제목 -->
@@ -49,7 +178,7 @@
 
 
 
-            <td v-if="memberStore.myIdx===activity.memberIdx">
+            <td v-if="memberStore.myIdx === activity.memberIdx">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
                 @click.stop="activityDelete(activity.activityIdx)">
                 삭제
@@ -136,147 +265,3 @@
 
   </div>
 </template>
-
-<script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Search } from "lucide-vue-next";
-import { useActivityStore } from '../../stores/useActivityStore';
-import { useStompStore } from '../../stores/useStompStore';
-import { useMemberStore } from '../../stores/useMemberStore';
-
-const activitySore = useActivityStore()
-const stomp = useStompStore();
-const memberStore = useMemberStore();
-const search = ref('')
-const currentPage = ref(1)
-const perPage = 5
-const listDeleteBTN=ref(false);
-
-// const activities = 
-// ref([
-// { status: '대기 중', topic: '봉사', content: '지역 봉사 활동', userId: 'user123' },
-//   { status: '대기 중', topic: '기부', content: '재난기부', userId: 'user456' },
-//   { status: '승인 반려', topic: '봉사', content: '캄보디아 봉사', userId: 'user789' },
-//   { status: '승인', topic: '봉사', content: '민관 협력 국가재난 지원 봉사', userId: 'admin01' },
-//   { status: '승인', topic: '기부', content: '정기 기부', userId: 'donor77' },
-//   { status: '승인', topic: '기부', content: '일시 기부', userId: 'guest32' }
-// ])
-
-const totalPages = computed(() =>
-  Math.ceil(activitySore.activityList.length / perPage)
-)
-
-// const filteredActivities = computed(() => {
-//   return activities.value.filter(
-//     a =>
-//       a.content.includes(search.value) ||
-//       a.topic.includes(search.value) ||
-//       a.status.includes(search.value)
-//   )
-// })
-
-const pagedActivities = computed(() => {
-  const start = (currentPage.value - 1) * perPage
-  return filteredActivities.value.slice(start, start + perPage)
-})
-
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) currentPage.value = page
-}
-
-const newActivity = ref({ topic: '', file: null })
-
-// 리스트 관련
-onMounted(async () => {
-  await activitySore.list((currentPage.value - 1), perPage);
-  // 여기에 후속 처리 코드도 작성 가능
-})
-
-
-// 이미지 관련
-// const handleFileUpload = (e) => {
-//   newActivity.value.file = e.target.files[0]
-// }
-const previewImage = ref(null);
-const file = ref(null);
-const fileInput = ref(null);
-const formRef = ref(null)
-
-const handleFileUpload = (event) => {
-  file.value = event.target.files[0];
-  if (file.value) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      previewImage.value = e.target.result;
-    };
-    reader.readAsDataURL(file.value);
-  }
-}
-
-// 프리뷰 제거
-const previewImageClose = () => {
-  console.log(file.value);
-  previewImage.value = null;
-  file.value = null;
-  if (fileInput.value) {
-    fileInput.value.value = null;
-  }
-}
-
-// form 데이터 전송
-const submit = async () => {
-  let formData = new FormData(formRef.value);
-
-
-
-  if (!formData.get('title')) {
-    alert("제목을 입력하여 주십시오.")
-  }
-  else if (!newActivity.value.topic) {
-    alert("주제를 선택하여 주십시오.")
-  }
-  else if (!formData.get("performance")) {
-    alert("활동 시간이나 금액을 입력하여 주십시오.")
-  } else if (file.value === null) {
-    alert("파일을 첨부하여 주십시오.")
-  } else if (!formData.get('description')) {
-    alert("내용을 입력하여 주십시오.")
-  } else {
-    const dto = {
-      type: newActivity.value.topic,
-      title: formData.get("title"),
-      description: formData.get("description"),
-      performance: formData.get('performance')
-    };
-
-    // formData=null;
-    formData = new FormData();
-    formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
-
-    formData.append("file", file.value);
-
-    try {
-      const response = await activitySore.regist(formData);
-
-      stomp.activityApproveReq("활동 승인 요청","["+response.title+"] 승인 요청이 왔습니다.",memberStore.myCompanyIdx,response.idx);
-      window.location.reload();
-    } catch (error) {
-      alert("활동 추가 실패 \n 관리자에게 문의 하시오.");
-    }
-  }
-}
-
-
-const activityDelete=async (activicyIdx)=>{
-  const isSuccess=await activitySore.delete(activicyIdx);
-  if(isSuccess===true){
-    window.location.reload();
-  }else{
-    alert("삭제 실패");
-  }
-};
-
-
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
-</script>

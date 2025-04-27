@@ -22,7 +22,6 @@ export const useStompStore = defineStore('stomp', {
         reconnectDelay: 5000,
         onConnect: () => {
           this.connected = true;
-          console.log('🔌 STOMP 연결됨');
 
           let webSocketIdx = 0;
           if (member) webSocketIdx = member.idx;

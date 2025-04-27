@@ -86,11 +86,6 @@ const handleSubmit = async () => {
   }
 };
 
-// const goToPage = async (page) => {
-//   if (page >= 1 && page <= totalPages.value) {
-//     currentPage.value = page
-//   }
-// }
 </script>
 
 <template>

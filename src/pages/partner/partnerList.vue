@@ -114,7 +114,7 @@ const userRole = ref(
           <tr>
             <th class="p-3 border" rowspan="2">회사명</th>
             <th class="p-3 border" colspan="4">KCGS</th>
-            <th class="p-3 border">IMHR</th>
+            <!-- <th class="p-3 border">IMHR</th> -->
             <th class="p-3 border" rowspan="2" v-if="userRole === 'manager'">
               삭제
             </th>
@@ -124,7 +124,7 @@ const userRole = ref(
             <th class="p-2 border">환경</th>
             <th class="p-2 border">사회</th>
             <th class="p-2 border">지배구조</th>
-            <th class="p-2 border">총점</th>
+            <!-- <th class="p-2 border">총점</th> -->
           </tr>
         </thead>
         <tbody v-if="partnerStore.partners.length > 0">
@@ -139,11 +139,11 @@ const userRole = ref(
               </router-link>
             </td>
 
-            <td class="p-2">{{ partner.totalGrade }}</td>
-            <td class="p-2">{{ partner.environment }}</td>
-            <td class="p-2">{{ partner.social }}</td>
-            <td class="p-2">{{ partner.governance }}</td>
-            <td class="p-2">{{ partner.score }}</td>
+            <td class="p-2">{{ partner.totalScore }}</td>
+            <td class="p-2">{{ partner.environmentScore }}</td>
+            <td class="p-2">{{ partner.socialScore }}</td>
+            <td class="p-2">{{ partner.governanceScore }}</td>
+            <!-- <td class="p-2">{{ partner.score }}</td> -->
 
             <td class="p-2" v-if="userRole === 'manager'">
               <button

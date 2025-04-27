@@ -15,7 +15,7 @@ const submit = async () => {
   console.log('입력된 정보:', form.value)
   const response = await memberStore.findId(form.value)
   if(response.data.isSuccess)
-    alert('이메일 전송 완료!')
+    alert('이메일 전송 완료! 이메일을 받지 못했다면 이름과 이메일을 확인해주세요.')
 }
 </script>
 

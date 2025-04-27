@@ -26,14 +26,24 @@ const submit = async () => {
     return
   }
   console.log('임직원 회원가입:', form.value)
-  const response = await memberStore.personalSignup(form.value);
-  console.log(response);
-  if(response.data.isSuccess){
-    console.log("test")
-    stomp.test()
-    alert('회원가입이 완료되었습니다!');
-    stomp.signupApprove("회원가입 요청","회원가입 요청이 있습니다.",response.data.data.companyCode);
-    router.push("/login");
+  try {
+    const response = await memberStore.personalSignup(form.value);
+    console.log(response);
+    if(response.data.isSuccess){
+      console.log("test")
+      stomp.test()
+      alert('회원가입이 완료되었습니다!');
+      stomp.signupApprove("회원가입 요청","회원가입 요청이 있습니다.",response.data.data.companyCode);
+      router.push("/login");
+    } else {
+      alert(response.data.message);
+    }
+  } catch (error) {
+    if (error.response.data.message === undefined) {
+      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+    } else {
+      alert(error.response.data.data);
+    }
   }
 }
 </script>

@@ -50,11 +50,22 @@ const submit = async () => {
     formData.append("file", file.value);
   }
   console.log(formData);
-  const response = await memberStore.companySignup(formData);
-  console.log(response);
-  if (response.data.isSuccess) {
-    alert("회원가입이 완료되었습니다!");
-    router.push("/login");
+  try {
+    const response = await memberStore.companySignup(formData);
+    console.log(response);
+    if (response.data.isSuccess) {
+      alert("회원가입이 완료되었습니다!");
+      router.push("/login");
+    } else {
+      alert(response.data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    if (error.response.data.message === undefined) {
+      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+    } else {
+      alert(error.response.data.data);
+    }
   }
 };
 </script>

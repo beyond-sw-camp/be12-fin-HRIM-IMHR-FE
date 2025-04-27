@@ -31,7 +31,6 @@ const me = ref({});
 onMounted(async () => {
   try {
     me.value = await memberStore.fetchMember();
-    console.log("memberStore.userInfo", memberStore.userInfo)
   } catch (error) {
     router.push('/login')
   }

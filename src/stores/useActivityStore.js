@@ -18,8 +18,10 @@ export const useActivityStore = defineStore('activity', {
         },
 
         async list(page, size) {
-            const response = await axios("/api/activity/activityList?page=" + page + "&size=" + size);
-            this.activityList = response.data.data;
+            const response = await axios("/api/activity/activityList?page=" + page);
+            
+            this.activityList = response.data.data.activityList;
+            return response.data.data.total;
         },
 
         async detail(idx) {

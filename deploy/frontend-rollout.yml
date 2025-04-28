@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: imhr-front
-          image: imhrkr/imhr-frontend:1.23
+          image: imhrkr/imhr-frontend:1.24
           imagePullPolicy: Always
           ports:
             - containerPort: 80

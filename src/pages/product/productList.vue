@@ -3,10 +3,10 @@
 
 
     <!-- 환경 점수 변화 차트 -->
-    <!-- <div
+    <div
       class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center transition hover:scale-105 hover:shadow-lg">
       <canvas ref="chartRef" class="w-full h-40"></canvas>
-    </div> -->
+    </div>
 
     <!-- 기준 대비 카드 -->
     <div class="bg-green-100 rounded-2xl shadow-md p-8 text-center transition hover:scale-105 hover:shadow-lg">
@@ -70,7 +70,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Search, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import Chart from 'chart.js/auto'
-import { useProductStore, calculateScore } from '../../stores/useProductStore'
+import { useProductStore, calculateScore, shortenProductName } from '../../stores/useProductStore'
 import { useScoreStore } from '../../stores/useScoreStore'
 
 const chartRef = ref(null)
@@ -82,6 +82,7 @@ const companyIdx = route.params.idx
 const userRole = 'manager' // 실제 상황에 맞게 변경 필요
 const scoreStore=useScoreStore();
 const eScore=ref(null);
+const labels = store.productList.map(p => shortenProductName(p.productName))
 onMounted(async () => {
   eScore.value = await scoreStore.eScore(companyIdx);
   if (!companyIdx) {
@@ -91,7 +92,7 @@ onMounted(async () => {
 
   await store.listByCompany(companyIdx)
 
-  const labels = store.productList.map(p => p.productName)
+  const labels = store.productList.map(p => shortenProductName(p.productName))
   const scores = store.productList.map(p => {
     const score = calculateScore(p)
     console.log(`📊 ${p.productName} 점수:`, score)

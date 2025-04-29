@@ -32,6 +32,8 @@ const companyName = ref("");
 const departmentList = ref([]);
 const memberscores = ref([]);
 const departmentIdx = ref(null);
+const departmentName = ref("");
+const totalScore = ref(null);
 
 function changeMonth(diff) {
   // diff: -1(이전 달), +1(다음 달)
@@ -80,7 +82,9 @@ async function fetchData() {
   };
   const departmentMonthData = await departmentStore.departmentmonth(params);
   departmentScoreData.value = departmentMonthData;
-  console.log(departmentScoreData.value.departmentTotalScore);
+  departmentName.value = departmentScoreData.value.departmentName;
+  totalScore.value = departmentScoreData.value.departmentTotalScore;
+  console.log(totalScore.value);
 }
 
 const totalData = computed(() => {
@@ -192,7 +196,7 @@ onMounted(() => {
 
     const gaugeCtx = document.getElementById("gaugeChart");
     if (gaugeCtx) {
-      createGaugeChart(gaugeCtx, 74.6, "#86EFAC"); // 전체 참여율
+      createGaugeChart(gaugeCtx, totalScore.value, "#86EFAC"); // 전체 참여율
     }
 
     const barCtx = document.getElementById("barChart");
@@ -339,8 +343,7 @@ const evalTable = [
 <template>
   <div class="bg-gray-50 p-6 font-sans max-w-6xl mx-auto">
     <h1 class="text-3xl font-bold mb-6">
-      {{ companyName }} ESG
-
+      {{ companyName }}의 "{{ departmentName }}" ESG
       <span
         class="items-center space-x-4 time-center text-gray-500 font-semibold"
       >
@@ -361,43 +364,6 @@ const evalTable = [
       </span>
     </h1>
 
-    <!-- ESG 요약 -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
-      <div
-        v-for="(item, index) in esgData"
-        :key="index"
-        class="bg-white p-4 rounded-xl shadow h-40 flex items-center justify-center relative"
-      >
-        <canvas :id="`chart${item.label}`" class="w-24 h-24"></canvas>
-        <div
-          class="flex absolute bottom-2 text-center text-xl font-semibold"
-          :style="{ color: item.color }"
-        >
-          {{ item.label }} :
-          <div class="text-gray-300 ml-2">{{ item.value }}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 이달의 사원 -->
-    <div class="bg-white shadow p-4 rounded mb-6 mt-6">
-      <h2 class="text-lg font-semibold mb-4">이달의 사원</h2>
-      <div class="flex justify-between text-center">
-        <div
-          v-for="(member, idx) in memberscores"
-          :key="idx"
-          style="display: flex; gap: 10px"
-        >
-          <span class="text-xl"> {{ idx + 1 }}위 </span>
-
-          <span class="mt-0.5"
-            >"{{ member.memberName }}"의 ESG 평균 점수 :
-            {{ member.averageScore }}
-          </span>
-        </div>
-      </div>
-    </div>
-
     <div class="flex gap-4 max-w-6xl mx-auto w-full items-stretch">
       <!-- 왼쪽: 부서 리스트 -->
       <div
@@ -409,7 +375,7 @@ const evalTable = [
             class="divide-y divide-gray-200 border rounded-md overflow-hidden"
           >
             <li
-              v-for="(dept, idx) in departmentList"
+              v-for="(dept, idx) in paginatedDepartments"
               :key="idx"
               class="px-3 py-2 hover:bg-gray-50 flex items-center gap-2"
             >
@@ -499,6 +465,46 @@ const evalTable = [
         </div>
       </div>
     </div>
+
+    <!-- 이달의 사원 -->
+    <div class="bg-white shadow p-4 rounded mb-6 mt-6">
+      <h2 class="text-lg font-semibold mb-4">이달의 사원</h2>
+      <div class="flex justify-between text-center">
+        <div
+          v-for="(member, idx) in memberscores"
+          :key="idx"
+          style="display: flex; gap: 10px"
+        >
+          <span class="text-xl"> {{ idx + 1 }}위 </span>
+
+          <span class="mt-0.5"
+            >"{{ member.memberName }}"의 ESG 평균 점수 :
+            {{ member.averageScore }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ESG 요약 -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div
+        v-for="(item, index) in esgData"
+        :key="index"
+        class="bg-white p-4 rounded-xl shadow h-40 flex items-center justify-center relative"
+      >
+        <canvas :id="`chart${item.label}`" class="w-24 h-24"></canvas>
+        <div
+          class="flex absolute bottom-2 text-center text-xl font-semibold"
+          :style="{ color: item.color }"
+        >
+          {{ item.label }} :
+          <div class="text-gray-300 ml-2">{{ item.value }}</div>
+        </div>
+      </div>
+    </div>
+    
 
     <div class="mt-10">
       <button

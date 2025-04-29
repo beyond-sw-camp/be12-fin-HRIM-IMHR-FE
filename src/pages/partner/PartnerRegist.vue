@@ -27,7 +27,7 @@ const filteredCompanys = computed(() =>
 );
 
 const onSearch = async () => {
-  currentPage.value = 0;
+  currentPage.value = 1;
   await fetchCompanies();
 };
 
@@ -116,18 +116,13 @@ const handleSubmit = async () => {
             <td class="border p-2">
               <input type="checkbox" v-model="selected" :value="company" />
             </td>
-            <td class="border p-2">{{ currentPage * 5 + idx + 1 }}</td>
+            <td class="border p-2">{{ (currentPage - 1)  * 5 + idx + 1 }}</td>
             <td class="border p-2">{{ company.name }}</td>
           </tr>
         </tbody>
       </table>
 
       <div class="flex justify-center mt-8 space-x-2 text-sm mb-2">
-        <!-- 첫 페이지(≪) 버튼 -->
-        <button @click="goToPage(1)" :disabled="currentPage === 1"
-          class="w-10 h-10 flex items-center justify-center rounded-full border disabled:opacity-40 hover:bg-slate-100">
-          ≪
-        </button>
 
         <!-- 이전(←) 버튼 -->
         <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
@@ -151,11 +146,6 @@ const handleSubmit = async () => {
           →
         </button>
 
-        <!-- 마지막 페이지(≫) 버튼 -->
-        <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages"
-          class="w-10 h-10 flex items-center justify-center rounded-full border disabled:opacity-40 hover:bg-slate-100">
-          ≫
-        </button>
       </div>
 
       <!-- 버튼 -->

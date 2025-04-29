@@ -1,0 +1,21 @@
+import { defineStore } from 'pinia';
+import axios from 'axios';
+
+export const useEducationStore = defineStore('education', {
+    state: () => (
+        {
+            activityList: [],
+        }),
+
+    actions: {
+        async regist(formData) {
+            const response = await axios.post("/api/education/regist", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            return response.data.data;
+        }
+    }
+
+})

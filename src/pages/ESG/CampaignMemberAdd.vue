@@ -284,7 +284,7 @@ onMounted(async () => {
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
         @click="handleSubmit"
       >
-        {{ participatedMembers.length > 0 ? "수정" : "추가" }}
+        저장
       </button>
 
       <button

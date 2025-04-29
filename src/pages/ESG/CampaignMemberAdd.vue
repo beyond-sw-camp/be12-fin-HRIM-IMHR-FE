@@ -43,6 +43,11 @@ const selectedUserIdxs = ref([]);
 
 // 추가 버튼 눌렀을 때
 const handleSubmit = async () => {
+  if (selectedUserIdxs.value.length === 0 ) {
+    alert("선택된 사원이  없습니다. 이대로 저장하시겠습니까?");
+    return;
+  }
+
   const formData = {
     eventIdx: Idx,
     memberIdxList: selectedUserIdxs.value,
@@ -67,7 +72,7 @@ const handleSubmit = async () => {
     title.value,
     formData
   );
-  // router.back();
+  router.back();
 };
 
 // 참여자 분리

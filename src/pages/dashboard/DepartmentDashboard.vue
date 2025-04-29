@@ -85,7 +85,8 @@ async function fetchData() {
 
 const totalData = computed(() => {
   if (!departmentScoreData.value) return "";
-  return departmentScoreData.value.departmentTotalScore ?? "";
+  const score = departmentScoreData.value.departmentTotalScore ?? "";
+  return typeof score === "number" ? score.toFixed(1) : score;
 });
 
 const esgData = computed(() => {

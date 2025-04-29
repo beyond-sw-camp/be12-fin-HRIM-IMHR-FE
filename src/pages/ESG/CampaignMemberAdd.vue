@@ -43,6 +43,11 @@ const selectedUserIdxs = ref([]);
 
 // 추가 버튼 눌렀을 때
 const handleSubmit = async () => {
+  if (selectedUserIdxs.value.length === 0 ) {
+    alert("선택된 사원이  없습니다. 이대로 저장하시겠습니까?");
+    return;
+  }
+
   const formData = {
     eventIdx: Idx,
     memberIdxList: selectedUserIdxs.value,
@@ -74,7 +79,7 @@ const handleSubmit = async () => {
 const participatedMembers = ref([]);
 const nonParticipatedUsers = computed(() => {
   const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
-  // console.log("vue",users.value);
+
   return users.value
     .filter((u) => !participatedIds.has(u.idx))
     .filter((u) => u.name.includes(searchText.value))

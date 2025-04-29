@@ -11,12 +11,32 @@ const educationStore = useEducationStore();
 const stomp = useStompStore();
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
 const activitySore = useActivityStore()
+const memberStore = useMemberStore();
+
 const currentPage = ref(1)
 const totalPages = ref(0);
-const memberStore = useMemberStore();
-// manager executive staff `'${{변수명}}'`
 
+const pageRange = computed(() => {
+  const total = totalPages.value;
+  const page = currentPage.value;
+  const groupSize = 5;
+  const groupIndex = Math.floor((page - 1) / groupSize);
+  const start = groupIndex * groupSize + 1;
+  const end = Math.min(start + groupSize - 1, total);
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
 
+const goToPage = async (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    router.push({ path: '/activityList', query: { page } });
+    totalPages.value = await activityStore.list(page - 1);
+  }
+};
 
 // 이미지 관련
 const previewImage = ref(null);
@@ -168,13 +188,29 @@ const filteredActivities = computed(() => {
     </div>
 
     <!-- 📄 페이지네이션 -->
-    <div class="mt-8 flex justify-center space-x-2 text-sm">
-      <button class="bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-900">← 이전</button>
-      <button class="bg-slate-800 text-white px-3 py-1 rounded font-bold">1</button>
-      <button class="bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-900">다음 →</button>
+    <div class="mt-6 flex justify-center space-x-2 text-sm text-slate-600">
+      <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
+        class="px-3 py-1 rounded border disabled:opacity-40 hover:bg-slate-100">
+        ← 이전
+      </button>
+
+      <!--  전체 totalPages가 아니라 pageRange만 렌더링 -->
+      <button v-for="page in pageRange" :key="page" @click="goToPage(page)" :class="[
+        'px-4 py-1 rounded-md border',
+        page === currentPage
+          ? 'bg-slate-800 text-white font-bold'
+          : 'hover:bg-slate-100'
+      ]">
+        {{ page }}
+      </button>
+
+      <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages"
+        class="px-3 py-1 rounded border disabled:opacity-40 hover:bg-slate-100">
+        다음 →
+      </button>
     </div>
 
-    <!-- ➕ 활동 추가 -->
+
     <!-- ➕ 활동 추가 -->
     <form action="/" method="post" @submit.prevent="handleSubmit" ref="formRef"
       class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="userRole !== 'manager'">

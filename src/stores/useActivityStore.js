@@ -21,7 +21,7 @@ export const useActivityStore = defineStore('activity', {
             const response = await axios("/api/activity/activityList?page=" + page);
             
             this.activityList = response.data.data.activityList;
-            console.log(this.activityList)
+            
             return response.data.data.total;
         },
 

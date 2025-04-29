@@ -6,40 +6,44 @@ import { useStompStore } from '../../stores/useStompStore';
 import { useMemberStore } from '../../stores/useMemberStore';
 import { useRouter } from 'vue-router'
 
-const activitySore = useActivityStore()
+const activityStore = useActivityStore()
 const stomp = useStompStore();
 const memberStore = useMemberStore();
-const search = ref('')
-const currentPage = ref(1)
-const perPage = 5
-const listDeleteBTN = ref(false);
-const totalPages = ref(0);
 const router = useRouter()
 
+const search = ref('')
+const currentPage = ref(1)
+const totalPages = ref(0);
 
-const pagedActivities = computed(() => {
-  const start = (currentPage.value - 1) * perPage
-  return filteredActivities.value.slice(start, start + perPage)
-})
+
+// **여기에 추가**: 5개씩 묶어서 보여줄 페이지 번호 범위 계산
+const pageRange = computed(() => {
+  const total = totalPages.value;
+  const page = currentPage.value;
+  const groupSize = 5;
+  const groupIndex = Math.floor((page - 1) / groupSize);
+  const start = groupIndex * groupSize + 1;
+  const end = Math.min(start + groupSize - 1, total);
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
 
 const goToPage = async (page) => {
   if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    router.push({
-      path: '/activityList',
-      query: {
-        page: page
-      }
-    })
-    await activitySore.list(page - 1);
+    currentPage.value = page;
+    router.push({ path: '/activityList', query: { page } });
+    totalPages.value = await activityStore.list(page - 1);
   }
-}
+};
 
 const newActivity = ref({ topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {
-  totalPages.value = await activitySore.list((currentPage.value - 1));
+  totalPages.value = await activityStore.list((currentPage.value - 1));
 })
 
 
@@ -103,7 +107,7 @@ const submit = async () => {
     formData.append("file", file.value);
 
     try {
-      const response = await activitySore.regist(formData);
+      const response = await activityStore.regist(formData);
 
       stomp.activityApproveReq("활동 승인 요청", "[" + response.title + "] 승인 요청이 왔습니다.", memberStore.myCompanyIdx, response.idx);
       window.location.reload();
@@ -115,7 +119,7 @@ const submit = async () => {
 
 
 const activityDelete = async (activicyIdx) => {
-  const isSuccess = await activitySore.delete(activicyIdx);
+  const isSuccess = await activityStore.delete(activicyIdx);
   if (isSuccess === true) {
     window.location.reload();
   } else {
@@ -126,7 +130,7 @@ const activityDelete = async (activicyIdx) => {
 
 
 const filteredActivities = computed(() => {
-  return activitySore.activityList.filter(activity => activity.type !== '교육');
+  return activityStore.activityList.filter(a => a.type !== '교육');
 });
 
 
@@ -199,7 +203,8 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
         ← 이전
       </button>
 
-      <button v-for="page in totalPages" :key="page" @click="goToPage(page)" :class="[
+      <!--  전체 totalPages가 아니라 pageRange만 렌더링 -->
+      <button v-for="page in pageRange" :key="page" @click="goToPage(page)" :class="[
         'px-4 py-1 rounded-md border',
         page === currentPage
           ? 'bg-slate-800 text-white font-bold'

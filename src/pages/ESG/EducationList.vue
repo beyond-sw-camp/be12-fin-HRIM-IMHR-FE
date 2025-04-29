@@ -1,13 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Search } from "lucide-vue-next";
 import { useEducationStore } from '../../stores/useEducationStore';
 import { useStompStore } from '../../stores/useStompStore';
+import { useActivityStore } from '../../stores/useActivityStore';
+import { useMemberStore } from '../../stores/useMemberStore';
 
 const searchQuery = ref('')
-const educationStore= useEducationStore();
+const educationStore = useEducationStore();
 const stomp = useStompStore();
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
+const activitySore = useActivityStore()
+const currentPage = ref(1)
+const totalPages = ref(0);
+const memberStore = useMemberStore();
 // manager executive staff `'${{변수명}}'`
 
 
@@ -44,7 +50,7 @@ const previewImageClose = () => {
 const submit = async () => {
   let formData = new FormData(formRef.value);
 
- 
+
   if (!formData.get('title')) {
     alert("제목을 입력하여 주십시오.")
   }
@@ -90,6 +96,15 @@ const activityDelete = async (activicyIdx) => {
     alert("삭제 실패");
   }
 };
+
+// 리스트 관련
+onMounted(async () => {
+  totalPages.value = await educationStore.list((currentPage.value - 1));
+})
+
+const filteredActivities = computed(() => {
+  return educationStore.activityList;
+});
 </script>
 
 <template>
@@ -122,55 +137,32 @@ const activityDelete = async (activicyIdx) => {
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b hover:bg-slate-50">
-            <td class="p-3">
-              <span class="bg-yellow-500 text-white px-3 py-1 rounded-md">대기 중</span>
+
+          <tr v-for="activity in filteredActivities" :key="activity.activityIdx"
+            @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
+            class="border-b hover:bg-slate-50 transition cursor-pointer">
+            <td class="py-2">
+              <span class="text-white text-xs px-3 py-1 rounded-md inline-block" :class="{
+                'bg-yellow-500': activity.status === '대기 중',
+                'bg-green-500': activity.status === '승인',
+                'bg-red-500': activity.status === '승인 반려'
+              }">
+                {{ activity.status }}
+              </span>
             </td>
 
-            <router-link to="/activeDetails/1">
-              <td class="p-3">ESG 교육 1</td>
-            </router-link>
+            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
 
-            <td class="p-3">2025.02.12</td>
-            <td class="p-3" v-if="userRole !== 'manager'">
-              <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
-                삭제
-              </button>
-            </td>
-          </tr>
-          <tr class="border-b hover:bg-slate-50">
-            <td class="p-3">
-              <span class="bg-red-500 text-white px-3 py-1 rounded-md">승인 반려</span>
-            </td>
+            <td>{{ activity.title }}</td>
 
-            <router-link to="/activeDetails/1">
-              <td class="p-3">ESG 교육 2</td>
-            </router-link>
-
-            <td class="p-3">2025.02.15</td>
-            <td class="p-3" v-if="userRole !== 'manager'">
-              <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
+            <td v-if="memberStore.myIdx === activity.memberIdx">
+              <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
+                @click.stop="activityDelete(activity.activityIdx)">
                 삭제
               </button>
             </td>
           </tr>
 
-          <tr class="border-b hover:bg-slate-50" v-for="i in 3" :key="i">
-            <td class="p-3">
-              <span class="bg-green-500 text-white px-3 py-1 rounded-md">승인</span>
-            </td>
-
-            <router-link to="/activeDetails/1">
-              <td class="p-3">ESG 교육 3</td>
-            </router-link>
-
-            <td class="p-3">2025.02.18</td>
-            <td class="p-3" v-if="userRole !== 'manager'">
-              <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
-                삭제
-              </button>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>

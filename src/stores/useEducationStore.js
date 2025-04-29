@@ -15,7 +15,15 @@ export const useEducationStore = defineStore('education', {
                 }
             });
             return response.data.data;
-        }
+        },
+
+        async list(page) {
+            const response = await axios("/api/education/activityList?page=" + page);
+            
+            this.activityList = response.data.data.educationList;
+            console.log(this.response.data.data)
+            return response.data.data.total;
+        },
     }
 
 })

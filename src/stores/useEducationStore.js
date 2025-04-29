@@ -21,7 +21,7 @@ export const useEducationStore = defineStore('education', {
             const response = await axios("/api/education/activityList?page=" + page);
             
             this.activityList = response.data.data.educationList;
-            console.log(this.response.data.data)
+
             return response.data.data.total;
         },
     }

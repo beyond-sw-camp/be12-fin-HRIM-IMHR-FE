@@ -72,14 +72,14 @@ const handleSubmit = async () => {
     title.value,
     formData
   );
-  router.back();
+  // router.back();
 };
 
 // 참여자 분리
 const participatedMembers = ref([]);
 const nonParticipatedUsers = computed(() => {
   const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
-  // console.log("vue",users.value);
+
   return users.value
     .filter((u) => !participatedIds.has(u.idx))
     .filter((u) => u.name.includes(searchText.value))

@@ -22,7 +22,7 @@ const pagedActivities = computed(() => {
   return filteredActivities.value.slice(start, start + perPage)
 })
 
-const goToPage = async(page) => {
+const goToPage = async (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page
     router.push({
@@ -31,7 +31,7 @@ const goToPage = async(page) => {
         page: page
       }
     })
-    await activitySore.list(page-1);
+    await activitySore.list(page - 1);
   }
 }
 
@@ -39,7 +39,7 @@ const newActivity = ref({ topic: '', file: null })
 
 // 리스트 관련
 onMounted(async () => {
-  totalPages.value =await activitySore.list((currentPage.value - 1));
+  totalPages.value = await activitySore.list((currentPage.value - 1));
 })
 
 
@@ -124,6 +124,12 @@ const activityDelete = async (activicyIdx) => {
 };
 
 
+
+const filteredActivities = computed(() => {
+  return activitySore.activityList.filter(activity => activity.type !== '교육');
+});
+
+
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
@@ -157,10 +163,9 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
         </thead>
         <tbody>
 
-          <tr v-for="activity in activitySore.activityList" :key="activity.activityIdx"
+          <tr v-for="activity in filteredActivities" :key="activity.activityIdx"
             @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
             class="border-b hover:bg-slate-50 transition cursor-pointer">
-
             <td class="py-2">
               <span class="text-white text-xs px-3 py-1 rounded-md inline-block" :class="{
                 'bg-yellow-500': activity.status === '대기 중',
@@ -175,16 +180,12 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
 
             <td>{{ activity.title }}</td>
 
-
-
-
             <td v-if="memberStore.myIdx === activity.memberIdx">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
                 @click.stop="activityDelete(activity.activityIdx)">
                 삭제
               </button>
             </td>
-
           </tr>
 
         </tbody>

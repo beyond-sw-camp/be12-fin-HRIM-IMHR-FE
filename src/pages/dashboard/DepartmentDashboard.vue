@@ -52,7 +52,10 @@ function changeMonth(diff) {
 }
 
 async function fetchData() {
-  const companyScoreData = await companyStore.companyScore(year.value, month.value);
+  const companyScoreData = await companyStore.companyScore(
+    year.value,
+    month.value
+  );
   memberscores.value = companyScoreData.memberScores;
   departmentList.value = companyScoreData.departments;
   companyName.value = companyScoreData.companyName;
@@ -141,14 +144,15 @@ const trends = computed(() => {
 const itemsPerPage = 10;
 const currentPage = ref(1);
 
-const totalPages = computed(() =>
-  Math.ceil(departmentList.length / itemsPerPage)
-);
+const totalPages = computed(() => {
+  const len = departmentList.value?.length || 0;
+  return Math.max(1, Math.ceil(len / itemsPerPage));
+});
 
-// const paginatedDepartments = computed(() => {
-//   const start = (currentPage.value - 1) * itemsPerPage;
-//   return departmentList.slice(start, start + itemsPerPage);
-// });
+const paginatedDepartments = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return departmentList.value.slice(start, start + itemsPerPage);
+});
 
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--;
@@ -174,7 +178,6 @@ watch(
     }
   }
 );
-
 
 onMounted(() => {
   fetchData().then(() => {
@@ -226,63 +229,63 @@ function createGaugeChart(ctx, value, color) {
 }
 
 function createBarChart(ctx) {
-  const labels = ['1월', '2월', '3월', '4월', '5월', '6월'];
-  
+  const labels = ["1월", "2월", "3월", "4월", "5월", "6월"];
+
   return new Chart(ctx, {
-    type: 'bar',
+    type: "bar",
     data: {
       labels: labels,
       datasets: [
         {
-          label: 'E(환경)',
+          label: "E(환경)",
           data: departmentScoreData.value?.monthlyEScores || [1, 3, 2, 4, 5, 6],
-          backgroundColor: '#D1FAE5',
+          backgroundColor: "#D1FAE5",
           borderRadius: 5,
         },
         {
-          label: 'S(사회)',
+          label: "S(사회)",
           data: departmentScoreData.value?.monthlySScores || [1, 3, 2, 4, 5, 6],
-          backgroundColor: '#DBEAFE',
+          backgroundColor: "#DBEAFE",
           borderRadius: 5,
         },
         {
-          label: 'G(지배구조)',
+          label: "G(지배구조)",
           data: departmentScoreData.value?.monthlyGScores || [1, 3, 2, 4, 5, 6],
-          backgroundColor: '#EDE9FE',
+          backgroundColor: "#EDE9FE",
           borderRadius: 5,
-        }
-      ]
+        },
+      ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: 'bottom',
+          position: "bottom",
           labels: {
             font: {
-              size: 12
-            }
-          }
+              size: 12,
+            },
+          },
         },
         title: {
           display: true,
-          text: '월별 ESG 점수 추이',
+          text: "월별 ESG 점수 추이",
           font: {
-            size: 14
-          }
-        }
+            size: 14,
+          },
+        },
       },
       scales: {
         y: {
           beginAtZero: true,
           max: 10,
           ticks: {
-            stepSize: 1
-          }
-        }
-      }
-    }
+            stepSize: 1,
+          },
+        },
+      },
+    },
   });
 }
 
@@ -432,7 +435,14 @@ const evalTable = [
           >
             이전
           </button>
-          <span>{{ currentPage }} / {{ totalPages }}</span>
+
+          <span>
+            <template v-if="totalPages === 1">
+              {{ currentPage }}
+            </template>
+            <template v-else> {{ currentPage }} / {{ totalPages }} </template>
+          </span>
+
           <button
             @click="nextPage"
             :disabled="currentPage === totalPages"
@@ -528,6 +538,5 @@ const evalTable = [
     </div>
   </div>
 </template>
-  
-<style scoped>
-</style>
+
+<style scoped></style>

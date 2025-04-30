@@ -52,10 +52,10 @@ function changeMonth(diff) {
   month.value = newMonth;
 
   router.push({
-    name: 'dashboard-with-department',
+    name: "dashboard-with-department",
     params: {
       departmentName: departmentName.value,
-      yearMonth: `${newYear}-${newMonth < 10 ? '0' + newMonth : newMonth}`,
+      yearMonth: `${newYear}-${newMonth < 10 ? "0" + newMonth : newMonth}`,
     },
   });
 
@@ -94,7 +94,6 @@ async function fetchData() {
   departmentName.value = departmentScoreData.value.departmentName;
   totalScore.value = departmentScoreData.value.departmentTotalScore;
 }
-
 
 const itemsPerPage = 10;
 const currentPage = ref(1);
@@ -139,21 +138,156 @@ onMounted(() => {
     // canvas 렌더링 이후 실행되어야 안전함
     esgData.value.forEach((item) => {
       const ctx = document.getElementById(`chart${item.label}`);
-      if (ctx) {
-        createGaugeChart(ctx, item.value, item.color);
-      }
     });
 
     const gaugeCtx = document.getElementById("gaugeChart");
-    if (gaugeCtx) {
-      createGaugeChart(gaugeCtx, totalScore.value, "#86EFAC"); // 전체 참여율
-    }
 
     const barCtx = document.getElementById("barChart");
-    if (barCtx) {
-      createBarChart(barCtx);
+  });
+});
+
+
+let gaugeChartInstance = null;
+let barChartInstance = null;
+let esgChartInstances = {};
+
+function createOrUpdateGaugeChart(ctx, value, color) {
+  if (gaugeChartInstance) {
+    gaugeChartInstance.data.datasets[0].data = [value, 100 - value];
+    gaugeChartInstance.update();
+  } else {
+    gaugeChartInstance = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["점수", "남은 비율"],
+        datasets: [
+          {
+            data: [value, 100 - value],
+            backgroundColor: [color, "#F4F4F4"],
+            borderWidth: 0,
+          },
+        ],
+      },
+      options: {
+        rotation: -90,
+        cutout: "70%",
+        circumference: 180,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    });
+  }
+}
+
+function createOrUpdateESGChart(label, ctx, value, color) {
+  if (esgChartInstances[label]) {
+    esgChartInstances[label].destroy();
+    esgChartInstances[label] = null;
+  }
+  esgChartInstances[label] = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["점수", "남은 비율"],
+      datasets: [
+        {
+          data: [value, 100 - value],
+          backgroundColor: [color, "#F4F4F4"],
+          borderWidth: 0,
+        },
+      ],
+    },
+    options: {
+      rotation: -90,
+      cutout: "70%",
+      circumference: 180,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  });
+}
+
+// 바 차트도 동일 패턴 적용
+function createOrUpdateBarChart(ctx) {
+  // departmentList.value에서 데이터 추출
+  const labels = departmentList.value.map(dept => dept.name);
+  const eScores = departmentList.value.map(dept => dept.eScore ?? 0);
+  const sScores = departmentList.value.map(dept => dept.sScore ?? 0);
+  const gScores = departmentList.value.map(dept => dept.gScore ?? 0);
+
+  if (barChartInstance) {
+    barChartInstance.data.labels = labels;
+    barChartInstance.data.datasets[0].data = eScores;
+    barChartInstance.data.datasets[1].data = sScores;
+    barChartInstance.data.datasets[2].data = gScores;
+    barChartInstance.update();
+  } else {
+    barChartInstance = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "E(환경)",
+            data: eScores,
+            backgroundColor: "#D1FAE5",
+            borderRadius: 5,
+          },
+          {
+            label: "S(사회)",
+            data: sScores,
+            backgroundColor: "#DBEAFE",
+            borderRadius: 5,
+          },
+          {
+            label: "G(지배구조)",
+            data: gScores,
+            backgroundColor: "#EDE9FE",
+            borderRadius: 5,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "bottom", labels: { font: { size: 12 } } },
+          title: { display: true, text: "부서별 ESG 점수", font: { size: 14 } },
+        },
+        scales: {
+          y: { beginAtZero: true, max: 10, ticks: { stepSize: 1 } },
+        },
+      },
+    });
+  }
+}
+
+// 데이터 변경 감지하여 차트 업데이트
+watch(departmentScoreData, (newVal) => {
+  // 게이지 차트
+  const gaugeCtx = document.getElementById("gaugeChart");
+  if (gaugeCtx && newVal) {
+    createOrUpdateGaugeChart(gaugeCtx, newVal.departmentTotalScore, "#86EFAC");
+  }
+
+  // ESG 영역별 차트
+  ["E", "S", "G"].forEach((label) => {
+    const esgCtx = document.getElementById(`chart${label}`);
+    if (esgCtx && newVal) {
+      const value = newVal[`department${label}Score`];
+      let color =
+        label === "E" ? "#D1FAE5" : label === "S" ? "#DBEAFE" : "#EDE9FE";
+      createOrUpdateESGChart(label, esgCtx, value, color);
     }
   });
+});
+
+watch([departmentList, departmentScoreData], () => {
+  const barCtx = document.getElementById("barChart");
+  if (barCtx && departmentList.value && departmentList.value.length > 0) {
+    createOrUpdateBarChart(barCtx);
+  }
 });
 
 const totalData = computed(() => {
@@ -214,94 +348,6 @@ const trends = computed(() => {
     },
   ];
 });
-
-function createGaugeChart(ctx, value, color) {
-  return new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["점수", "남은 비율"],
-      datasets: [
-        {
-          data: [value, 100 - value],
-          backgroundColor: [color, "#F4F4F4"],
-          borderWidth: 0,
-        },
-      ],
-    },
-    options: {
-      rotation: -90,
-      cutout: "70%",
-      circumference: 180,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false },
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-    },
-  });
-}
-
-function createBarChart(ctx) {
-  const labels = ["1월", "2월", "3월", "4월", "5월", "6월"];
-
-  return new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "E(환경)",
-          data: departmentScoreData.value?.monthlyEScores || [1, 3, 2, 4, 5, 6],
-          backgroundColor: "#D1FAE5",
-          borderRadius: 5,
-        },
-        {
-          label: "S(사회)",
-          data: departmentScoreData.value?.monthlySScores || [1, 3, 2, 4, 5, 6],
-          backgroundColor: "#DBEAFE",
-          borderRadius: 5,
-        },
-        {
-          label: "G(지배구조)",
-          data: departmentScoreData.value?.monthlyGScores || [1, 3, 2, 4, 5, 6],
-          backgroundColor: "#EDE9FE",
-          borderRadius: 5,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            font: {
-              size: 12,
-            },
-          },
-        },
-        title: {
-          display: true,
-          text: "월별 ESG 점수 추이",
-          font: {
-            size: 14,
-          },
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 10,
-          ticks: {
-            stepSize: 1,
-          },
-        },
-      },
-    },
-  });
-}
 
 const evalTable = [
   {
@@ -494,8 +540,6 @@ const evalTable = [
       </div>
     </div>
 
-
-
     <!-- ESG 요약 -->
     <div class="grid grid-cols-3 gap-4 mb-6">
       <div
@@ -513,7 +557,6 @@ const evalTable = [
         </div>
       </div>
     </div>
-    
 
     <div class="mt-10">
       <button

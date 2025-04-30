@@ -139,7 +139,6 @@ const onSearchInput = (e) => {
 }
 
 
-
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>

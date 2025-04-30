@@ -24,6 +24,16 @@ export const useEducationStore = defineStore('education', {
 
             return response.data.data.total;
         },
+
+        async search(search,page) {
+            const response = await axios("/api/education/activitySearch",{
+                params: { page, search }
+            });
+            
+            this.activityList = response.data.data.educationList;
+
+            return response.data.data.total;
+        },
     }
 
 })

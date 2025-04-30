@@ -6,13 +6,13 @@ import { useStompStore } from '../../stores/useStompStore';
 import { useActivityStore } from '../../stores/useActivityStore';
 import { useMemberStore } from '../../stores/useMemberStore';
 
-const searchQuery = ref('')
 const educationStore = useEducationStore();
 const stomp = useStompStore();
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
 const activitySore = useActivityStore()
 const memberStore = useMemberStore();
 
+const search = ref('')
 const currentPage = ref(1)
 const totalPages = ref(0);
 
@@ -122,9 +122,14 @@ onMounted(async () => {
   totalPages.value = await educationStore.list((currentPage.value - 1));
 })
 
-const filteredActivities = computed(() => {
-  return educationStore.activityList;
-});
+const loadActivities = async (e) => {
+  // search API가 totalPages를 반환한다고 가정
+  totalPages.value = await educationStore.search(e, currentPage.value - 1);
+};
+
+const onSearchInput = (e) => {
+  loadActivities(e.target.value)
+}
 </script>
 
 <template>
@@ -136,12 +141,15 @@ const filteredActivities = computed(() => {
     <div class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8">
       <Search color="black" :size="30" />
 
-      <input v-model="searchQuery" placeholder="내용을 입력해주세요"
+      <!-- v-model로 search에 바인딩 -->
+      <input v-model="search" type="text" placeholder="주제를 입력하세요" @input="onSearchInput"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500" />
 
-      <button class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition">
+      <button @click.prevent="currentPage = 1"
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition">
         검색
       </button>
+
     </div>
 
 
@@ -151,14 +159,14 @@ const filteredActivities = computed(() => {
         <thead class="bg-slate-100 border-b text-slate-700">
           <tr>
             <th class="p-3 border">상태</th>
-            <th class="p-3 border">내용</th>
-            <th class="p-3 border">날짜</th>
+            <th class="p-3 border">교육 제목</th>
+            <th class="p-3 border">개시자</th>
             <th class="p-3 border" v-if="userRole !== 'manager'">삭제</th>
           </tr>
         </thead>
         <tbody>
 
-          <tr v-for="activity in filteredActivities" :key="activity.activityIdx"
+          <tr v-for="activity in educationStore.activityList" :key="activity.activityIdx"
             @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
             class="border-b hover:bg-slate-50 transition cursor-pointer">
             <td class="py-2">
@@ -171,10 +179,11 @@ const filteredActivities = computed(() => {
               </span>
             </td>
 
-            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
-
             <td>{{ activity.title }}</td>
 
+            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
+
+          
             <td v-if="memberStore.myIdx === activity.memberIdx">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
                 @click.stop="activityDelete(activity.activityIdx)">

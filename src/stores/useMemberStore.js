@@ -95,6 +95,7 @@ export const useMemberStore = defineStore('member', {
 
         async fetchMember() {
             const response = await axios.post("/api/member/info");
+            this.userInfo = response.data.data;
             this.myCompanyIdx=response.data.data.companyIdx;
             this.myIdx = response.data.data.idx;
             

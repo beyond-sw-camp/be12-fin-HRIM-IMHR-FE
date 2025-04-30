@@ -21,6 +21,7 @@ const router = useRouter();
 const companyStore = useCompanyStore();
 const departmentStore = useDepartmentStore();
 const departmentScoreData = ref(null);
+const departments = ref([]);
 
 // 년도 월 전달 변수
 const today = new Date();
@@ -70,8 +71,11 @@ async function fetchData() {
   memberscores.value = companyScoreData.memberScores;
   departmentList.value = companyScoreData.departments;
   companyName.value = companyScoreData.companyName;
+  departments.value = companyScoreData.departments;
 
-  // 현재 부서명에 해당하는 idx 찾기
+  console.log(departments.value);
+
+  // 현재 부서명에 해당하는 idx 찾기  
   const matchedDept = departmentList.value.find(
     (dept) => dept.name === route.params.departmentName
   );
@@ -214,9 +218,9 @@ function createOrUpdateESGChart(label, ctx, value, color) {
 function createOrUpdateBarChart(ctx) {
   // departmentList.value에서 데이터 추출
   const labels = departmentList.value.map(dept => dept.name);
-  const eScores = departmentList.value.map(dept => dept.eScore ?? 0);
-  const sScores = departmentList.value.map(dept => dept.sScore ?? 0);
-  const gScores = departmentList.value.map(dept => dept.gScore ?? 0);
+  const eScores = departmentList.value.map(dept => dept.escore ?? 0);
+  const sScores = departmentList.value.map(dept => dept.sscore ?? 0);
+  const gScores = departmentList.value.map(dept => dept.gscore ?? 0);
 
   if (barChartInstance) {
     barChartInstance.data.labels = labels;
@@ -258,7 +262,7 @@ function createOrUpdateBarChart(ctx) {
           title: { display: true, text: "부서별 ESG 점수", font: { size: 14 } },
         },
         scales: {
-          y: { beginAtZero: true, max: 10, ticks: { stepSize: 1 } },
+          y: { beginAtZero: true, max: 100, ticks: { stepSize: 30 } },
         },
       },
     });

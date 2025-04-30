@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, nextTick } from "vue";
 import {
   ChevronDown,
   ChevronUp,
@@ -89,8 +89,10 @@ async function fetchData() {
       departmentIdx: departmentStore.departmentIdx,
     }),
   };
+
   const departmentMonthData = await departmentStore.departmentmonth(params);
   departmentScoreData.value = departmentMonthData;
+  await nextTick();
   departmentName.value = departmentScoreData.value.departmentName;
   totalScore.value = departmentScoreData.value.departmentTotalScore;
 }
@@ -264,7 +266,8 @@ function createOrUpdateBarChart(ctx) {
 }
 
 // 데이터 변경 감지하여 차트 업데이트
-watch(departmentScoreData, (newVal) => {
+watch(departmentScoreData, async (newVal) => {
+  await nextTick();
   // 게이지 차트
   const gaugeCtx = document.getElementById("gaugeChart");
   if (gaugeCtx && newVal) {

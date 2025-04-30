@@ -19,6 +19,15 @@ export const useActivityStore = defineStore('activity', {
 
         async list(page) {
             const response = await axios("/api/activity/activityList?page=" + page);
+            this.activityList = response.data.data.activityList;
+            
+            return response.data.data.total;
+        },
+
+        async search(search,page) {
+            const response = await axios.get('/api/activity/activitySearch', {
+                params: { page, search }
+              });
             
             this.activityList = response.data.data.activityList;
             

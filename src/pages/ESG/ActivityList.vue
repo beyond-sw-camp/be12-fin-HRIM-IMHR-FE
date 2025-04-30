@@ -16,6 +16,8 @@ const currentPage = ref(1)
 const totalPages = ref(0);
 
 
+
+
 // **여기에 추가**: 5개씩 묶어서 보여줄 페이지 번호 범위 계산
 const pageRange = computed(() => {
   const total = totalPages.value;
@@ -127,11 +129,15 @@ const activityDelete = async (activicyIdx) => {
   }
 };
 
+const loadActivities = async (e) => {
+  // search API가 totalPages를 반환한다고 가정
+  totalPages.value = await activityStore.search(e, currentPage.value - 1);
+};
 
+const onSearchInput = (e) => {
+  loadActivities(e.target.value)
+}
 
-const filteredActivities = computed(() => {
-  return activityStore.activityList.filter(a => a.type !== '교육');
-});
 
 
 const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
@@ -146,10 +152,12 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
     <div class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-8">
       <Search color="black" :size="30" />
 
-      <input type="text" placeholder="검색어를 입력하세요"
+      <!-- v-model로 search에 바인딩 -->
+      <input v-model="search" type="text" placeholder="주제를 입력하세요"  @input="onSearchInput"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500" />
 
-      <button class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition">
+      <button @click.prevent="currentPage = 1"
+        class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition">
         검색
       </button>
     </div>
@@ -160,14 +168,14 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
         <thead class="bg-slate-100 border-b">
           <tr>
             <th class="py-3">상태</th>
-            <th>유저</th>
             <th>주제</th>
+            <th>유저</th>
             <th>삭제</th>
           </tr>
         </thead>
         <tbody>
 
-          <tr v-for="activity in filteredActivities" :key="activity.activityIdx"
+          <tr v-for="activity in activityStore.activityList" :key="activity.activityIdx"
             @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
             class="border-b hover:bg-slate-50 transition cursor-pointer">
             <td class="py-2">
@@ -180,9 +188,9 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
               </span>
             </td>
 
-            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
-
             <td>{{ activity.title }}</td>
+
+            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
 
             <td v-if="memberStore.myIdx === activity.memberIdx">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"

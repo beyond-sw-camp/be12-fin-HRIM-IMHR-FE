@@ -56,22 +56,22 @@ import MyPageView from '../pages/mypage/MyPageView.vue';
 
 const routes = [
   {
-    path: '/departmentdashboard',
-    name: 'dashboard-no-department',
-    component: DepartmentDashboard,
-    props: route => ({
-      departmentName: null,
-      yearMonth: null,
-    })
-  },
-  {
-    path: '/departmentdashboard/:departmentName/:yearMonth',
-    name: 'dashboard-with-department',
-    component: DepartmentDashboard,
-    props: route => ({
-      departmentName: route.params.departmentName,
-      yearMonth: route.params.yearMonth,
-    })
+      path: '/departmentdashboard',
+      name: 'dashboard-no-department',
+      component: DepartmentDashboard,
+      props: route => ({
+        departmentName: null,
+        yearMonth: null,
+      })
+    },
+    {
+      path: '/departmentdashboard/:departmentName/:yearMonth',
+      name: 'dashboard-with-department',
+      component: DepartmentDashboard,
+      props: route => ({
+        departmentName: route.params.departmentName,
+        yearMonth: route.params.yearMonth,
+      })
   },
 
   // 로그인 & 인증

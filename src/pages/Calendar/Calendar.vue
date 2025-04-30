@@ -57,23 +57,6 @@ async function handleDateClick(date) {
   showDetailModal.value = true;
 }
 
-
-function handleEditEvent(event) {
-  selectedEvent.value = event;
-  showAddModal.value = true;
-  showEventInfoModal.value = false;
-  openAddEvent(event.date);
-  console.log("handle-open : ", event.date);
-}
-
-// date가 없으면 오늘 날짜로
-function openAddEvent(date = null) {
-  if (date) {
-    selectedDate.value = date;
-  } 
-  showAddModal.value = true;
-}
-
 async function deleteEvent(event) {
   try {
     const currentDate = selectedDate.value;
@@ -85,9 +68,27 @@ async function deleteEvent(event) {
     await calendarStore.dayevents(currentDate);
 
     showEventInfoModal.value = false;
+    selectedEvent.value = null;
+
+    alert("삭제가 완료 되었습니다.")
   } catch (error) {
     console.error("이벤트 삭제 실패:", error);
   }
+}
+
+function handleEditEvent(event) {
+  selectedEvent.value = event;
+  showAddModal.value = true;
+  showEventInfoModal.value = false;
+  openAddEvent(event.date);
+}
+
+// date가 없으면 오늘 날짜로
+function openAddEvent(date = null) {
+  if (date) {
+    selectedDate.value = date;
+  } 
+  showAddModal.value = true;
 }
 
 // 저번달
@@ -172,7 +173,11 @@ onMounted(async () => {
     <EventDetail
       :visible="showEventInfoModal"
       :event="selectedEvent"
-      @close="showEventInfoModal = false"
+      @close="() => {
+        showEventInfoModal = false;
+        selectedEvent = null;
+        }
+      "
       @delete-event="deleteEvent"
       @add-event="handleEditEvent"
     />

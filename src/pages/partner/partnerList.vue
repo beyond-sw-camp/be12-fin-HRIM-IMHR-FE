@@ -212,7 +212,5 @@ const userRole = ref(
       @close="registerModule = false"
       @confirm="registPartner"
     />
-
-    <!-- @confirm="addPartners" -->
   </div>
 </template>

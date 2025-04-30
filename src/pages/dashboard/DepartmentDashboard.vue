@@ -7,7 +7,7 @@ import {
   ChevronRight,
 } from "lucide-vue-next";
 import Chart from "chart.js/auto";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useCompanyStore } from "../../stores/useCompanyStore";
 import { useDepartmentStore } from "../../stores/useDepartmentStore";
 
@@ -17,6 +17,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const router = useRouter();
 const companyStore = useCompanyStore();
 const departmentStore = useDepartmentStore();
 const departmentScoreData = ref(null);
@@ -36,7 +37,6 @@ const departmentName = ref("");
 const totalScore = ref(null);
 
 function changeMonth(diff) {
-  // diff: -1(이전 달), +1(다음 달)
   let newMonth = month.value + diff;
   let newYear = year.value;
 
@@ -50,7 +50,16 @@ function changeMonth(diff) {
 
   year.value = newYear;
   month.value = newMonth;
-  fetchData(); // 월이 바뀔 때마다 데이터 요청
+
+  router.push({
+    name: 'dashboard-with-department',
+    params: {
+      departmentName: departmentName.value,
+      yearMonth: `${newYear}-${newMonth < 10 ? '0' + newMonth : newMonth}`,
+    },
+  });
+
+  fetchData();
 }
 
 async function fetchData() {
@@ -84,67 +93,8 @@ async function fetchData() {
   departmentScoreData.value = departmentMonthData;
   departmentName.value = departmentScoreData.value.departmentName;
   totalScore.value = departmentScoreData.value.departmentTotalScore;
-  console.log(totalScore.value);
 }
 
-const totalData = computed(() => {
-  if (!departmentScoreData.value) return "";
-  const score = departmentScoreData.value.departmentTotalScore ?? "";
-  return typeof score === "number" ? score.toFixed(1) : score;
-});
-
-const esgData = computed(() => {
-  if (!departmentScoreData.value) return [];
-
-  return [
-    {
-      label: "E",
-      value: departmentScoreData.value.departmentEScore,
-      color: "#D1FAE5",
-    },
-    {
-      label: "S",
-      value: departmentScoreData.value.departmentSScore,
-      color: "#DBEAFE",
-    },
-    {
-      label: "G",
-      value: departmentScoreData.value.departmentGScore,
-      color: "#EDE9FE",
-    },
-  ];
-});
-
-const trends = computed(() => {
-  if (!departmentScoreData.value) return [];
-
-  return [
-    {
-      percent: 0, // 추후 변동값 계산용
-      title: "환경 Environmental",
-      score: departmentScoreData.value.departmentEScore,
-      diff: 0, // 이전 값 비교해서 계산할 수도 있음
-      bg: "bg-green-100",
-      color: "text-green-600",
-    },
-    {
-      percent: 0,
-      title: "사회 Social",
-      score: departmentScoreData.value.departmentSScore,
-      diff: 0,
-      bg: "bg-blue-100",
-      color: "text-blue-600",
-    },
-    {
-      percent: 0,
-      title: "지배구조 Governance",
-      score: departmentScoreData.value.departmentGScore,
-      diff: 0,
-      bg: "bg-purple-100",
-      color: "text-purple-600",
-    },
-  ];
-});
 
 const itemsPerPage = 10;
 const currentPage = ref(1);
@@ -204,6 +154,65 @@ onMounted(() => {
       createBarChart(barCtx);
     }
   });
+});
+
+const totalData = computed(() => {
+  if (!departmentScoreData.value) return "";
+  const score = departmentScoreData.value.departmentTotalScore ?? "";
+  return typeof score === "number" ? score.toFixed(1) : score;
+});
+
+const esgData = computed(() => {
+  if (!departmentScoreData.value) return [];
+
+  return [
+    {
+      label: "E",
+      value: departmentScoreData.value.departmentEScore,
+      color: "#D1FAE5",
+    },
+    {
+      label: "S",
+      value: departmentScoreData.value.departmentSScore,
+      color: "#DBEAFE",
+    },
+    {
+      label: "G",
+      value: departmentScoreData.value.departmentGScore,
+      color: "#EDE9FE",
+    },
+  ];
+});
+
+const trends = computed(() => {
+  if (!departmentScoreData.value) return [];
+
+  return [
+    {
+      percent: 0, // 추후 변동값 계산용
+      title: "환경 Environmental",
+      score: departmentScoreData.value.departmentEScore,
+      diff: 0, // 이전 값 비교해서 계산할 수도 있음
+      bg: "bg-green-100",
+      color: "text-green-600",
+    },
+    {
+      percent: 0,
+      title: "사회 Social",
+      score: departmentScoreData.value.departmentSScore,
+      diff: 0,
+      bg: "bg-blue-100",
+      color: "text-blue-600",
+    },
+    {
+      percent: 0,
+      title: "지배구조 Governance",
+      score: departmentScoreData.value.departmentGScore,
+      diff: 0,
+      bg: "bg-purple-100",
+      color: "text-purple-600",
+    },
+  ];
 });
 
 function createGaugeChart(ctx, value, color) {

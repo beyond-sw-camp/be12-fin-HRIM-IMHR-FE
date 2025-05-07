@@ -21,6 +21,7 @@ import AllActivityDetails from '../pages/ESG/AllActivityDetails.vue'
 import ActivityList from '../pages/ESG/ActivityList.vue'
 import CampaignList from '../pages/ESG/CampaignEventList.vue';
 import CampaignMemberAdd from '../pages/ESG/CampaignMemberAdd.vue';
+import ActivitySetting from '../pages/ESG/ESGActivitySetting.vue'
 
 // 교육
 import EducationList from '../pages/ESG/EducationList.vue'
@@ -150,6 +151,11 @@ const routes = [
     name: 'allActivityDetails',
     component: AllActivityDetails
   },
+  {
+    path: '/activeSetting',
+    name: 'activitySetting',
+    component: ActivitySetting
+  },
 
   // 캘린더
   {
@@ -171,12 +177,12 @@ const routes = [
 
   // 보고서
   {
-    path: '/reportsList/1',
+    path: '/reportsList/',
     name: 'reportList',
     component: ReportListView
   },
   {
-    path: '/reports/1',
+    path: '/reports/:idx',
     name: 'reportDetail',
     component: ReportDetailView
   },
@@ -203,14 +209,14 @@ const routes = [
 
   // 부서 설정
   {
-    path: '/departmentSetting/1',
+    path: '/departmentSetting/',
     name: 'DepartmentSetting',
     component: DepartmentSetting
   },
 
   // 피드백
   {
-    path: '/feedbackForm/1',
+    path: '/feedbackForm/',
     name: 'feedbackForm',
     component: FeedbackForm,
   },

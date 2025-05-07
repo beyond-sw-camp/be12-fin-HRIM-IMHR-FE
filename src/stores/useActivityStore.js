@@ -52,5 +52,11 @@ export const useActivityStore = defineStore('activity', {
             const response = await axios.delete("/api/activity/delete/" + idx);
             return response.data.isSuccess;
         },
+
+        async subjectCreate(formData) {
+            console.log("store에서 받은 formdata ", formData);
+            const response = await axios.post("/api/activitySubject/create", formData);
+            return response.data.data;
+        }
     },
 });

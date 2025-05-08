@@ -1,28 +1,4 @@
 <!-- NotificationPopup.vue -->
-<template>
-  <div
-    class="absolute right-6 z-30 w-96"
-    :style="{ top: `${topOffset}px` }"
-  >
-    <div class="bg-slate-200 rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-      <div class="p-4 max-h-80 overflow-y-auto space-y-2" @scroll="onNotiScroll">
-        <div
-          v-for="(noti, index) in notificationStore.notifications"
-          :key="index"
-          @click="openDetail(noti)"
-          class="p-3 rounded cursor-pointer hover:bg-gray-100 transition flex justify-between items-center"
-          :class="noti.read ? 'text-gray-400' : 'text-gray-800 font-semibold'"
-        >
-          <span>{{ noti.title }}</span>
-          <button @click.stop="deleteNoti(index)">
-            <Trash class="w-4 h-4 text-gray-400 hover:text-red-500" />
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { Trash } from "lucide-vue-next";
 import { defineEmits,ref, onMounted, onBeforeUnmount } from "vue";
@@ -40,12 +16,16 @@ const props = defineProps({
   notifications: Array,
 });
 
-const openDetail = (noti) => {
+const openDetail = async (noti) => {
+  console.log(noti.idx)
+  await notificationStore.isRead(noti.idx);
   emit("open-detail", noti);
 };
 
-const deleteNoti = (index) => {
-  props.notifications.splice(index, 1);
+const deleteNoti = async (idx) => {
+  console.log(idx)
+  await notificationStore.remove(idx);
+  // props.notifications.splice(index, 1);
 };
 
 const stomp = useStompStore()
@@ -99,3 +79,28 @@ const onNotiScroll = (event) => {
   }
 }
 </script>
+
+<template>
+  <div
+    class="absolute right-6 z-30 w-96"
+    :style="{ top: `${topOffset}px` }"
+  >
+    <div class="bg-slate-200 rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+      <div class="p-4 max-h-80 overflow-y-auto space-y-2" @scroll="onNotiScroll">
+        <div
+          v-for="(noti, index) in notificationStore.notifications"
+          :key="index"
+          @click="openDetail(noti)"
+          class="p-3 rounded cursor-pointer hover:bg-gray-100 transition flex justify-between items-center"
+          :class="noti.read ? 'text-gray-400' : 'text-gray-800 font-semibold'"
+        >
+          <span>{{ noti.title }}</span>
+          <button @click.stop="deleteNoti(index)">
+            <Trash class="w-4 h-4 text-gray-400 hover:text-red-500" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+

@@ -4,10 +4,8 @@ import { useMemberStore } from '../../stores/useMemberStore'
 import { useRouter } from 'vue-router'
 import { Menu, Bell } from 'lucide-vue-next'
 import { useStompStore } from '../../stores/useStompStore'
-import { useNotificationStore } from "../../stores/useNotificationStore"
 
 const memberStore = useMemberStore();
-const NotificationStore = useNotificationStore();
 
 const emit = defineEmits(['toggle-sidebar', 'toggle-noti']);
 

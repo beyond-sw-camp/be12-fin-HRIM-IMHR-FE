@@ -8,13 +8,14 @@ import { useMemberStore } from '../../stores/useMemberStore';
 
 const educationStore = useEducationStore();
 const stomp = useStompStore();
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
 const activitySore = useActivityStore()
 const memberStore = useMemberStore();
 
 const search = ref('')
 const currentPage = ref(1)
 const totalPages = ref(0);
+
+const userRole = ref(false);
 
 const pageRange = computed(() => {
   const total = totalPages.value;
@@ -120,6 +121,7 @@ const activityDelete = async (activicyIdx) => {
 // 리스트 관련
 onMounted(async () => {
   totalPages.value = await educationStore.list((currentPage.value - 1));
+  userRole.value = await memberStore.isAdmin();
 })
 
 const loadActivities = async (e) => {
@@ -161,7 +163,7 @@ const onSearchInput = (e) => {
             <th class="p-3 border">상태</th>
             <th class="p-3 border">교육 제목</th>
             <th class="p-3 border">개시자</th>
-            <th class="p-3 border" v-if="userRole !== 'manager'">삭제</th>
+            <th class="p-3 border" v-if="!userRole">삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -222,7 +224,7 @@ const onSearchInput = (e) => {
 
     <!-- ➕ 활동 추가 -->
     <form action="/" method="post" @submit.prevent="handleSubmit" ref="formRef"
-      class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="userRole !== 'manager'">
+      class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="!userRole">
       <h2 class="text-lg font-semibold text-slate-800 mb-4">활동 추가</h2>
 
       <div class="flex flex-col md:flex-row gap-4 mb-2">

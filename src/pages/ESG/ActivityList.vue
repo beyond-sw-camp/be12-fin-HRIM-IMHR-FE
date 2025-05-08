@@ -15,7 +15,7 @@ const search = ref('')
 const currentPage = ref(1)
 const totalPages = ref(0);
 
-
+const userRole = ref(false);
 
 
 // **여기에 추가**: 5개씩 묶어서 보여줄 페이지 번호 범위 계산
@@ -46,6 +46,7 @@ const newActivity = ref({ topic: '', file: null })
 // 리스트 관련
 onMounted(async () => {
   totalPages.value = await activityStore.list((currentPage.value - 1));
+  userRole.value = await memberStore.isAdmin();
 })
 
 
@@ -139,7 +140,7 @@ const onSearchInput = (e) => {
 }
 
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
+// const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 <template>
@@ -228,7 +229,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
 
     <!-- ➕ 활동 추가 -->
     <form action="/" method="post" @submit.prevent="handleSubmit" ref="formRef"
-      class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="userRole !== 'manager'">
+      class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="!userRole">
       <h2 class="text-lg font-semibold text-slate-800 mb-4">활동 추가</h2>
 
       <div class="flex flex-col md:flex-row gap-4 mb-2">
@@ -251,7 +252,6 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
           class="absolute top-2 left-2 bg-white text-black rounded-full px-2 py-1 text-xs shadow hover:bg-gray-200">
           ✕
         </button>
-
         <!-- 이미지 -->
         <img class="h-64 rounded" :src="previewImage" alt="" />
       </div>

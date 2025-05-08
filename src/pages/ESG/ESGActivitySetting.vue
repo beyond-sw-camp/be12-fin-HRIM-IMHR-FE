@@ -9,6 +9,7 @@ const subjects = ref([
     choices: [{ text: "", type: "" }],
   },
 ]);
+const subjectlength = ref(0);
 
 const questions = ref([
   {
@@ -23,12 +24,13 @@ const questions = ref([
 const addQuestion = () => {
   subjects.value.push({
     subject: "",
+    isEditing: true,
     choices: [{ text: "", type: "" }], // 최소 1개 입력 항목 생성
   });
 };
 
 const removeQuestion = (index) => {
-  subjects.value.splice(qIndex, 1);
+  subjects.value.splice(index, 1);
 };
 
 // const setType = (index, type) => {
@@ -43,50 +45,69 @@ const addOption = (qIndex) => {
 };
 
 const removeOption = (qIndex, oIndex) => {
-  questions.value[qIndex].choices.splice(oIndex, 1);
+  subjects.value[qIndex].choices.splice(oIndex, 1);
 };
 
 const saveForm = async () => {
+  const filteredSubjects = subjects.value.filter(
+    (subject) =>
+      subject.subject.trim() !== "" ||
+      subject.choices.some(
+        (choice) => choice.text.trim() !== "" && choice.type !== ""
+      )
+  );
+
   const dto = {
     id: null,
     companyIdx: null,
-    subjects: subjects.value.map(subject => ({
+    subjects: filteredSubjects.map((subject) => ({
       subject: subject.subject,
-      inputs: subject.choices.map(choice => ({
+      inputs: subject.choices.map((choice) => ({
         text: choice.text,
-        type: choice.type
-      }))
-    }))
+        type: choice.type,
+      })),
+    })),
   };
 
-  console.log("dto? ", dto);
   await activityStore.subjectCreate(dto);
 };
 
 onMounted(async () => {
   const response = await activityStore.subjectListSearch();
+
+  console.log("vue : ", response[0]);
+
+  if (
+    response[0].subjects &&
+    Array.isArray(response[0].subjects) &&
+    response[0].subjects.length > 0
+  ) {
+    subjects.value = response.flatMap((template) =>
+      (template.subjects || []).map((subject) => ({
+        subject: subject.subject,
+        isEditing: false,
+        choices: (subject.inputs || []).map((choice) => ({
+          text: choice.text,
+          type: choice.type,
+        })),
+      }))
+    );
+
+    subjectlength.value = subjects.value.length;
+    console.log(subjectlength.value);
+  } else {
+    subjects.value = [];
+    subjectlength.value = 0;
+  }
+
+  // 항상 마지막에 빈 입력칸 추가
+  subjects.value.push({
+    subject: "",
+    isEditing: true,
+    choices: [{ text: "", type: "" }],
+  });
 });
-
-// onMounted(async () => {
-//   const response = await feedbackStore.fetchFeedbackTemplate();
-
-//   if (response.data && response.data.data && response.data.data.questions) {
-//     questions.value = response.data.data.questions.map((q) => ({
-//       questionIdx: q.questionIdx,
-//       question: q.question,
-//       type: q.type,
-//       sortOrder: q.sortOrder,
-//       choices: q.choices
-//         ? q.choices.map((c) => ({
-//             choiceIdx: c.choiceIdx,
-//             text: c.text,
-//           }))
-//         : [],
-//     }));
-//   }
-// });
 </script>
-
 
 <template>
   <div class="bg-gray-50 p-8">
@@ -104,6 +125,7 @@ onMounted(async () => {
         class="border border-gray-300 p-2 rounded w-80 mb-3"
         placeholder="주제 입력"
         v-model="subject.subject"
+        :readonly="!subject.isEditing"
       />
 
       <!-- 질문 유형 -->
@@ -119,12 +141,14 @@ onMounted(async () => {
             type="text"
             class="border border-gray-300 p-2 rounded rounded w-80"
             v-model="option.text"
+            :readonly="!subject.isEditing"
             placeholder="입력 받을 내용 입력 ex) 제목"
           />
 
           <select
             v-model="option.type"
             class="border border-gray-300 p-2 rounded"
+            :disabled="!subject.isEditing"
             required
           >
             <option disabled value="">입력 타입</option>
@@ -135,6 +159,7 @@ onMounted(async () => {
           </select>
 
           <button
+            v-if="subject.isEditing"
             class="bg-red-500 w-20 text-white px-3 py-1 rounded"
             @click="removeOption(qIndex, oIndex)"
           >
@@ -144,13 +169,29 @@ onMounted(async () => {
         <button
           class="bg-green-500 h-10 text-white px-3 py-1 rounded"
           @click="addOption(qIndex)"
+          v-if="subject.isEditing"
         >
           입력 항목 추가
         </button>
       </div>
 
-      <!-- 질문 삭제 -->
       <div class="flex justify-end">
+        <button
+          v-if="!subject.isEditing"
+          class="bg-yellow-500 h-10 text-white px-4 py-1 rounded mr-2"
+          @click="subject.isEditing = true"
+        >
+          수정
+        </button>
+
+        <button
+            v-if="subject.isEditing && qIndex < subjectlength"
+          class="bg-blue-500 h-10 text-white px-4 py-1 rounded mr-2"
+          @click="subject.isEditing = false"
+        >
+          저장
+        </button>
+
         <button
           class="bg-red-500 h-10 text-white px-4 py-1 rounded"
           @click="removeQuestion(qIndex)"
@@ -181,6 +222,5 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-
 
 <style scoped></style>

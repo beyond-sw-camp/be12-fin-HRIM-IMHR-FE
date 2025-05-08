@@ -47,7 +47,20 @@ const removeOption = (qIndex, oIndex) => {
 };
 
 const saveForm = async () => {
-  await actviityStore.subjectCreate(subjects.value);
+  const dto = {
+    id: null,
+    companyIdx: null,
+    subjects: subjects.value.map(subject => ({
+      subject: subject.subject,
+      inputs: subject.choices.map(choice => ({
+        text: choice.text,
+        type: choice.type
+      }))
+    }))
+  };
+
+  console.log("dto? ", dto);
+  await actviityStore.subjectCreate(dto);
 };
 
 // onMounted(async () => {
@@ -70,7 +83,6 @@ const saveForm = async () => {
 // });
 </script>
 
-<style scoped></style>
 
 <template>
   <div class="bg-gray-50 p-8">
@@ -165,3 +177,6 @@ const saveForm = async () => {
     </div>
   </div>
 </template>
+
+
+<style scoped></style>

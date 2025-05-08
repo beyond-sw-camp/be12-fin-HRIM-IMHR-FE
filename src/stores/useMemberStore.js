@@ -93,9 +93,14 @@ export const useMemberStore = defineStore('member', {
             await axios.post("/api/member/logout");
         },
 
+        async isAdmin() {
+            const response =await axios.post("/api/member/isAdmin");
+            return response.data.data
+        },
+
         async fetchMember() {
             const response = await axios.post("/api/member/info");
-            this.userInfo = response.data.data;
+            // this.userInfo = response.data.data;
             this.myCompanyIdx=response.data.data.companyIdx;
             this.myIdx = response.data.data.idx;
             

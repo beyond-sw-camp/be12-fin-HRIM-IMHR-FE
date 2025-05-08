@@ -5,6 +5,7 @@ export const useActivityStore = defineStore('activity', {
     state: () => (
         {
             activityList: [],
+            subjectList: [],
         }),
 
     actions: {
@@ -54,9 +55,14 @@ export const useActivityStore = defineStore('activity', {
         },
 
         async subjectCreate(formData) {
-            console.log("store에서 받은 formdata ", formData);
             const response = await axios.post("/api/activitySubject/create", formData);
             return response.data.data;
-        }
+        },
+
+        async subjectListSearch() {
+            const response = await axios.post("/api/activitySubject/search");
+            this.subjectList = response.data.data;
+            return response.data.data;
+        },
     },
 });

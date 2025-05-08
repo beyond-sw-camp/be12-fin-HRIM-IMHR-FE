@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useActivityStore } from "../../stores/useActivityStore.js";
 
-const actviityStore = useActivityStore();
+const activityStore = useActivityStore();
 const subjects = ref([
   {
     subject: "",
@@ -60,8 +60,12 @@ const saveForm = async () => {
   };
 
   console.log("dto? ", dto);
-  await actviityStore.subjectCreate(dto);
+  await activityStore.subjectCreate(dto);
 };
+
+onMounted(async () => {
+  const response = await activityStore.subjectListSearch();
+});
 
 // onMounted(async () => {
 //   const response = await feedbackStore.fetchFeedbackTemplate();

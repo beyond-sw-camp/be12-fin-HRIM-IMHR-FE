@@ -19,7 +19,7 @@ const menuItems = [
   { path: "/calendar", label: "캘린더 관리" },
   { path: "/departmentSetting", label: "부서 설정" },
   { path: "/feedbackForm", label: "피드백 설정" },
-  { path: "/activeSetting", label: "ESG 활동 설정" },
+  { path: "/activeSetting", label: "ESG 활동 주제 설정" },
 ];
 </script>
 

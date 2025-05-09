@@ -1,25 +1,21 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useActivityStore } from "../../stores/useActivityStore.js";
+import { useMemberStore } from "../../stores/useMemberStore.js";
 
 const activityStore = useActivityStore();
+const memberStore = useMemberStore(); 
 const subjects = ref([
   {
+    id: null,
+    companyIdx: null,
     subject: "",
+    isEditing: true,
     choices: [{ text: "", type: "" }],
   },
 ]);
-const subjectlength = ref(0);
 
-const questions = ref([
-  {
-    questionIdx: null,
-    question: "",
-    type: "",
-    sortOrder: 0,
-    choices: [],
-  },
-]);
+const subjectlength = ref(0);
 
 const addQuestion = () => {
   subjects.value.push({
@@ -28,17 +24,6 @@ const addQuestion = () => {
     choices: [{ text: "", type: "" }], // 최소 1개 입력 항목 생성
   });
 };
-
-const removeQuestion = (index) => {
-  subjects.value.splice(index, 1);
-};
-
-// const setType = (index, type) => {
-//   questions.value[index].type = type;
-//   if (type === "SUBJECTIVE") {
-//     questions.value[index].choices = [];
-//   }
-// };
 
 const addOption = (qIndex) => {
   subjects.value[qIndex].choices.push({ text: "", type: "" });
@@ -49,63 +34,123 @@ const removeOption = (qIndex, oIndex) => {
 };
 
 const saveForm = async () => {
-  const filteredSubjects = subjects.value.filter(
+  // 새로 추가된(아직 id가 없는) 주제만 저장
+  if (!memberScores.userInfo.isAdmin) {
+    alert("접근 불가능한 권한입니다.")
+    return;
+  }
+
+  const newSubjects = subjects.value.filter(
     (subject) =>
-      subject.subject.trim() !== "" ||
-      subject.choices.some(
-        (choice) => choice.text.trim() !== "" && choice.type !== ""
-      )
+      (!subject.id || subject.id === null) && // id가 없거나 null인 경우
+      (subject.subject.trim() !== "" ||
+        subject.choices.some(
+          (choice) => choice.text.trim() !== "" && choice.type !== ""
+        ))
   );
 
-  const dto = {
+  const subjectsList = newSubjects.map((subject) => ({
     id: null,
     companyIdx: null,
-    subjects: filteredSubjects.map((subject) => ({
-      subject: subject.subject,
-      inputs: subject.choices.map((choice) => ({
+    subject: subject.subject,
+    inputs: subject.choices.map((choice) => ({
+      text: choice.text,
+      type: choice.type,
+    })),
+  }));
+
+  
+  await activityStore.subjectCreate(subjectsList);
+  await search();
+  alert("등록이 완료되었습니다.");
+};
+
+const search = async () => {
+  const response = await activityStore.subjectListSearch();
+
+  if (
+    response &&
+    Array.isArray(response) &&
+    response.length > 0 &&
+    response.some(
+      (item) =>
+        item &&
+        typeof item.subject === "string" &&
+        item.subject.trim() !== ""
+    )
+  ) {
+    subjects.value = response.map((item) => ({
+      id: item.id,
+      companyIdx: item.companyId,
+      subject: item.subject,
+      isEditing: false,
+      choices: (item.inputs || []).map((choice) => ({
         text: choice.text,
         type: choice.type,
       })),
-    })),
-  };
-
-  await activityStore.subjectCreate(dto);
-};
-
-onMounted(async () => {
-  const response = await activityStore.subjectListSearch();
-
-  console.log("vue : ", response[0]);
-
-  if (
-    response[0].subjects &&
-    Array.isArray(response[0].subjects) &&
-    response[0].subjects.length > 0
-  ) {
-    subjects.value = response.flatMap((template) =>
-      (template.subjects || []).map((subject) => ({
-        subject: subject.subject,
-        isEditing: false,
-        choices: (subject.inputs || []).map((choice) => ({
-          text: choice.text,
-          type: choice.type,
-        })),
-      }))
-    );
-
+    }));
     subjectlength.value = subjects.value.length;
-    console.log(subjectlength.value);
   } else {
     subjects.value = [];
     subjectlength.value = 0;
   }
 
-  // 항상 마지막에 빈 입력칸 추가
+  // 마지막에 빈 입력칸 추가
   subjects.value.push({
+    id: null,
+    companyIdx: null,
     subject: "",
     isEditing: true,
     choices: [{ text: "", type: "" }],
   });
+};
+
+const updateSubject = async (qIndex) => {
+  const subject = subjects.value[qIndex];
+  // id가 있어야 수정 가능
+  if (!subject.id) {
+    alert("DB에 저장된 주제만 수정할 수 있습니다.");
+    return;
+  } if (!memberStore.userInfo.isAdmin) {
+    alert("접근 불가능한 권한입니다.")
+    return;
+  }
+
+  const updateDto = {
+    id: subject.id,
+    companyIdx: subject.companyIdx || null,
+    subject: subject.subject,
+    inputs: subject.choices.map((choice) => ({
+      text: choice.text,
+      type: choice.type,
+    })),
+  };
+  await activityStore.subjectUpdate(updateDto);
+  await search(); // 수정 후 최신 리스트로 갱신
+  subject.isEditing = false;
+};
+
+const deleteSubject = async(qIndex) => {
+  if (!memberStore.userInfo.isAdmin) {
+    alert("접근 불가능한 권한입니다.")
+    return;
+  }
+
+  const subject = subjects.value[qIndex];
+
+  await activityStore.subjectDelete(subject.id);
+  await search();
+
+
+  alert("삭제를 성공했습니다.");
+};
+
+// const removeQuestion = (index) => {
+//   subjects.value.splice(index, 1);
+// };
+
+onMounted(() => {
+  search();
 });
 </script>
 
@@ -185,16 +230,16 @@ onMounted(async () => {
         </button>
 
         <button
-            v-if="subject.isEditing && qIndex < subjectlength"
+          v-if="subject.isEditing && qIndex < subjectlength"
           class="bg-blue-500 h-10 text-white px-4 py-1 rounded mr-2"
-          @click="subject.isEditing = false"
+          @click="updateSubject(qIndex)"
         >
           저장
         </button>
 
         <button
           class="bg-red-500 h-10 text-white px-4 py-1 rounded"
-          @click="removeQuestion(qIndex)"
+          @click="deleteSubject(qIndex)"
         >
           주제 삭제
         </button>

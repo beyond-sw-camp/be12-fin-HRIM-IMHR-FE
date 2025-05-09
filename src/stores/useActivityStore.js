@@ -64,5 +64,15 @@ export const useActivityStore = defineStore('activity', {
             this.subjectList = response.data.data;
             return response.data.data;
         },
+
+        async subjectUpdate(formData) {
+            const response = await axios.put("/api/activitySubject/update", formData);
+            return response.data.data;
+        },
+
+        async subjectDelete(id) {
+            console.log("store",id);
+            // await axios.delete(`/api/activitySubject/delete/${id}`);
+        },
     },
 });

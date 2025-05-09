@@ -35,7 +35,7 @@ const removeOption = (qIndex, oIndex) => {
 
 const saveForm = async () => {
   // 새로 추가된(아직 id가 없는) 주제만 저장
-  if (!memberScores.userInfo.isAdmin) {
+  if (!memberStore.userInfo.isAdmin) {
     alert("접근 불가능한 권한입니다.")
     return;
   }
@@ -81,7 +81,7 @@ const search = async () => {
   ) {
     subjects.value = response.map((item) => ({
       id: item.id,
-      companyIdx: item.companyId,
+      companyIdx: item.companyIdx,
       subject: item.subject,
       isEditing: false,
       choices: (item.inputs || []).map((choice) => ({
@@ -139,15 +139,12 @@ const deleteSubject = async(qIndex) => {
   const subject = subjects.value[qIndex];
 
   await activityStore.subjectDelete(subject.id);
-  await search();
 
+  await search();
 
   alert("삭제를 성공했습니다.");
 };
 
-// const removeQuestion = (index) => {
-//   subjects.value.splice(index, 1);
-// };
 
 onMounted(() => {
   search();

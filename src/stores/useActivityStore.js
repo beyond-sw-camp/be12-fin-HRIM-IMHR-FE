@@ -71,8 +71,7 @@ export const useActivityStore = defineStore('activity', {
         },
 
         async subjectDelete(id) {
-            console.log("store",id);
-            // await axios.delete(`/api/activitySubject/delete/${id}`);
+            await axios.delete(`/api/activitySubject/delete/${id}`);
         },
     },
 });

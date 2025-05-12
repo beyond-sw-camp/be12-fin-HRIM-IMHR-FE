@@ -33,7 +33,8 @@ export const useCompanyStore = defineStore('company', {
     },
 
     async updateScore(formData) {
-      await axios.get(`/api/company/scoreUpdate/${formData.idx}/${formData.targetScore}`);
+      console.log("store",formData);
+      await axios.post("/api/company/scoreUpdate", formData);
     },
   }
 });

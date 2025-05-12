@@ -11,10 +11,9 @@ export const useCompanyStore = defineStore('company', {
   }),
   actions: {
     async list(page, size, keyword = "") {
-      const response = await axios.get(`/api/company/list?page=${page}&size=${size}&keyword=${keyword}`,
-      );
+      const response = await axios.get(`/api/company/list?page=${page}&size=${size}&keyword=${keyword}`);
       this.companys = response.data.data.content;
-      
+
       return response.data.data.totalPages;
     },
 
@@ -25,6 +24,18 @@ export const useCompanyStore = defineStore('company', {
       this.top3 = response.data.data.memberScores;
       this.departments = response.data.data.departments;
       return response.data.data;
-    }
+    },
+
+    async fetchCompany() {
+      const response = await axios.post("/api/comapny/fetch");
+
+      console.log("store company", response.data.data);
+      return response.data.data;
+    },
+
+    async updateScore(formData) {
+      console.log("store formData ", formData);
+      const response = await axios.get(`/api/company/scoreUpdate?companyIdx=${formData.companyIdx}$score=${formData.score}`);
+    },
   }
 });

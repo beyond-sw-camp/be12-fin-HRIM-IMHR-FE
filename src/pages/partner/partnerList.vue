@@ -113,8 +113,7 @@ const userRole = ref(
         <thead class="bg-slate-100 text-slate-700">
           <tr>
             <th class="p-3 border" rowspan="2">회사명</th>
-            <th class="p-3 border" colspan="4">KCGS</th>
-            <!-- <th class="p-3 border">IMHR</th> -->
+            <th class="p-3 border" colspan="4">KEGS</th>
             <th class="p-3 border" rowspan="2" v-if="userRole === 'manager'">
               삭제
             </th>
@@ -124,7 +123,6 @@ const userRole = ref(
             <th class="p-2 border">환경</th>
             <th class="p-2 border">사회</th>
             <th class="p-2 border">지배구조</th>
-            <!-- <th class="p-2 border">총점</th> -->
           </tr>
         </thead>
         <tbody v-if="partnerStore.partners.length > 0">

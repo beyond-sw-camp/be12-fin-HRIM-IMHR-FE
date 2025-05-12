@@ -33,10 +33,7 @@ const onSearch = async () => {
 
 const fetchCompanies = async () => {
   totalPages.value = await companyStore.list(currentPage.value - 1, 5,search.value); 
-  // 서버가 0부터 시작하는 경우
 };
-
-// 5개 단위로 끊어서 페이지 계산
 
 const displayedPages = computed(() => {
   const pages = [];
@@ -104,11 +101,16 @@ const handleSubmit = async () => {
 
       <!-- 테이블 -->
       <table class="w-full border text-sm text-center mb-4">
-        <thead>
-          <tr class="bg-slate-100">
-            <th class="p-2 border">선택</th>
-            <th class="p-2 border">회사 번호</th>
-            <th class="p-2 border">회사 이름</th>
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="p-2 border" rowspan="2">선택</th>
+            <th class="p-2 border" rowspan="2">회사 명</th>
+            <th class="p-2 border" colspan="4">KESG</th>
+          </tr>
+          <tr>
+            <th class="p-2 border">환경</th>
+            <th class="p-2 border">사회</th>
+            <th class="p-2 border">지배구조</th>
           </tr>
         </thead>
         <tbody>
@@ -116,8 +118,10 @@ const handleSubmit = async () => {
             <td class="border p-2">
               <input type="checkbox" v-model="selected" :value="company" />
             </td>
-            <td class="border p-2">{{ (currentPage - 1)  * 5 + idx + 1 }}</td>
             <td class="border p-2">{{ company.name }}</td>
+            <td class="border p-2">{{ company.escore }}</td>
+            <td class="border p-2">{{ company.sscore }}</td>
+            <td class="border p-2">{{ company.gscore }}</td>
           </tr>
         </tbody>
       </table>

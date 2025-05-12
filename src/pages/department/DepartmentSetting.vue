@@ -6,7 +6,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const departmentStore = useDepartmentStore();
-const compnayStore = useCompanyStore();
+const companyStore = useCompanyStore();
 
 const departments = ref([{ name: "", targetScore: null }]);
 const createDepartments = ref([]);
@@ -47,26 +47,19 @@ const saveForm = async () => {
 };
 
 const update = async () => {
-  console.log("vue mycompany", mycompany.value);
-  const formData = mycompany.map((i) => ({
-    idx: i.idx,
-    targetScore: i.targetScore,
-  }));
+  await companyStore.updateScore(mycompany.value);
 
-  mycompany.value.isEditing = true;
   search();
   alert("수정을 성공하였습니다.");
 };
 
 const search = async () => {
-  const c = await compnayStore.fetchCompany();
+  const c = await companyStore.fetchCompany();
 
-  mycompany.value = c.map((i) => ({
-    idx: i.idx,
-    targetScore: i.targetScore,
-    name: i.name,
-    isEditing: false,
-  }));
+  mycompany.value.idx = c.idx ?? null;
+  mycompany.value.name = c.name ?? null;
+  mycompany.value.targetScore = c.targetScore ?? null;
+  mycompany.value.isEditing = false;
 };
 
 const cancelEdit = async () => {

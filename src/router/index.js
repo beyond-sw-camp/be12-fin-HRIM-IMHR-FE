@@ -42,6 +42,8 @@ import Calendar from '../pages/Calendar/Calendar.vue';
 import PartnerDashboard from '../pages/dashboard/partnerDashboard.vue';
 import DepartmentDashboard from '../pages/dashboard/DepartmentDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
+import GrafanaPanel from '../pages/dashboard/GrafanaPanel.vue';
+
 
 // 피드백
 import FeedbackForm from '../pages/feedback/FeedbackForm.vue';
@@ -207,6 +209,12 @@ const routes = [
     props: true
   },
 
+  {
+    path: '/grafana',
+    name: 'GrafanaPanel',
+    component: GrafanaPanel,
+  },
+
   // 부서 설정
   {
     path: '/departmentSetting/',
@@ -257,6 +265,8 @@ const routes = [
     component: MyPageView,
   },
 ];
+
+
 
 const router = createRouter({
   history: createWebHistory(),

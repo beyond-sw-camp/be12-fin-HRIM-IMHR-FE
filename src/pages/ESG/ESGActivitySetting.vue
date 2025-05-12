@@ -4,7 +4,9 @@ import { useActivityStore } from "../../stores/useActivityStore.js";
 import { useMemberStore } from "../../stores/useMemberStore.js";
 
 const activityStore = useActivityStore();
-const memberStore = useMemberStore(); 
+const memberStore = useMemberStore();
+const subjectlength = ref(0);
+
 const subjects = ref([
   {
     id: null,
@@ -14,8 +16,6 @@ const subjects = ref([
     choices: [{ text: "", type: "" }],
   },
 ]);
-
-const subjectlength = ref(0);
 
 const addQuestion = () => {
   subjects.value.push({
@@ -42,7 +42,7 @@ const saveForm = async () => {
 
   const newSubjects = subjects.value.filter(
     (subject) =>
-      (!subject.id || subject.id === null) && // id가 없거나 null인 경우
+      (!subject.id || subject.id === null) && 
       (subject.subject.trim() !== "" ||
         subject.choices.some(
           (choice) => choice.text.trim() !== "" && choice.type !== ""
@@ -89,6 +89,7 @@ const search = async () => {
         type: choice.type,
       })),
     }));
+
     subjectlength.value = subjects.value.length;
   } else {
     subjects.value = [];
@@ -103,6 +104,11 @@ const search = async () => {
     isEditing: true,
     choices: [{ text: "", type: "" }],
   });
+};
+
+const cancelEdit = async (qIndex) => {
+  subjects.value[qIndex].isEditing = false;
+  await search();
 };
 
 const updateSubject = async (qIndex) => {
@@ -128,6 +134,7 @@ const updateSubject = async (qIndex) => {
   await activityStore.subjectUpdate(updateDto);
   await search(); // 수정 후 최신 리스트로 갱신
   subject.isEditing = false;
+  alert("수정을 성공하였습니다.");
 };
 
 const deleteSubject = async(qIndex) => {
@@ -171,9 +178,8 @@ onMounted(() => {
       />
 
       <!-- 질문 유형 -->
-
       <div class="mb-4">
-        <label class="block font-medium mb-2">입력 항목 추가</label>
+        <label class="block font-medium mb-2">입력 항목란</label>
         <div
           v-for="(option, oIndex) in subject.choices"
           :key="oIndex"
@@ -232,6 +238,13 @@ onMounted(() => {
           @click="updateSubject(qIndex)"
         >
           저장
+        </button>
+
+        <button 
+          v-if="subject.isEditing && qIndex < subjectlength"
+          class="bg-black h-10 text-white px-4 py-1 rounded mr-2"
+          @click="cancelEdit(qIndex)">
+          취소
         </button>
 
         <button

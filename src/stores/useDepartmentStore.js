@@ -22,8 +22,7 @@ export const useDepartmentStore = defineStore('department', {
         },
 
         async updateDepartment(formData) {
-            console.log(formData);
-            const response = await axios.get(`/api/department/update/${formData.idx}/${formData.targetScore}`);
+            const response = await axios.post("/api/department/update", formData);
             return response;
         }, 
 

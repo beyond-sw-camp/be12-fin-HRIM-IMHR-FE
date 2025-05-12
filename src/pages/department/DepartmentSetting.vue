@@ -8,7 +8,12 @@ const router = useRouter();
 const departmentStore = useDepartmentStore();
 const companyStore = useCompanyStore();
 
-const departments = ref([{ name: "", targetScore: "", isEditing:false }]);
+const departments = ref([{ 
+  name: "", 
+  targetScore: "", 
+  targetSScore: "",
+  targetGScore: "",
+  isEditing:false }]);
 const createDepartments = ref([]);
 const updateDepartments = ref([]);
 const deleteDepartments = ref([]);
@@ -17,7 +22,9 @@ const deptlength = ref(0);
 const mycompany = ref({
   idx: null,
   name: "",
-  targetScore: null,
+  targetEScore: null,
+  targetSScore: null,
+  targetGScore: null,
   isEditing: false,
 });
 
@@ -29,7 +36,12 @@ const fetchDept = async () => {
 };
 
 const addDepartment = () => {
-  departments.value.push({ idx: null, name: "", targetScore: "", isEditing:true });
+  departments.value.push({ 
+    idx: null, name: "", 
+    targetScore: "", 
+    targetSScore: "",
+    targetGScore: "",
+    isEditing:true });
 };
 
 const removeDept = async (idx) => {
@@ -55,7 +67,9 @@ const saveForm = async () => {
     .filter((dept) => dept.idx === null)
     .map((dept) => ({
       name: dept.name,
-      targetScore: dept.targetScore ?? 0,
+      targetEScore: dept.targetEScore ?? 0,
+      targetSScore: dept.targetSScore ?? 0,
+      targetGScore: dept.targetGScore ?? 0,
     }));
 
 
@@ -89,7 +103,9 @@ const search = async () => {
 
   mycompany.value.idx = c.idx ?? null;
   mycompany.value.name = c.name ?? null;
-  mycompany.value.targetScore = c.targetScore ?? null;
+  mycompany.value.targetEScore = c.targetEScore ?? null;
+  mycompany.value.targetSScore = c.targetSScore ?? null;
+  mycompany.value.targetGScore = c.targetGScore ?? null;
   mycompany.value.isEditing = false;
 };
 
@@ -112,13 +128,33 @@ onMounted(async () => {
 
     <div class="mb-3 mb-6 border-b pb-6">
       <div class="flex items-center w-full">
-        <label class="block text-gray-700 text-2xl">기업 목표 점수 : </label>
+        <label class="block text-gray-700 text-2xl">기업 E 목표 점수 : </label>
 
         <input
-          v-model="mycompany.targetScore"
+          v-model="mycompany.targetEScore"
           type="number"
-          class="border border-gray-300 p-2 rounded w-80 mt-3 ml-2 mr-2"
-          placeholder="기업 목표 점수를 입력해주세요."
+          class="border border-gray-300 p-2 rounded w-40 mt-3 ml-2 mr-2"
+          placeholder="목표 E 점수 입력"
+          :readonly="!mycompany.isEditing"
+        />
+
+        <label class="block text-gray-700 text-2xl">기업 S 목표 점수 : </label>
+
+        <input
+          v-model="mycompany.targetSScore"
+          type="number"
+          class="border border-gray-300 p-2 rounded w-40 mt-3 ml-2 mr-2"
+          placeholder="목표 S 점수 입력"
+          :readonly="!mycompany.isEditing"
+        />
+
+        <label class="block text-gray-700 text-2xl">기업 G 목표 점수 : </label>
+
+        <input
+          v-model="mycompany.targetGScore"
+          type="number"
+          class="border border-gray-300 p-2 rounded w-40 mt-3 ml-2 mr-2"
+          placeholder="목표 G 점수 입력"
           :readonly="!mycompany.isEditing"
         />
       </div>
@@ -165,17 +201,35 @@ onMounted(async () => {
           v-model="dept.name"
           type="text"
           :readonly="!dept.isEditing"
-          class="border border-gray-300 p-2 rounded w-80 ml-2 mr-2"
+          class="border border-gray-300 p-2 rounded w-50 ml-2 mr-2"
           placeholder="부서명을 입력하세요"
         />
 
-        <label class="block text-gray-700 pl-2">부서 목표 점수 : </label>
+        <label class="block text-gray-700 pl-2">부서 E 목표 점수 : </label>
         <input
-          v-model="dept.targetScore"
+          v-model="dept.targetEScore"
           type="number"
           :readonly="!dept.isEditing"
-          class="border border-gray-300 p-2 rounded w-80 ml-2 mr-2"
-          placeholder="부서 목표 점수 이력해주세요."
+          class="border border-gray-300 p-2 rounded w-40 ml-2 mr-2"
+          placeholder="목표 E 점수 입력"
+        />
+
+        <label class="block text-gray-700 pl-2">부서 S 목표 점수 : </label>
+        <input
+          v-model="dept.targetSScore"
+          type="number"
+          :readonly="!dept.isEditing"
+          class="border border-gray-300 p-2 rounded w-40 ml-2 mr-2"
+          placeholder="목표 S 점수 입력"
+        />
+
+        <label class="block text-gray-700 pl-2">부서 G 목표 점수 : </label>
+        <input
+          v-model="dept.targetGScore"
+          type="number"
+          :readonly="!dept.isEditing"
+          class="border border-gray-300 p-2 rounded w-40 ml-2 mr-2"
+          placeholder="목표 G 점수 입력"
         />
       </div>
 

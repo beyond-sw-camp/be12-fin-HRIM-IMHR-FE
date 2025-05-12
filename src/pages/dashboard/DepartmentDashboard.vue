@@ -523,7 +523,7 @@ const evalTable = [
           </p>
           <h4 :class="`font-bold ${trend.color}`">{{ trend.title }}</h4>
           <p class="text-2xl font-semibold">{{ trend.score }}</p>
-          <p class="text-sm text-gray-500">전년대비 ▲ {{ trend.diff }}</p>
+          <p class="text-sm text-gray-500">전월 대비 ▲ {{ trend.diff }}</p>
         </div>
       </div>
     </div>

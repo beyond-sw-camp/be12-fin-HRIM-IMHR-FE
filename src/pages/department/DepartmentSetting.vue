@@ -8,9 +8,11 @@ const router = useRouter();
 const departmentStore = useDepartmentStore();
 const companyStore = useCompanyStore();
 
-const departments = ref([{ name: "", targetScore: null }]);
+const departments = ref([{ name: "", targetScore: "", isEditing:false }]);
 const createDepartments = ref([]);
+const updateDepartments = ref([]);
 const deleteDepartments = ref([]);
+const deptlength = ref(0);
 
 const mycompany = ref({
   idx: null,
@@ -18,35 +20,64 @@ const mycompany = ref({
   targetScore: null,
   isEditing: false,
 });
-const targetScore = ref([""]);
 
-const addDepartment = () => {
-  departments.value.push({ idx: "", name: "", targetScore: null });
+
+const fetchDept = async () => {
+  const response = await departmentStore.fetchDepartments();
+  departments.value = response.data.data.departments;
+  deptlength.value = response.data.data.departments.length;
 };
 
-const removeDepartment = (index, idx) => {
-  if (idx !== "") {
-    deleteDepartments.value.push({ idx: idx });
+const addDepartment = () => {
+  departments.value.push({ idx: null, name: "", targetScore: "", isEditing:true });
+};
+
+const removeDept = async (idx) => {
+  if (idx) {
+    await departmentStore.deleteDepartment(idx);
   }
-  departments.value.splice(index, 1);
+
+  await fetchDept();
+  
+  alert("삭제를 성공했습니다.");
+};
+
+const updateDept = async (index) => {
+  const dept = departments.value[index];
+
+  await departmentStore.updateDepartment(dept);
+  await fetchDept();
+  alert("수정을 성공했습니다.");
 };
 
 const saveForm = async () => {
   createDepartments.value = departments.value
-    .filter((dept) => dept.idx === "")
-    .map((dept) => dept.name);
-  console.log("부서 저장:", createDepartments.value, deleteDepartments.value);
-  const response = await departmentStore.updateDepartments({
+    .filter((dept) => dept.idx === null)
+    .map((dept) => ({
+      name: dept.name,
+      targetScore: dept.targetScore ?? 0,
+    }));
+
+
+  const response = await departmentStore.createDepartments({
     createRequests: createDepartments.value,
-    deleteRequests: deleteDepartments.value,
+    deleteRequests: [],
   });
+
   if (response.data.isSuccess) {
+    fetchDept();
     alert("부서가 저장되었습니다!");
-    router.go(0);
+  } else {
+    alert("저장에 실패했습니다.");
   }
 };
 
-const update = async () => {
+const cancleDept = async (index) => {
+  departments.value[index].isEditing = false;
+  await fetchDept();
+};
+
+const updateCompany = async () => {
   await companyStore.updateScore(mycompany.value);
 
   search();
@@ -62,16 +93,14 @@ const search = async () => {
   mycompany.value.isEditing = false;
 };
 
-const cancelEdit = async () => {
+const cancelCompany = async () => {
   mycompany.value.isEditing = false;
-  search(); 
+  await search(); 
 };
 
 onMounted(async () => {
-  const response = await departmentStore.fetchDepartments();
   search();
-
-  departments.value = response.data.data.departments;
+  fetchDept();
 });
 </script>
 
@@ -106,7 +135,7 @@ onMounted(async () => {
         <button
           v-if="mycompany.isEditing"
           class="bg-blue-500 h-10 text-white px-4 py-1 rounded mr-2"
-          @click="update()"
+          @click="updateCompany()"
         >
           저장
         </button>
@@ -114,7 +143,7 @@ onMounted(async () => {
         <button
           v-if="mycompany.isEditing"
           class="bg-black h-10 text-white px-4 py-1 rounded mr-2"
-          @click="cancelEdit()"
+          @click="cancelCompany()"
         >
           취소
         </button>
@@ -135,7 +164,7 @@ onMounted(async () => {
         <input
           v-model="dept.name"
           type="text"
-          :readonly="dept.idx !== ''"
+          :readonly="!dept.isEditing"
           class="border border-gray-300 p-2 rounded w-80 ml-2 mr-2"
           placeholder="부서명을 입력하세요"
         />
@@ -143,18 +172,40 @@ onMounted(async () => {
         <label class="block text-gray-700 pl-2">부서 목표 점수 : </label>
         <input
           v-model="dept.targetScore"
-          type="text"
-          :readonly="dept.idx !== ''"
+          type="number"
+          :readonly="!dept.isEditing"
           class="border border-gray-300 p-2 rounded w-80 ml-2 mr-2"
           placeholder="부서 목표 점수 이력해주세요."
         />
-        <input />
       </div>
 
       <div class="flex justify-end">
         <button
+          v-if="!dept.isEditing && index < deptlength"
+          class="bg-yellow-500 h-10 text-white px-4 py-1 rounded mr-2"
+          @click="dept.isEditing = true"
+        >
+          수정
+        </button>
+
+        <button
+          v-if="dept.isEditing && index < deptlength"
+          class="bg-blue-500 h-10 text-white px-4 py-1 rounded mr-2"
+          @click="updateDept(index)"
+        >
+          저장
+        </button>
+
+        <button 
+          v-if="dept.isEditing && index < deptlength"
+          class="bg-black h-10 text-white px-4 py-1 rounded mr-2"
+          @click="cancleDept(index)">
+          취소
+        </button>
+
+        <button
           class="bg-red-500 text-white px-4 py-1 rounded"
-          @click="removeDepartment(index, dept.idx)"
+          @click="removeDept(dept.idx)"
         >
           부서 삭제
         </button>

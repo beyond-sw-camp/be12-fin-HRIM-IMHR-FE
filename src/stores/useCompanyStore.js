@@ -27,15 +27,13 @@ export const useCompanyStore = defineStore('company', {
     },
 
     async fetchCompany() {
-      const response = await axios.post("/api/comapny/fetch");
+      const response = await axios.post("/api/company/fetchMyCompany");
 
-      console.log("store company", response.data.data);
       return response.data.data;
     },
 
     async updateScore(formData) {
-      console.log("store formData ", formData);
-      const response = await axios.get(`/api/company/scoreUpdate?companyIdx=${formData.companyIdx}$score=${formData.score}`);
+      await axios.get(`/api/company/scoreUpdate/${formData.idx}/${formData.targetScore}`);
     },
   }
 });

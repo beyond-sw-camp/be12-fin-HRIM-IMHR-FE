@@ -37,6 +37,15 @@ const departmentIdx = ref(null);
 const departmentName = ref("");
 const totalScore = ref(null);
 
+const esgScore = ref({
+  e: 0,
+  s: 0,
+  g: 0,
+  targetE: 0,
+  targetS: 0,
+  targetG: 0,
+});
+
 function changeMonth(diff) {
   let newMonth = month.value + diff;
   let newYear = year.value;
@@ -71,9 +80,11 @@ async function fetchData() {
   memberscores.value = companyScoreData.memberScores;
   departmentList.value = companyScoreData.departments;
   companyName.value = companyScoreData.companyName;
+  // 막대그래프를 위한 부서 리스트 목록 
   departments.value = companyScoreData.departments;
+  
 
-  console.log(departments.value);
+  console.log("vue",departments.value); 
 
   // 현재 부서명에 해당하는 idx 찾기  
   const matchedDept = departmentList.value.find(
@@ -95,10 +106,20 @@ async function fetchData() {
   };
 
   const departmentMonthData = await departmentStore.departmentmonth(params);
+  // 월별 부서 점수 데이터
   departmentScoreData.value = departmentMonthData;
+
+  console.log("월별 부서 점수 데이터", departmentScoreData.value);
   await nextTick();
   departmentName.value = departmentScoreData.value.departmentName;
   totalScore.value = departmentScoreData.value.departmentTotalScore;
+
+  esgScore.value.e = departmentScoreData.value.departmentEScore ?? 0;
+  esgScore.value.targetE = departmentScoreData.value.targetEScore ?? 0;
+  esgScore.value.s = departmentScoreData.value.departmentSScore ?? 0;
+  esgScore.value.targetS = departmentScoreData.value.targetSScore ?? 0;
+  esgScore.value.g = departmentScoreData.value.departmentGScore ?? 0;
+  esgScore.value.targetG = departmentScoreData.value.targetGScore ?? 0;
 }
 
 const itemsPerPage = 10;
@@ -157,9 +178,9 @@ let gaugeChartInstance = null;
 let barChartInstance = null;
 let esgChartInstances = {};
 
-function createOrUpdateGaugeChart(ctx, value, color) {
+function createOrUpdateGaugeChart(ctx, target, value, color) {
   if (gaugeChartInstance) {
-    gaugeChartInstance.data.datasets[0].data = [value, 100 - value];
+    gaugeChartInstance.data.datasets[0].data = [value, target - value];
     gaugeChartInstance.update();
   } else {
     gaugeChartInstance = new Chart(ctx, {
@@ -168,7 +189,7 @@ function createOrUpdateGaugeChart(ctx, value, color) {
         labels: ["점수", "남은 비율"],
         datasets: [
           {
-            data: [value, 100 - value],
+            data: [value, target - value],
             backgroundColor: [color, "#F4F4F4"],
             borderWidth: 0,
           },
@@ -186,7 +207,7 @@ function createOrUpdateGaugeChart(ctx, value, color) {
   }
 }
 
-function createOrUpdateESGChart(label, ctx, value, color) {
+function createOrUpdateESGChart(label, ctx, value, color, target) {
   if (esgChartInstances[label]) {
     esgChartInstances[label].destroy();
     esgChartInstances[label] = null;
@@ -197,7 +218,7 @@ function createOrUpdateESGChart(label, ctx, value, color) {
       labels: ["점수", "남은 비율"],
       datasets: [
         {
-          data: [value, 100 - value],
+          data: [value, target - value],
           backgroundColor: [color, "#F4F4F4"],
           borderWidth: 0,
         },
@@ -272,20 +293,21 @@ function createOrUpdateBarChart(ctx) {
 // 데이터 변경 감지하여 차트 업데이트
 watch(departmentScoreData, async (newVal) => {
   await nextTick();
-  // 게이지 차트
+  // 부서 평균 점수 게이지 차트
   const gaugeCtx = document.getElementById("gaugeChart");
   if (gaugeCtx && newVal) {
-    createOrUpdateGaugeChart(gaugeCtx, newVal.departmentTotalScore, "#86EFAC");
+    createOrUpdateGaugeChart(gaugeCtx, newVal.targetTotalScore, newVal.departmentTotalScore, "#86EFAC");
   }
 
-  // ESG 영역별 차트
+  // 부서 ESG 영역별 차트
   ["E", "S", "G"].forEach((label) => {
     const esgCtx = document.getElementById(`chart${label}`);
     if (esgCtx && newVal) {
       const value = newVal[`department${label}Score`];
       let color =
         label === "E" ? "#D1FAE5" : label === "S" ? "#DBEAFE" : "#EDE9FE";
-      createOrUpdateESGChart(label, esgCtx, value, color);
+      const target = newVal[`target${label}Score`];
+      createOrUpdateESGChart(label, esgCtx, value, color, target);
     }
   });
 });
@@ -326,29 +348,29 @@ const esgData = computed(() => {
 });
 
 const trends = computed(() => {
-  if (!departmentScoreData.value) return [];
+  if (!esgScore.value) return [];
 
   return [
     {
-      percent: 0, // 추후 변동값 계산용
+      percent: esgScore.value.targetE ? ((esgScore.value.e / esgScore.value.targetE) * 100).toFixed(1) : "0.0",
       title: "환경 Environmental",
-      score: departmentScoreData.value.departmentEScore,
+      score: esgScore.value.e,
       diff: 0, // 이전 값 비교해서 계산할 수도 있음
       bg: "bg-green-100",
       color: "text-green-600",
     },
     {
-      percent: 0,
+      percent: esgScore.value.targetS ? ((esgScore.value.s / esgScore.value.targetS) * 100).toFixed(1) : "0.0",
       title: "사회 Social",
-      score: departmentScoreData.value.departmentSScore,
+      score: esgScore.value.s,
       diff: 0,
       bg: "bg-blue-100",
       color: "text-blue-600",
     },
     {
-      percent: 0,
+      percent: esgScore.value.targetG ? ((esgScore.value.g / esgScore.value.targetG) * 100).toFixed(1) : "0.0",
       title: "지배구조 Governance",
-      score: departmentScoreData.value.departmentGScore,
+      score: esgScore.value.g,
       diff: 0,
       bg: "bg-purple-100",
       color: "text-purple-600",

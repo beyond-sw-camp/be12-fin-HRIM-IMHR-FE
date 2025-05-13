@@ -48,11 +48,6 @@ import FeedbackDetail from '../pages/feedback/FeedbackDetail.vue';
 
 // 마이페이지
 import MyPageView from '../pages/mypage/MyPageView.vue';
-// import { useRoute } from "vue-router";
-// const route = useRoute();
-// const idx = route.params.idx;
-
-
 
 const routes = [
   {

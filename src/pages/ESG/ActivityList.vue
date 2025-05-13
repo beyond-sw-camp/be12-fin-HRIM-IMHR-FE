@@ -14,9 +14,23 @@ const router = useRouter()
 const search = ref('')
 const currentPage = ref(1)
 const totalPages = ref(0);
+const userRole = ref(true);
 
-const userRole = ref(false);
+// Subject metadata and form data
+const subjects = ref([]);
+const selectedSubject = ref(null);
+const formData = ref({
+  subject: '',
+  activityDate: new Date().toISOString().split('T')[0],
+  description: '',
+  inputs: {}
+});
 
+// File handling
+const previewImage = ref(null);
+const file = ref(null);
+const fileInput = ref(null);
+const formRef = ref(null);
 
 // **여기에 추가**: 5개씩 묶어서 보여줄 페이지 번호 범위 계산
 const pageRange = computed(() => {
@@ -47,16 +61,17 @@ const newActivity = ref({ topic: '', file: null })
 onMounted(async () => {
   totalPages.value = await activityStore.list((currentPage.value - 1));
   userRole.value = await memberStore.isAdmin();
-})
+  subjects.value = await activityStore.subjectListSearch();
+  console.log(subjects)
+});
 
+const handleSubjectChange = (subject) => {
+  selectedSubject.value = subject;
+  formData.value.subject = subject.subject;
+  formData.value.inputs = {};
+};
 
-// 이미지 관련
-const previewImage = ref(null);
-const file = ref(null);
-const fileInput = ref(null);
-const formRef = ref(null)
-
-const handleFileUpload = (event) => {
+const handleFileUpload = (event, fieldName) => {
   file.value = event.target.files[0];
   if (file.value) {
     const reader = new FileReader();
@@ -64,62 +79,84 @@ const handleFileUpload = (event) => {
       previewImage.value = e.target.result;
     };
     reader.readAsDataURL(file.value);
+    formData.value.inputs[fieldName] = file.value;
   }
-}
+};
 
-// 프리뷰 제거
 const previewImageClose = () => {
-  console.log(file.value);
   previewImage.value = null;
   file.value = null;
   if (fileInput.value) {
     fileInput.value.value = null;
   }
-}
+};
 
-// form 데이터 전송
 const submit = async () => {
-  let formData = new FormData(formRef.value);
-
-
-
-  if (!formData.get('title')) {
-    alert("제목을 입력하여 주십시오.")
+  if (!formData.value.subject) {
+    alert("주제를 선택하여 주십시오.");
+    return;
   }
-  else if (!newActivity.value.topic) {
-    alert("주제를 선택하여 주십시오.")
+
+  if (!formData.value.description) {
+    alert("내용을 입력하여 주십시오.");
+    return;
   }
-  else if (!formData.get("performance")) {
-    alert("활동 시간이나 금액을 입력하여 주십시오.")
-  } else if (file.value === null) {
-    alert("파일을 첨부하여 주십시오.")
-  } else if (!formData.get('description')) {
-    alert("내용을 입력하여 주십시오.")
-  } else {
-    const dto = {
-      type: newActivity.value.topic,
-      title: formData.get("title"),
-      description: formData.get("description"),
-      performance: formData.get('performance')
-    };
 
-    // formData=null;
-    formData = new FormData();
-    formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
-
-    formData.append("file", file.value);
-
-    try {
-      const response = await activityStore.regist(formData);
-
-      stomp.activityApproveReq("활동 승인 요청", "[" + response.title + "] 승인 요청이 왔습니다.", memberStore.myCompanyIdx, response.idx);
-      window.location.reload();
-    } catch (error) {
-      alert("활동 추가 실패 \n 관리자에게 문의 하시오.");
+  // Validate required inputs
+  const selectedSubjectMeta = subjects.value.find(s => s.subject === formData.value.subject);
+  if (selectedSubjectMeta) {
+    for (const input of selectedSubjectMeta.inputs) {
+      if (!formData.value.inputs[input.text]) {
+        alert(`${input.text}을(를) 입력하여 주십시오.`);
+        return;
+      }
     }
   }
-}
 
+  try {
+    // Create FormData instance
+    const submitFormData = new FormData();
+
+    // Create DTO object without file data
+    const dto = {
+      subjectId: selectedSubjectMeta.id,
+      subject: formData.value.subject,
+      activityDate: formData.value.activityDate,
+      description: formData.value.description,
+      inputs: {}
+    };
+
+    // Add non-file inputs to DTO
+    for (const input of selectedSubjectMeta.inputs) {
+      if (input.type !== 'file') {
+        dto.inputs[input.text] = formData.value.inputs[input.text];
+      }
+    }
+
+    // Add DTO to FormData
+    submitFormData.append('dto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+
+    // Add file inputs to FormData separately
+    for (const input of selectedSubjectMeta.inputs) {
+      if (input.type === 'file' && formData.value.inputs[input.text]) {
+        submitFormData.append(input.text, formData.value.inputs[input.text]);
+      }
+    }
+
+    const response = await activityStore.activitySubmit(submitFormData);
+
+    stomp.activityApproveReq(
+      "활동 승인 요청", 
+      `[${response.title}] 승인 요청이 왔습니다.`, 
+      memberStore.myCompanyIdx, 
+      response.idx
+    );
+    window.location.reload();
+  } catch (error) {
+    console.log(error);
+    alert("활동 추가 실패 \n 관리자에게 문의 하시오.");
+  }
+};
 
 const activityDelete = async (activicyIdx) => {
   const isSuccess = await activityStore.delete(activicyIdx);
@@ -138,7 +175,6 @@ const loadActivities = async (e) => {
 const onSearchInput = (e) => {
   loadActivities(e.target.value)
 }
-
 
 // const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
 // manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
@@ -228,49 +264,60 @@ const onSearchInput = (e) => {
     </div>
 
     <!-- ➕ 활동 추가 -->
-    <form action="/" method="post" @submit.prevent="handleSubmit" ref="formRef"
+    <form @submit.prevent="submit" ref="formRef"
       class="mt-10 bg-white p-6 rounded-md shadow max-w-4xl mx-auto" v-if="!userRole">
       <h2 class="text-lg font-semibold text-slate-800 mb-4">활동 추가</h2>
 
       <div class="flex flex-col md:flex-row gap-4 mb-2">
-        <input placeholder="제목 입력" name="title"
+        <input placeholder="활동 제목" name="title"
           class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500" />
-        <select v-model="newActivity.topic"
+        <!-- 주제 선택 -->
+        <select v-model="formData.subject" @change="handleSubjectChange(subjects.find(s => s.subject === formData.subject))"
           class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500">
           <option disabled value="">주제 선택</option>
-          <option>봉사</option>
-          <option>기부</option>
+          <option v-for="subject in subjects" :key="subject._id" :value="subject.subject">
+            {{ subject.subject }}
+          </option>
         </select>
-
       </div>
 
+        <!-- 활동 날짜 -->
+        <input type="date" v-model="formData.activityDate"
+          class="border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500" />
 
+        <!-- 동적 입력 필드 -->
+        <template v-if="selectedSubject">
+          <div v-for="input in selectedSubject.inputs" :key="input.text" class="flex flex-col gap-2">
+            <label class="text-sm font-medium text-gray-700">{{ input.text }}</label>
+            
+            <!-- 파일 입력 -->
+            <template v-if="input.type === 'file'">
+              
+              <input type="file" name="files" :ref="el => { if (input.type === 'file') fileInput = el }"
+                @change="(e) => handleFileUpload(e, input.text)"
+                class="border border-gray-300 rounded-md px-4 py-2" />
+            </template>
 
-      <div v-if="previewImage" class="relative inline-block my-2">
-        <!-- 닫기 버튼 -->
-        <button @click="previewImageClose" type="button"
-          class="absolute top-2 left-2 bg-white text-black rounded-full px-2 py-1 text-xs shadow hover:bg-gray-200">
-          ✕
-        </button>
-        <!-- 이미지 -->
-        <img class="h-64 rounded" :src="previewImage" alt="" />
-      </div>
+            <!-- 숫자 입력 -->
+            <input v-else-if="input.type === 'number'" type="number"
+              v-model="formData.inputs[input.text]"
+              class="border border-gray-300 rounded-md px-4 py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
 
+            <!-- 텍스트 입력 -->
+            <input v-else type="text"
+              v-model="formData.inputs[input.text]"
+              class="border border-gray-300 rounded-md px-4 py-2" />
+          </div>
+        </template>
 
-      <div class="flex flex-col md:flex-row gap-4 mt-2">
-        <input type="number" name="performance" placeholder="활동 시간 및 금액 입력"
-          class="border border-gray-300 rounded-md px-4 py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-        <input type="file" ref="fileInput" accept="image/jpg, image/jpeg, image/png" name="file"
-          @change="handleFileUpload" class="border border-gray-300 rounded-md px-4 py-2" />
+        <!-- 설명 입력 -->
+        <div class="my-2">
+          <textarea v-model="formData.description"
+            class="w-full h-[150px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"
+            placeholder="활동 내용"></textarea>
+        </div>
 
-      </div>
-
-      <div class="my-2">
-        <textarea placeholder="내용 입력" name="description"
-          class="w-full h-[150px] flex-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-slate-500"></textarea>
-      </div>
-
-      <button type="button" @click="submit"
+      <button type="submit"
         class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition ml-auto w-[123px]">
         승인 요청
       </button>

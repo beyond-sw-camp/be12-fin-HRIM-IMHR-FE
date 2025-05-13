@@ -17,6 +17,20 @@ export const useActivityStore = defineStore('activity', {
             });
             return response.data.data;
         },
+        async activitySubmit(formData) {
+            const response = await axios.post("/api/esg_activity/submit", formData, {
+                headers: {
+                    "Content-Type" : "multipart/form-data"
+                }
+            }
+                // {
+                //     memberId:member.userid, name:member.name, email:member.email, 
+                //     password:member.password, companyName: member.companyName,
+                //     registrationNumber: member.registrationNumber
+                // }
+            );
+            return response;
+        },
 
         async list(page) {
             const response = await axios("/api/activity/activityList?page=" + page);

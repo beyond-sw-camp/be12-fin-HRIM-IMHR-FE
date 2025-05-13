@@ -37,6 +37,7 @@ const departmentIdx = ref(null);
 const departmentName = ref("");
 const totalScore = ref(null);
 
+
 const esgScore = ref({
   e: 0,
   s: 0,
@@ -82,34 +83,30 @@ async function fetchData() {
   companyName.value = companyScoreData.companyName;
   // 막대그래프를 위한 부서 리스트 목록 
   departments.value = companyScoreData.departments;
-  
+  if(departmentIdx.value===undefined || departmentIdx.value===null)
+    departmentIdx.value = companyScoreData.departments[0].idx;
 
-  console.log("vue",departments.value); 
 
-  // 현재 부서명에 해당하는 idx 찾기  
-  const matchedDept = departmentList.value.find(
-    (dept) => dept.name === route.params.departmentName
-  );
-  if (matchedDept) {
-    departmentStore.departmentIdx = matchedDept.idx;
-  } else {
-    departmentStore.departmentIdx = null;
+  watch(
+  () => route.params.departmentIdx,
+  (newVal) => {
+    departmentIdx.value = newVal ?? 1; // fallback to 1 if null/undefined
   }
+);
+
 
   // departmentIdx가 있으면 파라미터에 포함
   const params = {
     year: year.value,
     month: month.value,
-    ...(departmentStore.departmentIdx != null && {
-      departmentIdx: departmentStore.departmentIdx,
-    }),
+    departmentIdx:departmentIdx.value,
   };
 
   const departmentMonthData = await departmentStore.departmentmonth(params);
   // 월별 부서 점수 데이터
   departmentScoreData.value = departmentMonthData;
 
-  console.log("월별 부서 점수 데이터", departmentScoreData.value);
+
   await nextTick();
   departmentName.value = departmentScoreData.value.departmentName;
   totalScore.value = departmentScoreData.value.departmentTotalScore;
@@ -468,6 +465,7 @@ const evalTable = [
                   name: 'dashboard-with-department',
                   params: {
                     departmentName: dept.name,
+                    departmentIdx: dept.idx,
                     yearMonth: `${year}-${month < 10 ? '0' + month : month}`,
                   },
                 }"

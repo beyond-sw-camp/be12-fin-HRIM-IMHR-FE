@@ -63,15 +63,17 @@ const routes = [
       name: 'dashboard-no-department',
       component: DepartmentDashboard,
       props: route => ({
+        departmentIdx:null,
         departmentName: null,
         yearMonth: null,
       })
     },
     {
-      path: '/departmentdashboard/:departmentName/:yearMonth',
+      path: '/departmentdashboard/:departmentIdx/:departmentName/:yearMonth',
       name: 'dashboard-with-department',
       component: DepartmentDashboard,
       props: route => ({
+        departmentIdx:route.params.departmentIdx,
         departmentName: route.params.departmentName,
         yearMonth: route.params.yearMonth,
       })

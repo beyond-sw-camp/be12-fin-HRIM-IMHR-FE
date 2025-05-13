@@ -77,6 +77,22 @@ const userRole = ref(
       협력사 리스트
     </h1>
 
+ <!-- ✅ ESG TOP3 차트 섹션 -->
+    <div class="max-w-5xl mx-auto mb-10">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-slate-700">협력사 ESG 점수 Top 3</h2>
+        </div>
+        <iframe
+          src="http://192.0.30.41:3000/d-solo/ac7bebdb-e533-4313-9440-18e78c08670c/new-dashboard?orgId=1&from=now-30d&to=now&var-year=All&var-month=All&var-company_idx=1&panelId=3"
+          width="100%"
+          height="300"
+          frameborder="0"
+          class="w-full rounded border"
+        ></iframe>
+      </div>
+    </div>
+
     <!-- 검색창 -->
     <div
       class="max-w-2xl mx-auto bg-white p-4 rounded-md shadow-md flex items-center gap-3 mb-3"

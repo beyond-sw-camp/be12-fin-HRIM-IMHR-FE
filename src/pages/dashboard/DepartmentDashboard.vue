@@ -10,6 +10,7 @@ import Chart from "chart.js/auto";
 import { useRoute, useRouter } from "vue-router";
 import { useCompanyStore } from "../../stores/useCompanyStore";
 import { useDepartmentStore } from "../../stores/useDepartmentStore";
+import { useActivityStore } from "../../stores/useActivityStore";
 
 const props = defineProps({
   departmentName: String,
@@ -20,6 +21,7 @@ const route = useRoute();
 const router = useRouter();
 const companyStore = useCompanyStore();
 const departmentStore = useDepartmentStore();
+const activityStore = useActivityStore();
 const departmentScoreData = ref(null);
 const departments = ref([]);
 
@@ -84,7 +86,7 @@ async function fetchData() {
   departments.value = companyScoreData.departments;
   
 
-  console.log("vue",departments.value); 
+  // console.log("vue",departments.value); 
 
   // 현재 부서명에 해당하는 idx 찾기  
   const matchedDept = departmentList.value.find(
@@ -109,7 +111,7 @@ async function fetchData() {
   // 월별 부서 점수 데이터
   departmentScoreData.value = departmentMonthData;
 
-  console.log("월별 부서 점수 데이터", departmentScoreData.value);
+  // console.log("월별 부서 점수 데이터", departmentScoreData.value);
   await nextTick();
   departmentName.value = departmentScoreData.value.departmentName;
   totalScore.value = departmentScoreData.value.departmentTotalScore;
@@ -159,19 +161,6 @@ watch(
     }
   }
 );
-
-onMounted(() => {
-  fetchData().then(() => {
-    // canvas 렌더링 이후 실행되어야 안전함
-    esgData.value.forEach((item) => {
-      const ctx = document.getElementById(`chart${item.label}`);
-    });
-
-    const gaugeCtx = document.getElementById("gaugeChart");
-
-    const barCtx = document.getElementById("barChart");
-  });
-});
 
 
 let gaugeChartInstance = null;
@@ -378,50 +367,42 @@ const trends = computed(() => {
   ];
 });
 
-const evalTable = [
-  {
-    category: "환경(E)",
-    activity: "친환경 교육 100% 이수",
-    criteria: "연간 1회 이상 이수",
-    score: "가점 +3",
-  },
-  {
-    category: "환경(E)",
-    activity: "환경개선 아이디어 제안",
-    criteria: "제안서 1건 이상 제출",
-    score: "가점 +2",
-  },
-  {
-    category: "사회(S)",
-    activity: "사회공헌(봉사) 활동 연 1회 이상 참여",
-    criteria: "자원봉사 1회 이상",
-    score: "가점 +3",
-  },
-  {
-    category: "사회(S)",
-    activity: "다양성·인권 교육 참여",
-    criteria: "교육 이수 증빙 제출",
-    score: "가점 +2",
-  },
-  {
-    category: "사회(S)",
-    activity: "직무 관련 ESG 공모전/캠페인 참여",
-    criteria: "사내외 ESG 행사 참여 확인",
-    score: "가점 +2",
-  },
-  {
-    category: "지배구조(G)",
-    activity: "윤리경영 교육 이수",
-    criteria: "정기교육 이수 여부",
-    score: "가점 +2",
-  },
-  {
-    category: "지배구조(G)",
-    activity: "내부 제보(비리/인권 침해 등)",
-    criteria: "제보 시스템 이용 및 후속조치",
-    score: "가점 +5",
-  },
-];
+const subjects = async () => {
+  const response = await activityStore.subjectListSearch();
+
+  evalTable.value = response.map(item => ({
+    category: convertEsgValue(item.esgValue),
+    activity: item.esgActivityItem || "-",
+    criteria: item.evaluationCriteria || "-",
+    score: `가점 + ${item.esgScore}`,
+  }));
+};
+
+const convertEsgValue = (value) => {
+  switch (value) {
+    case "E": return "환경(E)";
+    case "S": return "사회(S)";
+    case "G": return "지배구조(G)";
+    default: return "-";
+  }
+};
+
+const evalTable = ref([]);
+
+onMounted(() => {
+  fetchData().then(() => {
+    // canvas 렌더링 이후 실행되어야 안전함
+    esgData.value.forEach((item) => {
+      const ctx = document.getElementById(`chart${item.label}`);
+    });
+
+    const gaugeCtx = document.getElementById("gaugeChart");
+
+    const barCtx = document.getElementById("barChart");
+  });
+
+  subjects();
+});
 </script>
 
 <template>
@@ -623,6 +604,8 @@ const evalTable = [
           </tbody>
         </table>
       </div>
+
+
     </div>
   </div>
 </template>

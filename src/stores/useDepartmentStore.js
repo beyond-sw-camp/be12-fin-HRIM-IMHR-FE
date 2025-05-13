@@ -15,8 +15,20 @@ export const useDepartmentStore = defineStore('department', {
 
             return response;
         },
-        async updateDepartments(CDRequest) {
-            const response = await axios.post("/api/department/update", CDRequest);
+
+        async createDepartments(CDRequest) {
+            const response = await axios.post("/api/department/create", CDRequest);
+            return response;
+        },
+
+        async updateDepartment(formData) {
+            const response = await axios.post("/api/department/update", formData);
+            return response;
+        }, 
+
+        async deleteDepartment(idx) {
+            const response = await axios.delete(`/api/department/delete/${idx}`);
+
             return response;
         },
 

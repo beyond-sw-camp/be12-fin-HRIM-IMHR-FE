@@ -23,9 +23,6 @@ import CampaignList from '../pages/ESG/CampaignEventList.vue';
 import CampaignMemberAdd from '../pages/ESG/CampaignMemberAdd.vue';
 import ActivitySetting from '../pages/ESG/ESGActivitySetting.vue'
 
-// 교육
-import EducationList from '../pages/ESG/EducationList.vue'
-
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'
 import ReportDetailView from '../pages/report/reportDetail.vue'
@@ -42,6 +39,8 @@ import Calendar from '../pages/Calendar/Calendar.vue';
 import PartnerDashboard from '../pages/dashboard/partnerDashboard.vue';
 import DepartmentDashboard from '../pages/dashboard/DepartmentDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
+import GrafanaPanel from '../pages/dashboard/GrafanaPanel.vue';
+
 
 // 피드백
 import FeedbackForm from '../pages/feedback/FeedbackForm.vue';
@@ -61,15 +60,17 @@ const routes = [
       name: 'dashboard-no-department',
       component: DepartmentDashboard,
       props: route => ({
+        departmentIdx:null,
         departmentName: null,
         yearMonth: null,
       })
     },
     {
-      path: '/departmentdashboard/:departmentName/:yearMonth',
+      path: '/departmentdashboard/:departmentIdx/:departmentName/:yearMonth',
       name: 'dashboard-with-department',
       component: DepartmentDashboard,
       props: route => ({
+        departmentIdx:route.params.departmentIdx,
         departmentName: route.params.departmentName,
         yearMonth: route.params.yearMonth,
       })
@@ -187,13 +188,6 @@ const routes = [
     component: ReportDetailView
   },
 
-  // 교육
-  {
-    path: '/educationList',
-    name: 'EducationList',
-    component: EducationList
-  },
-
   // 파트너사
   {
     path: '/partnerList',
@@ -205,6 +199,12 @@ const routes = [
     name: 'partnerDashboard',
     component: PartnerDashboard,
     props: true
+  },
+
+  {
+    path: '/grafana',
+    name: 'GrafanaPanel',
+    component: GrafanaPanel,
   },
 
   // 부서 설정
@@ -257,6 +257,8 @@ const routes = [
     component: MyPageView,
   },
 ];
+
+
 
 const router = createRouter({
   history: createWebHistory(),

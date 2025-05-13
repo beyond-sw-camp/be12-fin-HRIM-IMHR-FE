@@ -4,10 +4,8 @@ import { useMemberStore } from '../../stores/useMemberStore'
 import { useRouter } from 'vue-router'
 import { Menu, Bell } from 'lucide-vue-next'
 import { useStompStore } from '../../stores/useStompStore'
-import { useNotificationStore } from "../../stores/useNotificationStore"
 
 const memberStore = useMemberStore();
-const NotificationStore = useNotificationStore();
 
 const emit = defineEmits(['toggle-sidebar', 'toggle-noti']);
 
@@ -21,6 +19,7 @@ const handleLogout = async () => {
   } finally {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('userInfo')
+    emit('toggle-sidebar')
     router.push('/login')
   }
 }
@@ -30,7 +29,6 @@ const me = ref({});
 onMounted(async () => {
   try {
     me.value = await memberStore.fetchMember();
-
   } catch (error) {
     router.push('/login')
   }
@@ -41,7 +39,7 @@ onMounted(async () => {
 <template>
   <header class="bg-white shadow-md w-full h-16 flex items-center px-6 fixed top-0 left-0 z-20">
     <div class="flex items-center gap-3">
-      <router-link to="/" class="text-slate-800 font-bold text-5xl md:text-5xl ml-2 mb-1">IMHR</router-link>
+      <router-link :to="`/partner/${memberStore.myCompanyIdx}`" class="text-slate-800 font-bold text-5xl md:text-5xl ml-2 mb-1">IMHR</router-link>
 
       <button @click="emit('toggle-sidebar')" class="p-3 rounded  transition" aria-label="사이드바 열기">
         <Menu class="w-11 h-11 text-slate-800 mt-0.5" />

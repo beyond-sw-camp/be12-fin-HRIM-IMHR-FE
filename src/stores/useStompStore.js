@@ -17,12 +17,11 @@ export const useStompStore = defineStore('stomp', {
       const memberStore = useMemberStore();
 
       this.stompClient = new Client({
-        brokerURL: 'ws://localhost:8080/ws',
+        brokerURL: '/ws',
         connectHeaders: {},
         reconnectDelay: 5000,
         onConnect: () => {
           this.connected = true;
-          console.log('🔌 STOMP 연결됨');
 
           let webSocketIdx = 0;
           if (member) webSocketIdx = member.idx;

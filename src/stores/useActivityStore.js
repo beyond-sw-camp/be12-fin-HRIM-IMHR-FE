@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { data } from 'autoprefixer';
 
 export const useActivityStore = defineStore('activity', {
     state: () => (
         {
             activityList: [],
+            subjectList: [],
         }),
 
     actions: {
@@ -16,10 +18,34 @@ export const useActivityStore = defineStore('activity', {
             });
             return response.data.data;
         },
+        async activitySubmit(formData) {
+            const response = await axios.post("/api/esg_activity/submit", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }});
+            return response;
+        },
 
-        async list(page, size) {
-            const response = await axios("/api/activity/activityList?page=" + page + "&size=" + size);
-            this.activityList = response.data.data;
+        async activityListsearch(memberIdx) {
+            const response = await axios.get(`/api/esg_activity/listsearch/${memberIdx}`);
+            return response.data.data;
+        },
+
+        async list(page) {
+            const response = await axios("/api/activity/activityList?page=" + page);
+            this.activityList = response.data.data.activityList;
+
+            return response.data.data.total;
+        },
+
+        async search(search, page) {
+            const response = await axios.get('/api/activity/activitySearch', {
+                params: { page, search }
+            });
+
+            this.activityList = response.data.data.activityList;
+
+            return response.data.data.total;
         },
 
         async detail(idx) {
@@ -39,6 +65,28 @@ export const useActivityStore = defineStore('activity', {
         async delete(idx) {
             const response = await axios.delete("/api/activity/delete/" + idx);
             return response.data.isSuccess;
+        },
+
+        async subjectCreate(formData) {
+            const response = await axios.post("/api/activitySubject/create", formData);
+            return response.data.data;
+        },
+
+        async subjectListSearch() {
+            const response = await axios.post("/api/activitySubject/search");
+            this.subjectList = response.data.data;
+
+            return response.data.data;
+        },
+
+        async subjectUpdate(formData) {
+            console.log("store update", formData);
+            const response = await axios.put("/api/activitySubject/update", formData);
+            return response.data.data;
+        },
+
+        async subjectDelete(id) {
+            await axios.delete(`/api/activitySubject/delete/${id}`);
         },
     },
 });

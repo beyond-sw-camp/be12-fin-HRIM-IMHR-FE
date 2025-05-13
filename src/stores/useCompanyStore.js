@@ -1,18 +1,39 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { list } from "postcss";
 
 export const useCompanyStore = defineStore('company', {
   state: () => ({
-    companys: []
+    companyName: null,
+    departments: [],
+    top3: [],
+    companys: [],
+    companyScores:[]
   }),
   actions: {
-    async list() {
-      const response = await axios.post("/api/company/list");
+    async list(page, size, keyword = "") {
+      const response = await axios.get(`/api/company/list?page=${page}&size=${size}&keyword=${keyword}`);
+      this.companys = response.data.data.content;
 
-      console.log("백 -> store ", response.data.data);
-      this.companys = response.data.data;
-      return this.companys;
-    }
+      return response.data.data.totalPages;
+    },
+
+    async companyScore(year, month) {
+      const response = await axios.get(`/api/company/monthDashboard?year=${year}&month=${month}`);
+      
+      this.companyName = response.data.data.companyName;
+      this.top3 = response.data.data.memberScores;
+      this.departments = response.data.data.departments;
+      return response.data.data;
+    },
+
+    async fetchCompany() {
+      const response = await axios.post("/api/company/fetchMyCompany");
+
+      return response.data.data;
+    },
+
+    async updateScore(formData) {
+      await axios.post("/api/company/scoreUpdate", formData);
+    },
   }
 });

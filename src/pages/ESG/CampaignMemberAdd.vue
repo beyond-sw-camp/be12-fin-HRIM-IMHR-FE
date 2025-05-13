@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Search } from "lucide-vue-next";
 import { useCalendarStore } from "../../stores/useCalendarStore";
@@ -43,37 +43,47 @@ const selectedUserIdxs = ref([]);
 
 // 추가 버튼 눌렀을 때
 const handleSubmit = async () => {
+  if (selectedUserIdxs.value.length === 0 ) {
+    alert("선택된 사원이  없습니다. 이대로 저장하시겠습니까?");
+    return;
+  }
+
   const formData = {
     eventIdx: Idx,
     memberIdxList: selectedUserIdxs.value,
   };
 
-  try {
-    if (participatedMembers.value.length > 0) {
-      // 기존 참여자가 있다면 수정 API 호출
-      const result = await campaign.campaignMemberupdate(formData.eventIdx, formData);
-      alert("사원 정보가 성공적으로 수정되었습니다.");
-    } else {
-      // 없다면 추가 API 호출
-      const result = await campaign.register(formData);
-      alert("사원이 성공적으로 추가되었습니다.");
-    }
-
-    stomp.campaignMemberAdd("캠페인 참여 승인 되었습니다.",title.value,formData);
-    // router.back();
-  } catch (error) {
-    console.error("처리 실패:", error);
-    alert("사원 정보 처리 중 오류가 발생했습니다.");
+  if (participatedMembers.value.length > 0) {
+    // 기존 참여자가 있다면 수정 API 호출
+    await campaign.campaignMemberupdate(
+      formData.eventIdx,
+      formData
+    );
+    alert("사원 정보가 성공적으로 수정되었습니다.");
+    window.location.reload();
+  } else {
+    // 없다면 추가 API 호출
+    await campaign.register(formData);
+    alert("사원이 성공적으로 추가되었습니다.");
   }
+
+  stomp.campaignMemberAdd(
+    "캠페인 참여 승인 되었습니다.",
+    title.value,
+    formData
+  );
+  // router.back();
 };
 
 // 참여자 분리
 const participatedMembers = ref([]);
 const nonParticipatedUsers = computed(() => {
   const participatedIds = new Set(participatedMembers.value.map((m) => m.idx));
+
   return users.value
     .filter((u) => !participatedIds.has(u.idx))
-    .filter((u) => u.name.includes(searchText.value));
+    .filter((u) => u.name.includes(searchText.value))
+    .filter((u) => u.department && u.department.name);
 });
 
 //
@@ -95,7 +105,9 @@ onMounted(async () => {
       campaign.campaignfetchMemberList(Idx),
     ]);
     // 승인된 사원들만 필터
-    users.value = userRes.data.data.filter((u) => u.status === "APPROVED" && u.isAdmin === false);
+    users.value = userRes.data.data.filter(
+      (u) => u.status === "APPROVED" && u.isAdmin === false
+    );
     participatedMembers.value = memberRes;
     selectedUserIdxs.value.push(...memberRes.map((m) => m.idx));
   }
@@ -258,7 +270,7 @@ onMounted(async () => {
                   v-model="selectedUserIdxs"
                 />
               </td>
-              <td class="p-2">{{ user.department }}</td>
+              <td class="p-2">{{ user.department.name }}</td>
               <td class="p-2">{{ user.name }}</td>
               <td class="p-2">{{ user.memberId }}</td>
             </tr>
@@ -272,7 +284,7 @@ onMounted(async () => {
         class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
         @click="handleSubmit"
       >
-        {{ participatedMembers.length > 0 ? "수정" : "추가" }}
+        저장
       </button>
 
       <button

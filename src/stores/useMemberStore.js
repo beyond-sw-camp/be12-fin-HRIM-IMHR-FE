@@ -46,6 +46,8 @@ export const useMemberStore = defineStore('member', {
         },
         async myPageInfo() {
             const response = await axios.post("/api/member/myinfo");
+            this.myCompanyName = response.company;
+
             return response;
         },
         async myActivity() {
@@ -91,15 +93,19 @@ export const useMemberStore = defineStore('member', {
             await axios.post("/api/member/logout");
         },
 
-        async fetchMember(idx) {
-            const response = await axios.post("/api/member/info");
-            console.log(response.data.data.companyIdx)
-            this.myCompanyIdx=response.data.data.companyIdx;
-            this.myIdx = response.data.data.idx;
-            return response.data.data;
+        async isAdmin() {
+            const response =await axios.post("/api/member/isAdmin");
+            return response.data.data
         },
 
+        async fetchMember() {
+            const response = await axios.post("/api/member/info");
+            this.userInfo = response.data.data;
 
-        
+            this.myCompanyIdx=response.data.data.companyIdx;
+            this.myIdx = response.data.data.idx;
+            
+            return response.data.data;
+        },
     }
 })

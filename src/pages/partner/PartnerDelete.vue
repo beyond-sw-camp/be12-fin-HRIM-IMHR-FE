@@ -1,3 +1,21 @@
+<script setup>
+import { defineEmits, defineProps } from 'vue';
+import { usePartnerStore } from '../../stores/usePartnerStore';
+
+const emit = defineEmits(['close', 'confirm'])
+const props = defineProps({
+  visible: Boolean,
+  partnerIdx: Number,
+})
+
+const partnerStore = usePartnerStore();
+
+const handleDelete = async () => {
+  await partnerStore.delete(props.partnerIdx);
+  emit("confirm");
+};
+</script>
+
 <template>
   <div
     v-if="visible"
@@ -13,9 +31,10 @@
         >
           취소
         </button>
+
         <button
           class="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600"
-          @click="$emit('confirm')"
+          @click="handleDelete"
         >
           삭제
         </button>
@@ -23,10 +42,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  visible: Boolean,
-})
-defineEmits(['close', 'confirm'])
-</script>

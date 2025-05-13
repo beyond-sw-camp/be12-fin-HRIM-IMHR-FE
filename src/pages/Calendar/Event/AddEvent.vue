@@ -70,9 +70,10 @@ async function save() {
       // 수정 모드
       await calendarStore.update(props.event.idx, form.value);
       emit("save", { id: props.event.idx, ...form.value });
+    } else if (form.value.endDate && form.value.startDate > form.value.endDate){
+      alert("끝나는 날짜는 시작 날짜보다 빠를 수 없습니다.");
+      return;
     } else {
-      // 추가 모드
-      console.log({...form.value});
       await calendarStore.regist({ ...form.value });
       emit("save", { ...form.value });
       stomp.eventRegist({...form.value},memberStore.myCompanyIdx)

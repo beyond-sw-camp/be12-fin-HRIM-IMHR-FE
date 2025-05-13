@@ -14,7 +14,7 @@ const submit = async () => {
   console.log('비밀번호 재설정 요청:', form.value)
   const response = await memberStore.findPW(form.value)
   if(response.data.isSuccess)
-    alert('입력된 이메일로 재설정 페이지가 전송되었습니다.')
+    alert('입력된 이메일로 재설정 페이지가 전송되었습니다. 이메일을 받지 못했다면 ID와 이메일을 확인해주세요.')
 }
 </script>
 

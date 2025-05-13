@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 import Header from "./pages/common/Header.vue";
 import ManagerSidebar from "./pages/common/Sidebar/ManagerSidebar.vue";
@@ -9,9 +9,21 @@ import ExecutiveSidebar from "./pages/common/Sidebar/ExecutiveSidebar.vue";
 import NotificationDetail from "./pages/common/Notification/NotificationDetail.vue";
 import NotificationList from "./pages/common/Notification/NotificationList.vue";
 
-const isSidebarOpen = ref(true);
-const toggleSidebar = () => {
+const isSidebarOpen = ref(false);
+const toggleSidebar = async () => {
   isSidebarOpen.value = !isSidebarOpen.value;
+  const memberStore = useMemberStore();
+  const response = await memberStore.fetchMember();
+  const memberInfo = response;
+  console.log(response);
+  
+  if (memberInfo?.isAdmin) {
+    localStorage.setItem("userInfo", JSON.stringify({ role: "manager" }));
+    role.value = "manager";
+  } else {
+    localStorage.setItem("userInfo", JSON.stringify({ role: "executive" }));
+    role.value = "executive"; 
+  }
 };
 
 const route = useRoute();
@@ -20,6 +32,18 @@ const hideLayout = computed(() => route.meta?.hideLayout === true);
 const role = ref(
   JSON.parse(localStorage.getItem("userInfo"))?.role || "executive"
 );
+
+import { onMounted } from "vue";
+import { useMemberStore } from "./stores/useMemberStore";
+
+onMounted(async () => {
+  const saved = localStorage.getItem('isSidebarOpen')
+  if (saved !== null) isSidebarOpen.value = JSON.parse(saved)
+});
+
+watch(isSidebarOpen, (val) => {
+  localStorage.setItem('isSidebarOpen', JSON.stringify(val))
+})
 
 const sidebarComponent = computed(() => {
   switch (role.value) {

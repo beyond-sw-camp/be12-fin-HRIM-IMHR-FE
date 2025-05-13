@@ -11,19 +11,17 @@ import CompanyRegisterView from '../pages/member/CompanyRegisterView.vue'
 import EmployeeRegisterView from '../pages/member/EmployeeRegisterView.vue'
 
 // 관리자
-import PermissionSetting from '../pages/Staff/PermissionSetting.vue';
-import StaffSearch from '../pages/Staff/StaffSearch.vue';
-import StaffDetail from '../pages/Staff/StaffDetail.vue';
+import PermissionSetting from '../pages/staff/PermissionSetting.vue';
+import StaffSearch from '../pages/staff/StaffSearch.vue';
+import StaffDetail from '../pages/staff/StaffDetail.vue';
 import DepartmentSetting from '../pages/department/DepartmentSetting.vue'
 
 // 활동
-import AllActivityDetails from '../pages/esg/AllActivityDetails.vue'
-import ActivityList from '../pages/esg/ActivityList.vue'
-import CampaignList from '../pages/esg/CampaignEventList.vue';
-import CampaignMemberAdd from '../pages/esg/CampaignMemberAdd.vue';
-
-// 교육
-import EducationList from '../pages/esg/EducationList.vue'
+import AllActivityDetails from '../pages/ESG/AllActivityDetails.vue'
+import ActivityList from '../pages/ESG/ActivityList.vue'
+import CampaignList from '../pages/ESG/CampaignEventList.vue';
+import CampaignMemberAdd from '../pages/ESG/CampaignMemberAdd.vue';
+import ActivitySetting from '../pages/ESG/ESGActivitySetting.vue'
 
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'
@@ -38,9 +36,11 @@ import ProductRegistView from '../pages/product/ProductRegist.vue'
 import Calendar from '../pages/Calendar/Calendar.vue';
 
 // 대시보드 & 파트너
-import DashboardView from '../pages/dashboard/Dashboard.vue';
-import PartnerDashboard from '../pages/dashboard/PartnerDashboard.vue';
+import PartnerDashboard from '../pages/dashboard/partnerDashboard.vue';
+import DepartmentDashboard from '../pages/dashboard/DepartmentDashboard.vue';
 import PartnerListView from '../pages/partner/partnerList.vue';
+import GrafanaPanel from '../pages/dashboard/GrafanaPanel.vue';
+
 
 // 피드백
 import FeedbackForm from '../pages/feedback/FeedbackForm.vue';
@@ -51,21 +51,24 @@ import MyPageView from '../pages/mypage/MyPageView.vue';
 
 const routes = [
   {
-    path: '/',
-    name: 'homeRedirect',
-    beforeEnter: (to, from, next) => {
-      const companyId = 1;
-      if (companyId) {
-        next(`/partner/${companyId}`);
-      } else {
-        next(`/partner/${companyId}`); // 또는 next('/login')
-      }
-    }
-  },
-  {
-    path: '/dashboard/1',
-    name: 'dashboard',
-    component: DashboardView
+      path: '/departmentdashboard',
+      name: 'dashboard-no-department',
+      component: DepartmentDashboard,
+      props: route => ({
+        departmentIdx:null,
+        departmentName: null,
+        yearMonth: null,
+      })
+    },
+    {
+      path: '/departmentdashboard/:departmentIdx/:departmentName/:yearMonth',
+      name: 'dashboard-with-department',
+      component: DepartmentDashboard,
+      props: route => ({
+        departmentIdx:route.params.departmentIdx,
+        departmentName: route.params.departmentName,
+        yearMonth: route.params.yearMonth,
+      })
   },
 
   // 로그인 & 인증
@@ -144,6 +147,11 @@ const routes = [
     name: 'allActivityDetails',
     component: AllActivityDetails
   },
+  {
+    path: '/activeSetting',
+    name: 'activitySetting',
+    component: ActivitySetting
+  },
 
   // 캘린더
   {
@@ -165,7 +173,7 @@ const routes = [
 
   // 보고서
   {
-    path: '/reportsList',
+    path: '/reportsList/',
     name: 'reportList',
     component: ReportListView
   },
@@ -175,36 +183,35 @@ const routes = [
     component: ReportDetailView
   },
 
-  // 교육
-  {
-    path: '/educationList/1',
-    name: 'EducationList',
-    component: EducationList
-  },
-
   // 파트너사
   {
-    path: '/partnerList/1',
+    path: '/partnerList',
     name: 'partnerList',
     component: PartnerListView
   },
   {
-    path: '/partner/1',
+    path: '/partner/:idx',
     name: 'partnerDashboard',
     component: PartnerDashboard,
     props: true
   },
 
+  {
+    path: '/grafana',
+    name: 'GrafanaPanel',
+    component: GrafanaPanel,
+  },
+
   // 부서 설정
   {
-    path: '/departmentSetting',
+    path: '/departmentSetting/',
     name: 'DepartmentSetting',
     component: DepartmentSetting
   },
 
   // 피드백
   {
-    path: '/feedbackForm/1',
+    path: '/feedbackForm/',
     name: 'feedbackForm',
     component: FeedbackForm,
   },
@@ -245,6 +252,8 @@ const routes = [
     component: MyPageView,
   },
 ];
+
+
 
 const router = createRouter({
   history: createWebHistory(),

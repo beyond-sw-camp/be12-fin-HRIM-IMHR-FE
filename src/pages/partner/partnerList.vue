@@ -84,7 +84,8 @@ const userRole = ref(
           <h2 class="text-xl font-bold text-slate-700">협력사 ESG 점수 Top 3</h2>
         </div>
         <iframe
-          src="http://192.0.30.41:3000/d-solo/ac7bebdb-e533-4313-9440-18e78c08670c/new-dashboard?orgId=1&from=now-30d&to=now&var-year=All&var-month=All&var-company_idx=1&panelId=3"
+          src="https://www.imhr.p-e.kr/grafana/d-solo/c9163afd-5fb4-4eea-990c-db85ce712052/new-dashboard?orgId=1&from=1747100717563&to=1747122317563&timezone=browser&var-year=2025&var-company_idx=1&panelId=2&__feature.dashboardSceneSolo
+"
           width="100%"
           height="300"
           frameborder="0"

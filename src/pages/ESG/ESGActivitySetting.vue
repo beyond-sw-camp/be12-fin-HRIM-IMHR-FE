@@ -13,7 +13,7 @@ const subjects = ref([
     companyIdx: null,
     subject: "",
     isEditing: true,
-    choices: [{ text: "", type: "" }],
+    choices: [{ text: "", type: "", inputValue: "", }],
     esgValue: "",
     esgScore: null,
     esgActivityItem: "",
@@ -25,7 +25,7 @@ const addQuestion = () => {
   subjects.value.push({
     subject: "",
     isEditing: true,
-    choices: [{ text: "", type: "" }],
+    choices: [{ text: "", type: "", inputValue: "",}],
     esgValue: "",
     esgScore: null,
     esgActivityItem: "",
@@ -34,7 +34,7 @@ const addQuestion = () => {
 };
 
 const addOption = (qIndex) => {
-  subjects.value[qIndex].choices.push({ text: "", type: "" });
+  subjects.value[qIndex].choices.push({ text: "", type: "", inputValue: "", });
 };
 
 const removeOption = (qIndex, oIndex) => {
@@ -65,8 +65,9 @@ const saveForm = async () => {
     esgScore: subject.esgScore,
     esgActivityItem: subject.esgActivityItem,
     evaluationCriteria: subject.evaluationCriteria,
-    inputs: subject.choices.map((choice) => ({
+    inputs: subject.choices.map((choice, index) => ({
       text: choice.text,
+      inputValue: `value${index + 1}`,
       type: choice.type,
     })),
   }));
@@ -97,9 +98,10 @@ const search = async () => {
       esgActivityItem: item.esgActivityItem,
       evaluationCriteria: item.evaluationCriteria,
       isEditing: false,
-      choices: (item.inputs || []).map((choice) => ({
+      choices: (item.inputs || []).map((choice, index) => ({
         text: choice.text,
         type: choice.type,
+        inputValue: `value${index + 1}`,
       })),
     }));
 
@@ -115,7 +117,7 @@ const search = async () => {
     companyIdx: null,
     subject: "",
     isEditing: true,
-    choices: [{ text: "", type: "" }],
+    choices: [{ text: "", type: "", inputValue: "" }],
     esgValue: "",
     esgScore: null,
     esgActivityItem: "",
@@ -148,9 +150,10 @@ const updateSubject = async (qIndex) => {
     esgScore: subject.esgScore,
     esgActivityItem: subject.esgActivityItem,
     evaluationCriteria: subject.evaluationCriteria,
-    inputs: subject.choices.map((choice) => ({
+    inputs: subject.choices.map((choice, index) => ({
       text: choice.text,
       type: choice.type,
+      inputValue: `value${index + 1}`,
     })),
   };
   await activityStore.subjectUpdate(updateDto);

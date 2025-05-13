@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { data } from 'autoprefixer';
 
 export const useActivityStore = defineStore('activity', {
     state: () => (
@@ -21,15 +22,13 @@ export const useActivityStore = defineStore('activity', {
             const response = await axios.post("/api/esg_activity/submit", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
-                }
-            }
-                // {
-                //     memberId:member.userid, name:member.name, email:member.email, 
-                //     password:member.password, companyName: member.companyName,
-                //     registrationNumber: member.registrationNumber
-                // }
-            );
+                }});
             return response;
+        },
+
+        async activityListsearch(memberIdx) {
+            const response = await axios.get(`/api/esg_activity/listsearch/${memberIdx}`);
+            return response.data.data;
         },
 
         async list(page) {

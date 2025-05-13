@@ -16,6 +16,8 @@ const currentPage = ref(1);
 const totalPages = ref(0);
 const pageSize = ref(5);
 const userRole = ref(true);
+const activityList = ref([]);
+
 
 // Subject metadata and form data
 const subjects = ref([]);
@@ -173,6 +175,9 @@ onMounted(async () => {
 
   userRole.value = await memberStore.isAdmin();
   const rawSubjects = await activityStore.subjectListSearch();
+  const memberIdx = await memberStore.userInfo.idx;
+  activityList.value = await activityStore.activityListsearch(memberIdx);
+  console.log("vue list", activityList.value);
 
   // E, S, G 순서로 정렬
   const order = { E: 0, S: 1, G: 2 };
@@ -217,21 +222,20 @@ onMounted(async () => {
       <table class="min-w-full text-sm text-center text-slate-700">
         <thead class="bg-slate-100 border-b">
           <tr>
-            <th class="py-3 border" v-if="!userRole">순서</th>
-            <th class="py-3 border" v-if="userRole">상태</th>
+            <th class="py-3 border">순서</th>
+            <th class="py-3 border">상태</th>
             <th class="p-3 border">주제</th>
             <th class="p-3 border">유저</th>
-            <th class="p-3 border" v-if="userRole">삭제</th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="(activity, index) in activityStore.activityList"
+            v-for="(activity, index) in activityList"
             :key="activity.activityIdx"
             @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
             class="border-b hover:bg-slate-50 transition cursor-pointer"
           >
-            <td class="py-3 border" v-if="!userRole">
+            <td class="py-3 border">
               {{
                 ((currentPage?.value ?? 1) - 1) * (pageSize?.value ?? 5) +
                 index +
@@ -239,33 +243,21 @@ onMounted(async () => {
               }}
             </td>
 
-            <td class="py-2" v-if="userRole">
+            <td class="py-2">
               <span
                 class="text-white text-xs px-3 py-1 rounded-md inline-block"
-                :class="{
-                  'bg-yellow-500': activity.status === '대기 중',
-                  'bg-green-500': activity.status === '승인',
-                  'bg-red-500': activity.status === '승인 반려',
-                }"
+                :class="activity.status ? 'bg-green-500' : 'bg-red-500'"
               >
-                {{ activity.status }}
+              {{ activity.status ? '승인' : '반려' }}
               </span>
             </td>
 
-            <td class="p-3 border">{{ activity.title }}</td>
+            <td class="p-3 border">{{ activity.subject }}</td>
 
             <td class="p-3 border">
-              {{ activity.memberName }} ({{ activity.memberId }})
+              {{ activity.userName }} ({{ activity.userID }})
             </td>
 
-            <td v-if="memberStore.myIdx === activity.memberIdx && userRole">
-              <button
-                class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
-                @click.stop="activityDelete(activity.activityIdx)"
-              >
-                삭제
-              </button>
-            </td>
           </tr>
         </tbody>
       </table>
@@ -398,3 +390,5 @@ onMounted(async () => {
     </form>
   </div>
 </template>
+
+<style scoped></style>

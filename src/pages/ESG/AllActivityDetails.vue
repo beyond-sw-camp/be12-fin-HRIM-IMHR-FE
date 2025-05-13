@@ -109,17 +109,12 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
           반려
         </button>
       </div>
+
       <div class="flex justify-end gap-3 pt-4" v-else-if="detail.status === 'APPROVED'">
         승인 되었습니다.
       </div>
       <div class="flex justify-end gap-3 pt-4" v-else-if="detail.status === 'REJECTED'">
         반려 되었습니다.
-      </div>
-
-      <div class="flex justify-end gap-3 pt-4" v-if="me.idx === detail.member?.idx">
-        <button class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50" @click="deleteActivity">
-          삭제
-        </button>
       </div>
 
     </div>

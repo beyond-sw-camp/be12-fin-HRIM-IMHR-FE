@@ -23,9 +23,6 @@ import CampaignList from '../pages/ESG/CampaignEventList.vue';
 import CampaignMemberAdd from '../pages/ESG/CampaignMemberAdd.vue';
 import ActivitySetting from '../pages/ESG/ESGActivitySetting.vue'
 
-// 교육
-import EducationList from '../pages/ESG/EducationList.vue'
-
 // 보고서
 import ReportListView from '../pages/report/reportList.vue'
 import ReportDetailView from '../pages/report/reportDetail.vue'
@@ -189,13 +186,6 @@ const routes = [
     path: '/reports/:idx',
     name: 'reportDetail',
     component: ReportDetailView
-  },
-
-  // 교육
-  {
-    path: '/educationList',
-    name: 'EducationList',
-    component: EducationList
   },
 
   // 파트너사

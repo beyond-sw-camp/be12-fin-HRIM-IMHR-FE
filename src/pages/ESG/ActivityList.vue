@@ -16,6 +16,7 @@ const currentPage = ref(1)
 const totalPages = ref(0);
 
 const userRole = ref(false);
+const pageSize = ref(5);
 
 
 // **여기에 추가**: 5개씩 묶어서 보여줄 페이지 번호 범위 계산
@@ -23,6 +24,7 @@ const pageRange = computed(() => {
   const total = totalPages.value;
   const page = currentPage.value;
   const groupSize = 5;
+  pageSize.value = groupSize.value;
   const groupIndex = Math.floor((page - 1) / groupSize);
   const start = groupIndex * groupSize + 1;
   const end = Math.min(start + groupSize - 1, total);
@@ -46,6 +48,7 @@ const newActivity = ref({ topic: '', file: null })
 // 리스트 관련
 onMounted(async () => {
   totalPages.value = await activityStore.list((currentPage.value - 1));
+
   userRole.value = await memberStore.isAdmin();
 })
 
@@ -138,11 +141,8 @@ const loadActivities = async (e) => {
 const onSearchInput = (e) => {
   loadActivities(e.target.value)
 }
-
-
-// const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'executive')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
+
 <template>
   <div class="min-h-screen bg-gray-50 p-10">
     <!-- 제목 -->
@@ -167,18 +167,22 @@ const onSearchInput = (e) => {
       <table class="min-w-full text-sm text-center text-slate-700">
         <thead class="bg-slate-100 border-b">
           <tr>
-            <th class="py-3">상태</th>
-            <th>주제</th>
-            <th>유저</th>
-            <th>삭제</th>
+            <th class="py-3 border" v-if="!userRole"> 순서 </th>
+            <th class="py-3 border" v-if="userRole">상태</th>
+            <th class="p-3 border">주제</th>
+            <th class="p-3 border">유저</th>
+            <th class="p-3 border" v-if="userRole">삭제</th>
           </tr>
         </thead>
         <tbody>
 
-          <tr v-for="activity in activityStore.activityList" :key="activity.activityIdx"
+          <tr v-for="(activity, index) in activityStore.activityList" :key="activity.activityIdx"
             @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
             class="border-b hover:bg-slate-50 transition cursor-pointer">
-            <td class="py-2">
+
+            <td class="py-3 border" v-if="!userRole">  {{ ((currentPage?.value ?? 1) - 1) * (pageSize?.value ?? 5) + index + 1 }}</td>
+
+            <td class="py-2" v-if="userRole">
               <span class="text-white text-xs px-3 py-1 rounded-md inline-block" :class="{
                 'bg-yellow-500': activity.status === '대기 중',
                 'bg-green-500': activity.status === '승인',
@@ -188,11 +192,11 @@ const onSearchInput = (e) => {
               </span>
             </td>
 
-            <td>{{ activity.title }}</td>
+            <td class="p-3 border">{{ activity.title }}</td>
 
-            <td>{{ activity.memberName }} ({{ activity.memberId }})</td>
+            <td class="p-3 border">{{ activity.memberName }} ({{ activity.memberId }})</td>
 
-            <td v-if="memberStore.myIdx === activity.memberIdx">
+            <td v-if="memberStore.myIdx === activity.memberIdx && userRole">
               <button class="bg-red-500 text-white text-xs px-3 py-1 rounded hover:bg-red-600 transition"
                 @click.stop="activityDelete(activity.activityIdx)">
                 삭제

@@ -375,7 +375,12 @@ const subjects = async () => {
     activity: item.esgActivityItem || "-",
     criteria: item.evaluationCriteria || "-",
     score: `가점 + ${item.esgScore}`,
-  }));
+    esgRaw: item.esgValue,
+  }))
+  .sort((a, b) => {
+    const order = { E: 0, S: 1, G: 2 };
+    return order[a.esgRaw] - order[b.esgRaw];
+  });
 };
 
 const convertEsgValue = (value) => {

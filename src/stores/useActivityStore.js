@@ -63,7 +63,6 @@ export const useActivityStore = defineStore('activity', {
             const response = await axios.post("/api/activitySubject/search");
             this.subjectList = response.data.data;
 
-            console.log("store List", response.data.data);
             return response.data.data;
         },
 

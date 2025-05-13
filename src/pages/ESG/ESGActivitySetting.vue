@@ -14,7 +14,7 @@ const subjects = ref([
     subject: "",
     isEditing: true,
     choices: [{ text: "", type: "" }],
-    esgvalue: "",
+    esgValue: "",
     esgScore: null,
     esgActivityItem: "",
     evaluationCriteria: "",
@@ -26,7 +26,7 @@ const addQuestion = () => {
     subject: "",
     isEditing: true,
     choices: [{ text: "", type: "" }],
-    esgvalue: "",
+    esgValue: "",
     esgScore: null,
     esgActivityItem: "",
     evaluationCriteria: "",
@@ -61,7 +61,7 @@ const saveForm = async () => {
     id: null,
     companyIdx: null,
     subject: subject.subject,
-    esgvalue: subject.esgvalue,
+    esgValue: subject.esgValue,
     esgScore: subject.esgScore,
     esgActivityItem: subject.esgActivityItem,
     evaluationCriteria: subject.evaluationCriteria,
@@ -92,7 +92,7 @@ const search = async () => {
       id: item.id,
       companyIdx: item.companyIdx,
       subject: item.subject,
-      esgvalue: item.esgvalue,
+      esgValue: item.esgValue,
       esgScore: item.esgScore,
       esgActivityItem: item.esgActivityItem,
       evaluationCriteria: item.evaluationCriteria,
@@ -116,7 +116,7 @@ const search = async () => {
     subject: "",
     isEditing: true,
     choices: [{ text: "", type: "" }],
-    esgvalue: "",
+    esgValue: "",
     esgScore: null,
     esgActivityItem: "",
     evaluationCriteria: "",
@@ -144,7 +144,7 @@ const updateSubject = async (qIndex) => {
     id: subject.id,
     companyIdx: subject.companyIdx || null,
     subject: subject.subject,
-    esgvalue: subject.esgvalue,
+    esgValue: subject.esgValue,
     esgScore: subject.esgScore,
     esgActivityItem: subject.esgActivityItem,
     evaluationCriteria: subject.evaluationCriteria,
@@ -196,7 +196,7 @@ onMounted(() => {
             </label>
 
             <select
-              v-model="subject.esgvalue"
+              v-model="subject.esgValue"
               class="border border-gray-300 p-2 rounded ml-2"
               :disabled="!subject.isEditing"
               required

@@ -168,7 +168,7 @@ onMounted(async () => {
           class="flex justify-end px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
         >
           삭제
-        </button>
+        </button> 
       </div>
 
       <div

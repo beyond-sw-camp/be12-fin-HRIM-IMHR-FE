@@ -87,8 +87,7 @@ onMounted(async () => {
           <h2 class="text-xl font-bold text-slate-700">협력사 ESG 점수 Top 3</h2>
         </div>
         <iframe
-          src="https://www.imhr.p-e.kr/grafana/d-solo/c9163afd-5fb4-4eea-990c-db85ce712052/new-dashboard?orgId=1&from=1747100717563&to=1747122317563&timezone=browser&var-year=2025&var-company_idx=1&panelId=2&__feature.dashboardSceneSolo
-"
+          src="https://www.imhr.p-e.kr/grafana/d-solo/c28e40df-1f86-4207-a40a-11fd7b80cc7b/new-dashboard?orgId=1&from=1747181305209&to=1747202905209&timezone=browser&var-year=2025&var-company_idx=1&editIndex=1&panelId=2&__feature.dashboardSceneSolo"
           width="100%"
           height="300"
           frameborder="0"

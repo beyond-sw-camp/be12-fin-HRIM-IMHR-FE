@@ -1,24 +1,21 @@
-<!-- npm install lucide-vue-next -->
-<!-- npm uninstall lucide-vue-next -->
 <script setup>
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
-import { ref } from "vue";
+import { ref} from "vue";
 
 defineProps({
   year: Number,
   month: Number,
+  isAdmin: Boolean,
 });
 
 defineEmits(['prev', 'next', 'open-add']);
 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <template>
   <div class="flex justify-end">
     <button
-      v-if="userRole === 'manager'"
+      v-if="isAdmin"
       @click="$emit('open-add')"
       class="bg-slate-600 text-white px-2 py-1 rounded-lg hover:bg-slate-800"
     >

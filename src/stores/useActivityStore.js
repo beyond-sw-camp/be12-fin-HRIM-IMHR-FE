@@ -26,14 +26,14 @@ export const useActivityStore = defineStore('activity', {
             return response;
         },
 
-        async activityListsearch(memberIdx) {
-            const response = await axios.get(`/api/esg_activity/listsearch/${memberIdx}`);
-            return response.data.data;
+        async activityListsearch(myIdx, page, pageSize, keyword = "") {
+            const response = await axios.get(`/api/esg_activity/pageList?myIdx=${myIdx}&page=${page}&pageSize=${pageSize}&keyword=${keyword}`);
+            this.activityList = response.data.data.content;
+            return response.data.data.totalPages;
         },
 
         async list(page) {
             const response = await axios("/api/activity/activityList?page=" + page);
-            this.activityList = response.data.data.activityList;
 
             return response.data.data.total;
         },

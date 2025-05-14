@@ -7,9 +7,13 @@ import AddEvent from "./Event/AddEvent.vue";
 import EventByDateDetail from "./Event/EventByDateDetail.vue";
 import EventDetail from "./Event/EventDetail.vue";
 import { useCalendarStore } from "../../stores/useCalendarStore";
+import { useMemberStore } from "../../stores/useMemberStore";
 
 const route = useRoute();
 const calendarStore = useCalendarStore();
+const memberStore = useMemberStore();
+
+const isAdmin = ref(false);
 
 const today = new Date();
 const year = ref(today.getFullYear());
@@ -115,6 +119,7 @@ async function nextMonth() {
 
 onMounted(async () => {
   await calendarStore.monthevents(year.value, month.value);
+  isAdmin.value = await memberStore.userInfo.isAdmin;
 });
 </script>
 
@@ -126,6 +131,7 @@ onMounted(async () => {
       <CalendarHeader
         :year="year"
         :month="month"
+        :isAdmin="isAdmin"
         @prev="prevMonth"
         @next="nextMonth"
         @open-add="openAddEvent()"
@@ -161,6 +167,7 @@ onMounted(async () => {
       :visible="showDetailModal"
       :date="selectedDate"
       :events="dayEvents"
+      :isAdmin="isAdmin"
       @close="
         () => {
           showDetailModal = false;
@@ -173,6 +180,7 @@ onMounted(async () => {
     <EventDetail
       :visible="showEventInfoModal"
       :event="selectedEvent"
+      :isAdmin="isAdmin"
       @close="() => {
         showEventInfoModal = false;
         selectedEvent = null;

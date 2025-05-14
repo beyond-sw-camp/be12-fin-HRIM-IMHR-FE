@@ -5,22 +5,42 @@ import PartnerDelete from "./PartnerDelete.vue";
 import PartnerRegist from "./PartnerRegist.vue";
 import { usePartnerStore } from "../../stores/usePartnerStore";
 import { useCompanyStore } from "../../stores/useCompanyStore";
+import { useMemberStore } from "../../stores/useMemberStore";
 
 const partnerStore = usePartnerStore();
+const memberStore = useMemberStore();
+
 const search = ref("");
 const currentPage = ref(0);
 const totalPages = ref(0);
+
 const mycompanyIdx = computed(() => partnerStore.mycompanyIdx);
 const companyStore = useCompanyStore();
 
 const registerModule = ref(false);
 const deleteModal = ref(false);
 const selectedPartneryIndex = ref(null);
+
 const companyId = ref(null);
+const isAdmin = ref(false);
 
 const onSearch = async () => {
   currentPage.value = 0;
   await fetchCompanies(); // 키워드로 백엔드 검색
+};
+
+const filteredPartners = computed(() =>
+  partnerStore.partners.filter((p) =>
+    (p.companyName || "").toLowerCase().includes(search.value.toLowerCase()) 
+  )
+);
+
+const fetchCompanies = async () => {
+  totalPages.value = await partnerStore.pagelist(
+    currentPage.value,
+    8,
+    search.value
+  );
 };
 
 const openRegistModal = async () => {
@@ -46,29 +66,12 @@ const registPartner = async () => {
   alert("협력사 추가가 성공적으로 되었습니다.");
 };
 
-const filteredPartners = computed(() =>
-  partnerStore.partners.filter((p) =>
-    (p.companyName || "").toLowerCase().includes(search.value.toLowerCase()) 
-  )
-);
-
-
-
-const fetchCompanies = async () => {
-  totalPages.value = await partnerStore.pagelist(
-    currentPage.value,
-    8,
-    search.value
-  );
-};
 
 watch(currentPage, fetchCompanies);
-onMounted(fetchCompanies);
-
-const userRole = ref(
-  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
-);
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
+onMounted(async () => {
+  await fetchCompanies();
+  isAdmin.value = await memberStore.userInfo.isAdmin;
+});
 </script>
 
 <template>
@@ -115,7 +118,7 @@ const userRole = ref(
       </button>
     </div>
 
-    <div class="flex justify-end" v-if="userRole === 'manager'">
+    <div class="flex justify-end" v-if="isAdmin">
       <button
         @click="openRegistModal"
         class="bg-slate-800 text-white px-4 py-1 rounded hover:bg-slate-900 transition mb-3"
@@ -131,7 +134,7 @@ const userRole = ref(
           <tr>
             <th class="p-3 border" rowspan="2">회사명</th>
             <th class="p-3 border" colspan="4">KEGS</th>
-            <th class="p-3 border" rowspan="2" v-if="userRole === 'manager'">
+            <th class="p-3 border" rowspan="2" v-if="isAdmin">
               삭제
             </th>
           </tr>
@@ -160,7 +163,7 @@ const userRole = ref(
             <td class="p-2">{{ partner.governanceScore }}</td>
             <!-- <td class="p-2">{{ partner.score }}</td> -->
 
-            <td class="p-2" v-if="userRole === 'manager'">
+            <td class="p-2" v-if="isAdmin">
               <button
                 class="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 transition"
                 @click="openDeleteModal(partner.idx)"

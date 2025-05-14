@@ -4,14 +4,11 @@ import { ref } from 'vue';
 
 defineProps({
   visible: Boolean,
-  event: Object
+  event: Object,
+  isAdmin: Boolean,
 })
 
 defineEmits(['close'])
-
-// 권한 부여 하는 코드 
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <template>
@@ -29,7 +26,7 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
         <div :style="{ color: event.color }"><span class="font-semibold">종료일:</span> {{ event.endDate }}</div>
       </div>
 
-      <div class="flex justify-end gap-2 mt-4" v-if="userRole === 'manager'">
+      <div class="flex justify-end gap-2 mt-4" v-if="isAdmin">
         <button @click="$emit('delete-event', event)" class="px-3 py-1 rounded bg-gray-300">
           삭제
         </button>

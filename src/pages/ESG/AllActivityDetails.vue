@@ -1,44 +1,49 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useActivityStore } from '../../stores/useActivityStore';
-import { useMemberStore } from '../../stores/useMemberStore'
-import { useStompStore } from '../../stores/useStompStore'
+import { useActivityStore } from "../../stores/useActivityStore";
+import { useMemberStore } from "../../stores/useMemberStore";
+import { useStompStore } from "../../stores/useStompStore";
 
-const activitySore = useActivityStore()
+const activityStore = useActivityStore();
 const memberStore = useMemberStore();
+
 const route = useRoute();
-const idx = route.params.idx;
+
+const activeIdx = route.params.idx;
 
 const detail = ref({});
 const member = ref({});
-const me = ref({});
+const me = ref(false);
 
-const stomp = useStompStore()
+const stomp = useStompStore();
 
-onMounted(async () => {
-  me.value = await memberStore.fetchMember();
-  console.log(me.value.isAdmin)
-  detail.value = await activitySore.detail(idx);
-  console.log(detail.value.member.idx)
-  member.value = detail.value.member
-})
+const router = useRouter();
 
 // 승인
 const agree = async () => {
-  console.log(member.value.name)
+  console.log(member.value.name);
   activitySore.agree(idx);
-  stomp.activityApprove("승인 되었습니다.", "[" + detail.value.title + "] 활동이 승인 되었습니다.", member.value, "/activeDetails/" + idx);
+  stomp.activityApprove(
+    "승인 되었습니다.",
+    "[" + detail.value.title + "] 활동이 승인 되었습니다.",
+    member.value,
+    "/activeDetails/" + idx
+  );
   window.location.reload();
-
-}
+};
 
 // 반려
 const oppose = async () => {
   activitySore.oppose(idx);
-  stomp.activityApprove("반려 되었습니다.", "[" + detail.value.title + "] 활동이 반려 되었습니다.", member.value, "/activeDetails/" + idx);
+  stomp.activityApprove(
+    "반려 되었습니다.",
+    "[" + detail.value.title + "] 활동이 반려 되었습니다.",
+    member.value,
+    "/activeDetails/" + idx
+  );
   window.location.reload();
-}
+};
 
 const deleteActivity = async () => {
   try {
@@ -49,13 +54,13 @@ const deleteActivity = async () => {
     alert("삭제 실패");
     window.location.reload();
   }
+};
 
-}
-
-
-const router = useRouter();
-const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'manager')
-// manager executive staff `'${{변수명}}'`
+onMounted(async () => {
+  detail.value = await activityStore.detail(activeIdx);
+  console.log(detail.value);
+  me.value = await memberStore.userInfo.isAdmin;
+});
 </script>
 
 <template>
@@ -66,57 +71,113 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'mana
     </h2>
 
     <!-- 상세 카드 -->
-    <div class="border border-slate-200 p-6 rounded-lg bg-gray-50 shadow-md space-y-5 max-w-3xl mx-auto">
+    <div
+      class="border border-slate-200 p-6 rounded-lg bg-gray-50 shadow-md space-y-5 max-w-3xl mx-auto"
+    >
       <!-- 게시자 -->
       <div>
-        <span class="font-semibold text-slate-700">게시자:</span>
-        <span class="text-slate-600 ml-2">{{ member.name }}</span>
+        <span class="font-semibold text-slate-700">게시자 : </span>
+        <span class="text-slate-600 ml-2"
+          >{{ detail.userName }}({{ detail.userID }})</span
+        >
       </div>
 
       <!-- 제목 -->
       <div>
-        <span class="font-semibold text-slate-700">제목:</span>
-        <span class="text-slate-600 ml-2">{{ detail.title }}</span>
+        <span class="font-semibold text-slate-700">ESG 활동 항목 : </span>
+        <span class="text-slate-600 ml-2">
+          {{ detail.esgActivityItem }}</span
+        >
       </div>
 
       <!-- 첨부파일 -->
       <div>
-        <span class="font-semibold text-slate-700">첨부파일:</span>
-        <div class="flex gap-4 mt-2">
-          <a :href="detail.fileUrl" class="text-blue-600 hover:underline text-sm">
-            <img class="w-[150px]" :src="detail.fileUrl" alt="활동 이미지" />
+        <span class="font-semibold text-slate-700">첨부파일 : </span>
+        <div class="flex flex-wrap gap-4 mt-2">
+          <template v-for="(value, key) in detail.inputs">
+            <a
+              v-if="
+                typeof value === 'string' &&
+                /\.(png|jpe?g|pdf|docx?|xlsx?|pptx?|txt|zip|hwp)$/i.test(value)
+              "
+              :key="key"
+              :href="value"
+              :download="key"
+              class="text-blue-600 hover:underline text-sm flex flex-col items-center"
+              target="_blank"
+            >
+              <span>{{ key }}</span>
+            </a>
+          </template>
 
-          </a>
+          <div v-if="detail.inputs">
+            <span
+              v-if="
+                !Object.values(detail.inputs).some(
+                  (v) =>
+                    typeof v === 'string' &&
+                    /\.(png|jpe?g|pdf|docx?|xlsx?|pptx?|txt|zip|hwp)$/i.test(v)
+                )
+              "
+              class="text-gray-400"
+            >
+              첨부파일 없음
+            </span>
+          </div>
 
         </div>
       </div>
 
       <!-- 내용 -->
       <div>
-        <span class="font-semibold text-slate-700">내용:</span>
-        <div class="mt-2 p-4 bg-white border border-slate-200 rounded-md text-slate-600 text-sm leading-relaxed">
-          {{ detail.content }}
+        <span class="font-semibold text-slate-700">활동 내용 : </span>
+        <div
+          class="mt-2 p-4 bg-white border border-slate-200 rounded-md text-slate-600 text-sm leading-relaxed"
+        >
+          {{ detail.subject }}
         </div>
       </div>
 
       <!-- 버튼 -->
-      <div class="flex justify-end gap-3 pt-4" v-if="me.isAdmin && detail.status === 'PENDING'">
-        <button @click="agree" class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+      <div class="flex justify-end gap-3 pt-4">
+        <button
+          @click="agree"
+          v-if="me && !detail.status"
+          class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
+        >
           승인
         </button>
 
-        <button @click="oppose" class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50">
+        <button
+          @click="oppose"
+          v-if="me && !detail.status"
+          class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
+        >
           반려
+        </button>
+
+        <button
+          @click="oppose"
+          v-if="!me && !detail.status"
+          class="flex justify-end px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
+        >
+          삭제
         </button>
       </div>
 
-      <div class="flex justify-end gap-3 pt-4" v-else-if="detail.status === 'APPROVED'">
+      <div
+        class="flex justify-end gap-3 pt-4"
+        v-if="detail.status"
+      >
         승인 되었습니다.
       </div>
-      <div class="flex justify-end gap-3 pt-4" v-else-if="detail.status === 'REJECTED'">
+
+      <div
+        class="flex justify-end gap-3 pt-4"
+        v-if="!detail.status"
+      >
         반려 되었습니다.
       </div>
-
     </div>
   </div>
 </template>

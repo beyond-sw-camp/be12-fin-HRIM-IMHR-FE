@@ -64,10 +64,14 @@ function changeMonth(diff) {
   year.value = newYear;
   month.value = newMonth;
 
+// if(departmentIdx.value===undefined || departmentIdx.value===null)
+//     departmentIdx.value = companyScoreData.departments[0].idx;
+
   router.push({
     name: "dashboard-with-department",
     params: {
       departmentName: departmentName.value,
+      departmentIdx: departmentIdx.value,
       yearMonth: `${newYear}-${newMonth < 10 ? "0" + newMonth : newMonth}`,
     },
   });

@@ -2,13 +2,16 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '../../stores/useMemberStore'
+import { useActivityStore } from '../../stores/useActivityStore'
 
 const router = useRouter()
 const memberStore = useMemberStore()
+const activityStore = useActivityStore()
 
 const currentPage = ref(1)
 const perPage = 5
 const selectedCategory = ref('전체') // ✅ 활동 카테고리 필터
+const rawSubjects = ref('')
 
 const user = ref({
   name: '',
@@ -20,11 +23,7 @@ const user = ref({
 
 // ✅ 활동 내역 데이터 (type 속성 포함)
 const activities = ref([
-  { title: '탄소중립 교육', date: '2025.01.12', type: '교육' },
-  { title: '지역 봉사활동', date: '2025.01.13', type: '봉사' },
-  { title: '플라스틱 줄이기', date: '2025.01.14', type: '캠페인' },
-  { title: '에너지절약 캠페인', date: '2025.01.14', type: '캠페인' },
-  { title: '기후 변화 특강', date: '2025.01.15', type: '교육' }
+  { title: '', date: '', type: '' },
 ])
 
 // ✅ 카테고리 필터링된 활동들
@@ -55,10 +54,10 @@ const logout = async () => {
   router.push('/login')
 }
 
-const goToActivityDetail = (activityIdx, campaignIdx) => {
-  if (campaignIdx === '') {
-    router.push('/activeDetails/' + activityIdx)
-  } else if (activityIdx === '') {
+const goToActivityDetail = (activityId, campaignIdx) => {
+  if (campaignIdx === null) {
+    router.push('/activeDetails/' + activityId)
+  } else if (activityId === null) {
     router.push('/campaigndetail/' + campaignIdx)
   }
 }
@@ -71,9 +70,11 @@ const userRole = ref(JSON.parse(localStorage.getItem('userInfo'))?.role || 'exec
 
 onMounted(async () => {
   const infoResponse = await memberStore.myPageInfo()
+  rawSubjects.value = await activityStore.subjectListSearch()
   const activityResponse = await memberStore.myActivity()
   user.value = infoResponse.data.data
-  // activities.value = activityResponse.data.data.activities
+  activities.value = activityResponse.data.data.activities
+  console.log(activities.value)
 })
 </script>
 
@@ -97,7 +98,7 @@ onMounted(async () => {
       </button>
       <button @click="logout"
               class="w-full bg-slate-800 text-white py-2 rounded hover:bg-slate-900 text-sm font-semibold mb-3 transition">
-        ⏻ 로그아웃
+        로그아웃
       </button>
     </aside>
 
@@ -111,9 +112,11 @@ onMounted(async () => {
         <select v-model="selectedCategory"
                 class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-500">
           <option value="전체">전체</option>
-          <option value="교육">교육</option>
-          <option value="봉사">봉사</option>
           <option value="캠페인">캠페인</option>
+          <option v-for="subject in rawSubjects"
+            :key="subject._id"
+            :value="subject.subject"
+          >{{ subject.subject }}</option>
         </select>
       </div>
 
@@ -129,7 +132,7 @@ onMounted(async () => {
           <tbody>
             <tr v-for="(activity, idx) in paginatedActivities" :key="idx"
                 class="border-t hover:bg-slate-50 cursor-pointer transition"
-                @click="goToActivityDetail(activity.activityIdx, activity.campaignIdx)">
+                @click="goToActivityDetail(activity.activityId, activity.campaignIdx)">
               <td class="px-4 py-3">{{ activity.title }}</td>
               <td class="px-4 py-3 text-right">{{ activity.date }}</td>
             </tr>

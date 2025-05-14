@@ -37,12 +37,16 @@ export const useActivityStore = defineStore('activity', {
             return response.data.data;
         },
 
-        async agree(idx) {
-            const response = await axios("/api/activity/ativityApproval/agree/" + idx);
+        async agree(id) {
+            await axios.get(`/api/esg_activity/ativityApproval/agree/${id}`);
         },
 
-        async oppose(idx) {
-            const response = await axios("/api/activity/ativityApproval/oppose/" + idx);
+        async oppose(id) {
+            await axios.get(`/api/esg_activity/ativityApproval/oppose/${id}`);
+        },
+
+        async delete(id) {
+            await axios.get(`/api/esg_activity/delete/${id}`);
         },
 
         async subjectCreate(formData) {

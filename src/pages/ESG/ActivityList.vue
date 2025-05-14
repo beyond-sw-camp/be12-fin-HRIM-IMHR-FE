@@ -76,8 +76,8 @@ const submit = async () => {
 
     // Create DTO object without file data
     const dto = {
-      esgValue: formData.value.esgValue,
-      esgScore: formData.value.esgScore,
+      esgValue: selectedSubjectMeta.esgValue,
+      esgScore: selectedSubjectMeta.esgScore,
       subjectId: selectedSubjectMeta.id,
       subject: formData.value.subject,
       esgActivityItem: selectedSubjectMeta.esgActivityItem,
@@ -124,7 +124,7 @@ const submit = async () => {
   }
 };
 
-const filteredActivitys = computed(() => 
+const filteredActivitys = computed(() =>
   activityStore.activityList.filter((a) =>
     (a.subject || "").toLowerCase().includes(search.value.toLowerCase())
   )
@@ -143,7 +143,7 @@ onMounted(async () => {
   userRole.value = await memberStore.isAdmin();
   const rawSubjects = await activityStore.subjectListSearch();
   memberIdx.value = await memberStore.userInfo.idx;
-  
+
   await fetchactivity();
 
   // E, S, G 순서로 정렬
@@ -213,9 +213,21 @@ onMounted(async () => {
             <td class="py-2">
               <span
                 class="text-white text-xs px-3 py-1 rounded-md inline-block"
-                :class="activity.status ? 'bg-green-500' : 'bg-red-500'"
+                :class="
+                  activity.status === true
+                    ? 'bg-green-500'
+                    : activity.status === false
+                    ? 'bg-red-500'
+                    : 'bg-yellow-500'
+                "
               >
-                {{ activity.status ? "승인" : "반려" }}
+                {{
+                  activity.status === true
+                    ? "승인"
+                    : activity.status === false
+                    ? "반려"
+                    : "대기"
+                }}
               </span>
             </td>
 

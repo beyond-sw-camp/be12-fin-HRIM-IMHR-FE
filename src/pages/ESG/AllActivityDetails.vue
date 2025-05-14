@@ -23,43 +23,50 @@ const router = useRouter();
 // 승인
 const agree = async () => {
   console.log(member.value.name);
-  activitySore.agree(idx);
+  await activityStore.agree(activeIdx);
   stomp.activityApprove(
     "승인 되었습니다.",
-    "[" + detail.value.title + "] 활동이 승인 되었습니다.",
+    "[" + detail.value.subject + "] 활동이 승인 되었습니다.",
     member.value,
-    "/activeDetails/" + idx
+    "/activeDetails/" + activeIdx
   );
-  window.location.reload();
+  await search();
 };
 
 // 반려
 const oppose = async () => {
-  activitySore.oppose(idx);
+  await activityStore.oppose(activeIdx);
   stomp.activityApprove(
     "반려 되었습니다.",
-    "[" + detail.value.title + "] 활동이 반려 되었습니다.",
-    member.value,
-    "/activeDetails/" + idx
+    "[" + detail.value.subject + "] 활동이 반려 되었습니다.",
+    detail.value.memberIdx,
+    "/activeDetails/" + activeIdx
   );
-  window.location.reload();
+  await search();
 };
 
 const deleteActivity = async () => {
   try {
-    activitySore.delete(idx);
+    await activityStore.delete(activeIdx);
     alert("삭제 되었습니다.");
     router.push("/activityList");
   } catch {
     alert("삭제 실패");
-    window.location.reload();
+    await search();
   }
 };
 
-onMounted(async () => {
+const search = async () => {
   detail.value = await activityStore.detail(activeIdx);
-  console.log(detail.value);
+};
+
+onMounted(async () => {
+  await search();
   me.value = await memberStore.userInfo.isAdmin;
+  const response = await memberStore.staffDetail(detail.value.memberIdx);
+
+  member.value = response.data.data.info;
+  console.log(member.value);
 });
 </script>
 
@@ -139,10 +146,9 @@ onMounted(async () => {
       </div>
 
       <!-- 버튼 -->
-      <div class="flex justify-end gap-3 pt-4">
+      <div class="flex justify-end gap-3 pt-4" v-if="me && detail.status === null">
         <button
           @click="agree"
-          v-if="me && !detail.status"
           class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50"
         >
           승인
@@ -150,15 +156,15 @@ onMounted(async () => {
 
         <button
           @click="oppose"
-          v-if="me && !detail.status"
           class="px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
         >
           반려
         </button>
+      </div>
 
+      <div class="flex justify-end gap-3 pt-4" v-else-if="!me && (!detail.status || detail.status === '')">
         <button
           @click="oppose"
-          v-if="!me && !detail.status"
           class="flex justify-end px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
         >
           삭제
@@ -174,7 +180,14 @@ onMounted(async () => {
 
       <div
         class="flex justify-end gap-3 pt-4"
-        v-if="!detail.status"
+        v-else-if="detail.status === null"
+      >
+        대기중입니다.
+      </div>
+
+      <div
+        class="flex justify-end gap-3 pt-4"
+        v-else-if="!detail.status"
       >
         반려 되었습니다.
       </div>

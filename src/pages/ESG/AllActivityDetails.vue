@@ -164,7 +164,7 @@ onMounted(async () => {
 
       <div class="flex justify-end gap-3 pt-4" v-else-if="!me && (!detail.status || detail.status === '')">
         <button
-          @click="oppose"
+          @click="deleteActivity"
           class="flex justify-end px-4 py-1 border-2 border-red-500 text-red-500 rounded hover:bg-red-50"
         >
           삭제

@@ -46,7 +46,7 @@ export const useActivityStore = defineStore('activity', {
         },
 
         async delete(id) {
-            await axios.get(`/api/esg_activity/delete/${id}`);
+            await axios.delete(`/api/esg_activity/delete/${id}`);
         },
 
         async subjectCreate(formData) {

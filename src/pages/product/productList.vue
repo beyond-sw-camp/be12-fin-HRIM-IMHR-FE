@@ -2,7 +2,7 @@
   <!-- 📊 상단: 등급 카드 + 차트 + 평균 카드 가로 정렬 -->
   <div class="px-6 grid grid-cols-1 md:grid-cols-1 gap-8 max-w-6xl mx-auto py-8">
     <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
-      
+
       <!-- ⬅️ 환경 등급 카드
       <div class="bg-green-100 rounded-2xl shadow-md p-8 text-center w-60">
         <p class="text-3xl font-bold text-green-800 mb-2">{{ eScore }} 등급</p>
@@ -15,12 +15,23 @@
       </div>
 
       <!-- ➡️ 평균 친환경 점수 카드 -->
-      <div class="bg-blue-100 rounded-2xl shadow-md p-8 text-center w-60">
+      <div class="bg-blue-100 rounded-2xl shadow-md p-8 text-center w-60 cursor-pointer hover:bg-blue-200 transition"
+        @click="showDonutModal = true">
         <p class="text-3xl font-bold text-blue-800 mb-2">{{ avgScore }} 점</p>
         <p class="text-sm text-slate-700">평균 친환경 점수</p>
       </div>
     </div>
   </div>
+
+  <!-- 📊 도넛 차트 모달 -->
+<div v-if="showDonutModal" class="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+    <button @click="showDonutModal = false" class="absolute top-3 right-3 text-slate-500 hover:text-slate-700">✖</button>
+    <h3 class="text-lg font-semibold mb-4 text-center">제품별 친환경 점수 (도넛 차트)</h3>
+    <canvas ref="donutRef" class="w-full h-96"></canvas>
+  </div>
+</div>
+
 
   <!-- 📋 제품 리스트 테이블 -->
   <div class="min-h-screen bg-gray-50 px-6 py-10">
@@ -58,7 +69,8 @@
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>
             <td class="p-3">{{ product.serialNumber }}</td>
-            <td class="px-4 py-2 border font-semibold text-green-700">{{ calculateScore(product) }} 점</td> <!-- ✅ 점수 표시 -->
+            <td class="px-4 py-2 border font-semibold text-green-700">{{ calculateScore(product) }} 점</td>
+            <!-- ✅ 점수 표시 -->
           </tr>
         </tbody>
       </table>
@@ -84,37 +96,51 @@
   </div>
 
   <!-- 🔽 친환경 점수 기준표 (토글 버튼) -->
-<div class="max-w-4xl mx-auto text-center mb-8">
-  <button
-    @click="showScoreTable = !showScoreTable"
-    class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition"
-  >
-    {{ showScoreTable ? '기준표 닫기' : '📊 친환경 점수 기준 보기' }}
-  </button>
+  <div class="max-w-4xl mx-auto text-center mb-8">
+    <button @click="showScoreTable = !showScoreTable"
+      class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition">
+      {{ showScoreTable ? '기준표 닫기' : '📊 친환경 점수 기준 보기' }}
+    </button>
 
-  <div v-if="showScoreTable" class="mt-4 bg-white border rounded-xl shadow-md p-6 overflow-x-auto">
-    <table class="w-full table-auto text-left text-sm border-collapse">
-      <thead class="bg-slate-100 text-slate-700 font-semibold">
-        <tr>
-          <th class="px-4 py-2 border">항목</th>
-          <th class="px-4 py-2 border">점수</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="px-4 py-2 border">재활용 가능 여부</td><td class="px-4 py-2 border">+30</td></tr>
-        <tr><td class="px-4 py-2 border">생분해/친환경 원료</td><td class="px-4 py-2 border">+20</td></tr>
-        <tr><td class="px-4 py-2 border">탄소 저감형 공정</td><td class="px-4 py-2 border">+25</td></tr>
-        <tr><td class="px-4 py-2 border">에너지 효율 등급</td><td class="px-4 py-2 border">1등급 +20 / 2등급 +10 / 3등급 +5</td></tr>
-        <tr><td class="px-4 py-2 border">단가(가격)</td><td class="px-4 py-2 border">최대 +100 (낮을수록 가산점)</td></tr>
-      </tbody>
-    </table>
+    <div v-if="showScoreTable" class="mt-4 bg-white border rounded-xl shadow-md p-6 overflow-x-auto">
+      <table class="w-full table-auto text-left text-sm border-collapse">
+        <thead class="bg-slate-100 text-slate-700 font-semibold">
+          <tr>
+            <th class="px-4 py-2 border">항목</th>
+            <th class="px-4 py-2 border">점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-4 py-2 border">재활용 가능 여부</td>
+            <td class="px-4 py-2 border">+30</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">생분해/친환경 원료</td>
+            <td class="px-4 py-2 border">+20</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">탄소 저감형 공정</td>
+            <td class="px-4 py-2 border">+25</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">에너지 효율 등급</td>
+            <td class="px-4 py-2 border">1등급 +20 / 2등급 +10 / 3등급 +5</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">단가(가격)</td>
+            <td class="px-4 py-2 border">최대 +100 (낮을수록 가산점)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 
 </template>
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
+import { watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Search } from 'lucide-vue-next'
 import Chart from 'chart.js/auto'
@@ -134,6 +160,9 @@ const eScore = ref(null)
 const currentPage = ref(1)
 const itemsPerPage = 5
 const showScoreTable = ref(false) // ✅ 점수 기준표 표시 여부
+const showDonutModal = ref(false)  // 도넛 모달 토글 상태
+const donutRef = ref(null)         // 도넛 차트 ref
+
 
 // ✅ 페이지 마운트 시 제품 목록 불러오기 + 차트 렌더링
 onMounted(async () => {
@@ -181,6 +210,40 @@ onMounted(async () => {
             font: { size: 18, weight: 'bold' },
             color: '#0f172a',
             padding: { bottom: 20 }
+          }
+        }
+      }
+    })
+  }
+})
+
+watchEffect(() => {
+  if (showDonutModal.value && donutRef.value) {
+    const labels = store.productList.map(p => shortenProductName(p.productName))
+    const scores = store.productList.map(p => calculateScore(p))
+    const max = Math.max(...scores)
+    const min = Math.min(...scores)
+
+    new Chart(donutRef.value, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data: scores,
+          backgroundColor: scores.map(score =>
+            score === max ? '#22c55e' : score === min ? '#f87171' : '#4ade80'
+          ),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        cutout: '60%',
+        plugins: {
+          legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: '친환경 점수 분포',
+            font: { size: 16 }
           }
         }
       }

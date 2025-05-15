@@ -14,12 +14,14 @@ const search = ref("");
 const currentPage = ref(0);
 const totalPages = ref(0);
 
+const selectedYear = ref(new Date().getFullYear());
 const mycompanyIdx = computed(() => partnerStore.mycompanyIdx);
 const companyStore = useCompanyStore();
 
 const registerModule = ref(false);
 const deleteModal = ref(false);
 const selectedPartneryIndex = ref(null);
+
 
 const companyId = ref(null);
 const isAdmin = ref(false);
@@ -87,7 +89,7 @@ onMounted(async () => {
           <h2 class="text-xl font-bold text-slate-700">협력사 ESG 점수 Top 3</h2>
         </div>
         <iframe
-          src="https://www.imhr.p-e.kr/grafana/d-solo/c28e40df-1f86-4207-a40a-11fd7b80cc7b/new-dashboard?orgId=1&from=1747181305209&to=1747202905209&timezone=browser&var-year=2025&var-company_idx=1&editIndex=1&panelId=2&__feature.dashboardSceneSolo"
+          :src="`https://www.imhr.p-e.kr/grafana/d-solo/c28e40df-1f86-4207-a40a-11fd7b80cc7b/new-dashboard?orgId=1&from=1747181305209&to=1747202905209&timezone=browser&var-year=${selectedYear}}&var-company_idx=${mycompanyIdx}&editIndex=1&panelId=2&__feature.dashboardSceneSolo`"
           width="100%"
           height="300"
           frameborder="0"

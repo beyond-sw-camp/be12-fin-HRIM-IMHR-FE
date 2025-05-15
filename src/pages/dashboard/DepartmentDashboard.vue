@@ -1,21 +1,14 @@
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from "vue";
-import {
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-vue-next";
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import Chart from "chart.js/auto";
 import { useRoute, useRouter } from "vue-router";
 import { useCompanyStore } from "../../stores/useCompanyStore";
 import { useDepartmentStore } from "../../stores/useDepartmentStore";
 import { useActivityStore } from "../../stores/useActivityStore";
+import ScoreModel from "./grafanaDashboardModal/ScoreModel.vue";
 
-const props = defineProps({
-  departmentName: String,
-  yearMonth: String,
-});
+const showScoreModel = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -35,10 +28,22 @@ const showEval = ref(false);
 const companyName = ref("");
 const departmentList = ref([]);
 const memberscores = ref([]);
-const departmentIdx = ref(null);
 const departmentName = ref("");
+const grafanaPathForModal = ref("");
 const totalScore = ref(null);
 
+const companyIdx = ref(null);
+const departmentIdx = ref(null);
+const scoreValue = ref("");
+
+function openScoreModal(trend) {
+  grafanaPathForModal.value = trend.grafanaPath;
+  departmentIdx.value = departmentScoreData.value.idx;
+  departmentName.value = route.params.departmentName;
+  companyIdx.value = companyIdx.value;
+  showScoreModel.value = true;
+  scoreValue.value = trend.title;
+}
 
 const esgScore = ref({
   e: 0,
@@ -64,9 +69,6 @@ function changeMonth(diff) {
   year.value = newYear;
   month.value = newMonth;
 
-// if(departmentIdx.value===undefined || departmentIdx.value===null)
-//     departmentIdx.value = companyScoreData.departments[0].idx;
-
   router.push({
     name: "dashboard-with-department",
     params: {
@@ -91,9 +93,8 @@ async function fetchData() {
   departments.value = companyScoreData.departments;
   if(departmentIdx.value===undefined || departmentIdx.value===null)
     departmentIdx.value = companyScoreData.departments[0].idx;
-
-  console.log("vue",departments.value); 
-
+  
+  companyIdx.value = companyScoreData.idx;
 
   watch(
   () => route.params.departmentIdx,
@@ -113,8 +114,6 @@ async function fetchData() {
   const departmentMonthData = await departmentStore.departmentmonth(params);
   // 월별 부서 점수 데이터
   departmentScoreData.value = departmentMonthData;
-
-  console.log("월별 부서 점수 데이터", departmentMonthData.value);
 
   await nextTick();
   departmentName.value = departmentScoreData.value.departmentName;
@@ -351,6 +350,7 @@ const trends = computed(() => {
       diff: 0, // 이전 값 비교해서 계산할 수도 있음
       bg: "bg-green-100",
       color: "text-green-600",
+      grafanaPath: "84be5e94-2d05-4439-9111-69ef368ea629/21b39ea?orgId=1",
     },
     {
       percent: esgScore.value.targetS ? ((esgScore.value.s / esgScore.value.targetS) * 100).toFixed(1) : "0.0",
@@ -359,6 +359,7 @@ const trends = computed(() => {
       diff: 0,
       bg: "bg-blue-100",
       color: "text-blue-600",
+      grafanaPath: "8f1b99ce-8e31-42ad-b74a-96b8b72b046a/7b6bc4c?orgId=1",
     },
     {
       percent: esgScore.value.targetG ? ((esgScore.value.g / esgScore.value.targetG) * 100).toFixed(1) : "0.0",
@@ -367,6 +368,7 @@ const trends = computed(() => {
       diff: 0,
       bg: "bg-purple-100",
       color: "text-purple-600",
+      grafanaPath: "b36ed4a3-cc2d-4c7e-8717-3c21a5d1b019/9d5c27b?orgId=1",
     },
   ];
 });
@@ -529,6 +531,7 @@ onMounted(() => {
         <div
           v-for="(trend, index) in trends"
           :key="index"
+          @click="openScoreModal(trend)"
           :class="`p-4 rounded-xl shadow ${trend.bg}`"
         >
           <p class="text-xs text-gray-600 mb-1">
@@ -617,6 +620,18 @@ onMounted(() => {
 
 
     </div>
+
+    <ScoreModel
+    :visible="showScoreModel"
+    :grafanaUrl="grafanaPathForModal"
+    :year="year"
+    :month="month"
+    :companyIdx="companyIdx"
+    :departmentIdx="departmentIdx"
+    :title="scoreValue"
+    :departmentName="departmentName"
+    @close="() => {showScoreModel = false }"
+    />
   </div>
 </template>
 

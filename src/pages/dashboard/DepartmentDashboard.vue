@@ -355,7 +355,7 @@ const trends = computed(() => {
       diff: 0, // 이전 값 비교해서 계산할 수도 있음
       bg: "bg-green-100",
       color: "text-green-600",
-      grafanaPath: "환경",
+      grafanaPath: "84be5e94-2d05-4439-9111-69ef368ea629/21b39ea?orgId=1",
     },
     {
       percent: esgScore.value.targetS ? ((esgScore.value.s / esgScore.value.targetS) * 100).toFixed(1) : "0.0",
@@ -373,7 +373,7 @@ const trends = computed(() => {
       diff: 0,
       bg: "bg-purple-100",
       color: "text-purple-600",
-      grafanaPath: "지배구조",
+      grafanaPath: "b36ed4a3-cc2d-4c7e-8717-3c21a5d1b019/9d5c27b?orgId=1",
     },
   ];
 });

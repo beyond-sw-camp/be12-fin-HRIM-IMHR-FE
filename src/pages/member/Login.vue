@@ -109,6 +109,13 @@ const login = async () => {
             임직원 회원가입
           </button>
         </div>
+        <!-- 테스트 계정 정보 -->
+<div class="text-xs text-gray-400 mt-3 mb-2 space-y-1">
+  <p>🧪 테스트용 계정</p>
+  <p>• 관리자: ID <code>admin01</code> / PW <code>qwer1234</code></p>
+  <p>• 임직원: ID <code>meber</code> / PW <code>qwer1234</code></p>
+</div>
+
 
         <!-- 하단 링크 -->
         <div class="flex justify-between text-sm mt-4 text-slate-400">
@@ -123,4 +130,6 @@ const login = async () => {
       </div>
     </div>
   </div>
+
+  
 </template>

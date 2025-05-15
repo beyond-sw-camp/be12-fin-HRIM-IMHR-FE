@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { useScoreStore } from '../../stores/useScoreStore'
 import Chart from 'chart.js/auto'
 
-
 const donutChart = ref(null)
 const scoreChart = ref(null)
 const score = useScoreStore();
@@ -97,11 +96,6 @@ onMounted(async () => {
     }
   })
 })
-
-
-
-
-
 
 const prevYear = () => {
   const idx = yearList.value.indexOf(currentYear.value);

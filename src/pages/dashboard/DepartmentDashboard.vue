@@ -1,11 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from "vue";
-import {
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-vue-next";
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import Chart from "chart.js/auto";
 import { useRoute, useRouter } from "vue-router";
 import { useCompanyStore } from "../../stores/useCompanyStore";

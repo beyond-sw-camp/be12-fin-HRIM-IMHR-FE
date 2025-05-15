@@ -4,6 +4,9 @@ import { onMounted, ref, onUnmounted } from 'vue'
 import { ChevronLeft, ChevronRight } from "lucide-vue-next";
 import { useScoreStore } from '../../stores/useScoreStore'
 import Chart from 'chart.js/auto'
+import ScoreModel from "./grafanaDashboardModal/CompanyScoreModel.vue";
+
+const showScoreModel = ref(false);
 
 const donutChart = ref(null)
 const scoreChart = ref(null)
@@ -23,9 +26,36 @@ const currentScore = ref(0)
 const currentEnvironment = ref(0)
 const currentSocial = ref(0)
 const currentGovernance = ref(0)
+
+const grafanaPathForModal = ref("");
+const scoreValue = ref("");
+
+const handleOpenModal = (type) => {
+  console.log("1 - handleOpenModal", company.value, "-", idx.value, "-", currentYear.value, "-", scoreValue.value, "-", grafanaPathForModal.value);
+
+  showScoreModel.value = true;
+  company.value = company.value;
+  currentYear.value = currentYear.value;
+
+  if (type === "환경") {
+    scoreValue.value = "환경 Environmental";
+    grafanaPathForModal.value = "c1be1bd2-3665-45b3-a148-483cdce8854d/d6d0334?orgId=1";
+  } else if (type === "사회") {
+    scoreValue.value = "사회 Social";
+    grafanaPathForModal.value = "935c48b8-d261-41cf-ba24-f6d7a5ea9dac/d5d5f59?orgId=1";
+  } else if (type === "지배구조") {
+    scoreValue.value = "지배구조 Governance";
+    grafanaPathForModal.value = "1a687124-ae5f-48ab-83ad-eb36b08611a6/8970653?orgId=1";
+  };
+
+  console.log("2 - handleOpenModal", company.value, "-", idx, "-", currentYear.value, "-", scoreValue.value, "-", grafanaPathForModal.value);
+}
+
+
 onUnmounted(() => {
   document.body.style.overflow = 'auto';
 })
+
 onMounted(async () => {
   console.log(idx)
   const response = await score.dashboard(idx);
@@ -179,20 +209,20 @@ const nextYear = () => {
         <!-- 영역별 점수 변동 추이 -->
         <section class="mt-8">
           <h2 class="text-lg font-semibold mb-4">영역별 점수 변동 추이</h2>
-          <div class="grid grid-cols-3 gap-4">
-            <div class="bg-green-100 rounded-lg p-4 shadow">
+          <div class="grid grid-cols-3 gap-4" >
+            <div class="bg-green-100 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition" @click="handleOpenModal('환경')">
               <div class="text-xl font-bold text-green-800">환경 Environmental</div>
               <div class="text-3xl font-bold text-right text-gray-500">{{ currentEnvironment }} 등급</div>
               <div class="text-right mt-2 text-sm text-gray-500">전년대비 ▲ 1.1</div>
             </div>
 
-            <div class="bg-blue-100 rounded-lg p-4 shadow">
+            <div class="bg-blue-100 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition" @click="handleOpenModal('사회')">
               <div class="text-xl font-bold text-blue-800">사회 Social</div>
               <div class="text-3xl font-bold text-right text-gray-500">{{ currentSocial }} 등급</div>
               <div class="text-right mt-2 text-sm text-gray-500">전년대비 ▲ 17.7</div>
             </div>
 
-            <div class="bg-purple-100 rounded-lg p-4 shadow">
+            <div class="bg-purple-100 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition" @click="handleOpenModal('지배구조')">
               <div class="text-xl font-bold text-purple-800">지배구조 Governance</div>
               <div class="text-3xl font-bold text-right text-gray-500">{{ currentGovernance }} 등급</div>
               <div class="text-right mt-2 text-sm text-gray-500">전년대비 ▲ 2.8</div>
@@ -202,6 +232,16 @@ const nextYear = () => {
       </main>
       </div>
     </template>
+
+    <ScoreModel
+    :visible="showScoreModel"
+    :grafanaUrl="grafanaPathForModal"
+    :year="currentYear"
+    :companyIdx="idx"
+    :companyName="company"
+    :title="scoreValue"
+    @close="() => {showScoreModel = false }"
+    />
   </div>
 
 </template>

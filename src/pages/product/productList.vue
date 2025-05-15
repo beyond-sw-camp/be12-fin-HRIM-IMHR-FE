@@ -3,11 +3,11 @@
   <div class="px-6 grid grid-cols-1 md:grid-cols-1 gap-8 max-w-6xl mx-auto py-8">
     <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
       
-      <!-- ⬅️ 환경 등급 카드 -->
+      <!-- ⬅️ 환경 등급 카드
       <div class="bg-green-100 rounded-2xl shadow-md p-8 text-center w-60">
         <p class="text-3xl font-bold text-green-800 mb-2">{{ eScore }} 등급</p>
         <p class="text-sm text-slate-700">환경 Environmental</p>
-      </div>
+      </div> -->
 
       <!-- 🎯 친환경 점수 차트 (가운데) -->
       <div class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center w-full max-w-2xl">
@@ -44,6 +44,7 @@
             <th class="p-3">제품 번호</th>
             <th class="p-3">제품명</th>
             <th class="p-3">시리얼 넘버</th>
+            <th class="p-3">친환경 점수</th>
           </tr>
         </thead>
         <tbody>
@@ -57,6 +58,7 @@
             <td class="p-3">{{ product.idx }}</td>
             <td class="p-3">{{ product.productName }}</td>
             <td class="p-3">{{ product.serialNumber }}</td>
+            <td class="px-4 py-2 border font-semibold text-green-700">{{ calculateScore(product) }} 점</td> <!-- ✅ 점수 표시 -->
           </tr>
         </tbody>
       </table>
@@ -80,10 +82,39 @@
       </router-link>
     </div>
   </div>
+
+  <!-- 🔽 친환경 점수 기준표 (토글 버튼) -->
+<div class="max-w-4xl mx-auto text-center mb-8">
+  <button
+    @click="showScoreTable = !showScoreTable"
+    class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition"
+  >
+    {{ showScoreTable ? '기준표 닫기' : '📊 친환경 점수 기준 보기' }}
+  </button>
+
+  <div v-if="showScoreTable" class="mt-4 bg-white border rounded-xl shadow-md p-6 overflow-x-auto">
+    <table class="w-full table-auto text-left text-sm border-collapse">
+      <thead class="bg-slate-100 text-slate-700 font-semibold">
+        <tr>
+          <th class="px-4 py-2 border">항목</th>
+          <th class="px-4 py-2 border">점수</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="px-4 py-2 border">재활용 가능 여부</td><td class="px-4 py-2 border">+30</td></tr>
+        <tr><td class="px-4 py-2 border">생분해/친환경 원료</td><td class="px-4 py-2 border">+20</td></tr>
+        <tr><td class="px-4 py-2 border">탄소 저감형 공정</td><td class="px-4 py-2 border">+25</td></tr>
+        <tr><td class="px-4 py-2 border">에너지 효율 등급</td><td class="px-4 py-2 border">1등급 +20 / 2등급 +10 / 3등급 +5</td></tr>
+        <tr><td class="px-4 py-2 border">단가(가격)</td><td class="px-4 py-2 border">최대 +100 (낮을수록 가산점)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Search } from 'lucide-vue-next'
 import Chart from 'chart.js/auto'
@@ -102,16 +133,18 @@ const userRole = 'manager'
 const eScore = ref(null)
 const currentPage = ref(1)
 const itemsPerPage = 5
+const showScoreTable = ref(false) // ✅ 점수 기준표 표시 여부
 
 // ✅ 페이지 마운트 시 제품 목록 불러오기 + 차트 렌더링
 onMounted(async () => {
   eScore.value = await scoreStore.eScore(companyIdx)
   await store.listByCompany(companyIdx)
 
+  await nextTick() // 🔁 DOM 완성 후 차트 렌더링
+
   const labels = store.productList.map(p => shortenProductName(p.productName))
   const scores = store.productList.map(p => calculateScore(p))
 
-  // 📊 차트 그리기
   if (chartRef.value && scores.length > 0) {
     new Chart(chartRef.value, {
       type: 'bar',
@@ -126,7 +159,7 @@ onMounted(async () => {
         }]
       },
       options: {
-        indexAxis: 'y', // 가로 막대 차트
+        indexAxis: 'y',
         responsive: true,
         layout: { padding: 20 },
         scales: {
@@ -175,7 +208,7 @@ const avgScore = computed(() => {
   return store.productList.length ? Math.round(total / store.productList.length) : 0
 })
 
-// 검색시 페이지 초기화
+// 🔍 검색 시 페이지 초기화
 const onSearch = () => {
   currentPage.value = 1
 }

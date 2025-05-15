@@ -28,7 +28,7 @@ const departments = ref([]);
 // 년도 월 전달 변수
 const today = new Date();
 const year = ref(today.getFullYear());
-const month = ref(today.getMonth() + 1);
+const month = ref(today.getMonth());
 
 const showEval = ref(false);
 
@@ -64,10 +64,14 @@ function changeMonth(diff) {
   year.value = newYear;
   month.value = newMonth;
 
+// if(departmentIdx.value===undefined || departmentIdx.value===null)
+//     departmentIdx.value = companyScoreData.departments[0].idx;
+
   router.push({
     name: "dashboard-with-department",
     params: {
       departmentName: departmentName.value,
+      departmentIdx: departmentIdx.value,
       yearMonth: `${newYear}-${newMonth < 10 ? "0" + newMonth : newMonth}`,
     },
   });
@@ -88,7 +92,7 @@ async function fetchData() {
   if(departmentIdx.value===undefined || departmentIdx.value===null)
     departmentIdx.value = companyScoreData.departments[0].idx;
 
- console.log("vue",departments.value); 
+  console.log("vue",departments.value); 
 
 
   watch(
@@ -96,7 +100,7 @@ async function fetchData() {
   (newVal) => {
     departmentIdx.value = newVal ?? 1; // fallback to 1 if null/undefined
   }
-);
+  );
 
 
   // departmentIdx가 있으면 파라미터에 포함
@@ -110,7 +114,7 @@ async function fetchData() {
   // 월별 부서 점수 데이터
   departmentScoreData.value = departmentMonthData;
 
-  console.log("월별 부서 점수 데이터", departmentScoreData.value);
+  console.log("월별 부서 점수 데이터", departmentMonthData.value);
 
   await nextTick();
   departmentName.value = departmentScoreData.value.departmentName;

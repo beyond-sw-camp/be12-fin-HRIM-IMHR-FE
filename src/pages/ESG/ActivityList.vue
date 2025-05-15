@@ -11,19 +11,21 @@ const stomp = useStompStore();
 const memberStore = useMemberStore();
 const router = useRouter();
 
-const search = ref("");
-const currentPage = ref(1);
-const totalPages = ref(0);
-const pageSize = ref(5);
-const userRole = ref(true);
-const activityList = ref([]);
+const memberIdx = ref(0);
 
+const search = ref("");
+const currentPage = ref(0);
+const totalPages = ref(0);
+const pageSize = ref(10);
+
+const userRole = ref(true);
 
 // Subject metadata and form data
 const subjects = ref([]);
 const selectedSubject = ref(null);
 const formData = ref({
   subject: "",
+  esgActivityItem: "",
   esgScore: null,
   esgValue: "",
   activityDate: new Date().toISOString().split("T")[0],
@@ -35,31 +37,6 @@ const previewImage = ref(null);
 const file = ref(null);
 const fileInput = ref(null);
 const formRef = ref(null);
-
-// **여기에 추가**: 5개씩 묶어서 보여줄 페이지 번호 범위 계산
-const pageRange = computed(() => {
-  const total = totalPages.value;
-  const page = currentPage.value;
-  const groupSize = 5;
-  const groupIndex = Math.floor((page - 1) / groupSize);
-  const start = groupIndex * groupSize + 1;
-  const end = Math.min(start + groupSize - 1, total);
-  const pages = [];
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-  return pages;
-});
-
-const goToPage = async (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-    router.push({ path: "/activityList", query: { page } });
-    totalPages.value = await activityStore.list(page - 1);
-  }
-};
-
-const newActivity = ref({ topic: "", file: null });
 
 const handleSubjectChange = (subject) => {
   selectedSubject.value = subject;
@@ -76,14 +53,6 @@ const handleFileUpload = (event, fieldName) => {
     };
     reader.readAsDataURL(file.value);
     formData.value.inputs[fieldName] = file.value;
-  }
-};
-
-const previewImageClose = () => {
-  previewImage.value = null;
-  file.value = null;
-  if (fileInput.value) {
-    fileInput.value.value = null;
   }
 };
 
@@ -107,10 +76,11 @@ const submit = async () => {
 
     // Create DTO object without file data
     const dto = {
-      esgValue: formData.value.esgValue,
-      esgScore: formData.value.esgScore,
+      esgValue: selectedSubjectMeta.esgValue,
+      esgScore: selectedSubjectMeta.esgScore,
       subjectId: selectedSubjectMeta.id,
       subject: formData.value.subject,
+      esgActivityItem: selectedSubjectMeta.esgActivityItem,
       activityDate: formData.value.activityDate,
 
       inputs: {},
@@ -132,7 +102,10 @@ const submit = async () => {
     // Add file inputs to FormData separately
     for (const input of selectedSubjectMeta.inputs) {
       if (input.type === "file" && formData.value.inputs[input.inputValue]) {
-        submitFormData.append(input.inputValue, formData.value.inputs[input.inputValue]);
+        submitFormData.append(
+          input.inputValue,
+          formData.value.inputs[input.inputValue]
+        );
       }
     }
 
@@ -151,33 +124,27 @@ const submit = async () => {
   }
 };
 
-const activityDelete = async (activicyIdx) => {
-  const isSuccess = await activityStore.delete(activicyIdx);
-  if (isSuccess === true) {
-    window.location.reload();
-  } else {
-    alert("삭제 실패");
-  }
+const filteredActivitys = computed(() =>
+  activityStore.activityList.filter((a) =>
+    (a.subject || "").toLowerCase().includes(search.value.toLowerCase())
+  )
+);
+
+const fetchactivity = async () => {
+  totalPages.value = await activityStore.activityListsearch(
+    memberIdx.value,
+    currentPage.value,
+    pageSize.value,
+    search.value
+  );
 };
 
-const loadActivities = async (e) => {
-  // search API가 totalPages를 반환한다고 가정
-  totalPages.value = await activityStore.search(e, currentPage.value - 1);
-};
-
-const onSearchInput = (e) => {
-  loadActivities(e.target.value);
-};
-
-// 리스트 관련
 onMounted(async () => {
-  totalPages.value = await activityStore.list(currentPage.value - 1);
-
   userRole.value = await memberStore.isAdmin();
   const rawSubjects = await activityStore.subjectListSearch();
-  const memberIdx = await memberStore.userInfo.idx;
-  activityList.value = await activityStore.activityListsearch(memberIdx);
-  console.log("vue list", activityList.value);
+  memberIdx.value = await memberStore.userInfo.idx;
+
+  await fetchactivity();
 
   // E, S, G 순서로 정렬
   const order = { E: 0, S: 1, G: 2 };
@@ -205,12 +172,11 @@ onMounted(async () => {
         v-model="search"
         type="text"
         placeholder="주제를 입력하세요"
-        @input="onSearchInput"
         class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
       />
 
       <button
-        @click.prevent="currentPage = 1"
+        @click="onSearch"
         class="bg-slate-800 text-white px-6 py-2 rounded hover:bg-slate-900 transition"
       >
         검색
@@ -224,15 +190,16 @@ onMounted(async () => {
           <tr>
             <th class="py-3 border">순서</th>
             <th class="py-3 border">상태</th>
-            <th class="p-3 border">주제</th>
+            <th class="p-3 border">ESG 활동 항목</th>
+            <th class="py-3 border">주제</th>
             <th class="p-3 border">유저</th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="(activity, index) in activityList"
+            v-for="(activity, index) in filteredActivitys"
             :key="activity.activityIdx"
-            @click="$router.push(`/activeDetails/${activity.activityIdx}`)"
+            @click="$router.push(`/activeDetails/${activity.activityId}`)"
             class="border-b hover:bg-slate-50 transition cursor-pointer"
           >
             <td class="py-3 border">
@@ -246,52 +213,64 @@ onMounted(async () => {
             <td class="py-2">
               <span
                 class="text-white text-xs px-3 py-1 rounded-md inline-block"
-                :class="activity.status ? 'bg-green-500' : 'bg-red-500'"
+                :class="
+                  activity.status === true
+                    ? 'bg-green-500'
+                    : activity.status === false
+                    ? 'bg-red-500'
+                    : 'bg-yellow-500'
+                "
               >
-              {{ activity.status ? '승인' : '반려' }}
+                {{
+                  activity.status === true
+                    ? "승인"
+                    : activity.status === false
+                    ? "반려"
+                    : "대기"
+                }}
               </span>
             </td>
+
+            <td class="p-3 border">{{ activity.esgActivityItem }}</td>
 
             <td class="p-3 border">{{ activity.subject }}</td>
 
             <td class="p-3 border">
               {{ activity.userName }} ({{ activity.userID }})
             </td>
-
           </tr>
         </tbody>
       </table>
     </div>
 
     <!-- 📌 페이지네이션 -->
-    <div class="mt-6 flex justify-center space-x-2 text-sm text-slate-600">
+    <div class="flex justify-center items-center mt-6 space-x-2 text-sm">
       <button
-        @click="goToPage(currentPage - 1)"
+        class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="currentPage === 1"
-        class="px-3 py-1 rounded border disabled:opacity-40 hover:bg-slate-100"
+        @click="currentPage--"
       >
         ← 이전
       </button>
 
-      <!--  전체 totalPages가 아니라 pageRange만 렌더링 -->
       <button
-        v-for="page in pageRange"
+        v-for="page in totalPages"
         :key="page"
-        @click="goToPage(page)"
+        @click="currentPage = page - 1"
         :class="[
-          'px-4 py-1 rounded-md border',
-          page === currentPage
-            ? 'bg-slate-800 text-white font-bold'
-            : 'hover:bg-slate-100',
+          'px-3 py-1 rounded',
+          currentPage === page - 1
+            ? 'bg-slate-800 text-white'
+            : 'bg-slate-100 hover:bg-slate-200',
         ]"
       >
         {{ page }}
       </button>
 
       <button
-        @click="goToPage(currentPage + 1)"
-        :disabled="currentPage === totalPages"
-        class="px-3 py-1 rounded border disabled:opacity-40 hover:bg-slate-100"
+        class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
+        :disabled="currentPage === totalPages - 1"
+        @click="currentPage++"
       >
         다음 →
       </button>

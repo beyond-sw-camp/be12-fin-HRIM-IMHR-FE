@@ -4,6 +4,7 @@ import { X } from "lucide-vue-next";
 
 const props = defineProps({
   visible: Boolean,
+  isAdmin: Boolean,
   events: {
     type: Array,
     default: () => [],
@@ -25,11 +26,6 @@ watch(
   },
   { immediate: true, deep: true }
 );
-
-const userRole = ref(
-  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
-);
-// manager executive staff `'${{변수명}}'` v-if="userRole === 'manager'"
 </script>
 
 <template>
@@ -70,7 +66,7 @@ const userRole = ref(
       <button
         @click="$emit('add-event', date)"
         class="bg-slate-600 text-white mt-3 px-2 py-1 rounded-lg hover:bg-slate-800"
-        v-if="userRole === 'manager'"
+        v-if="isAdmin"
       >
         + 일정 추가
       </button>

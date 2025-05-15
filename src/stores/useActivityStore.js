@@ -26,45 +26,27 @@ export const useActivityStore = defineStore('activity', {
             return response;
         },
 
-        async activityListsearch(memberIdx) {
-            const response = await axios.get(`/api/esg_activity/listsearch/${memberIdx}`);
+        async activityListsearch(myIdx, page, pageSize, keyword = "") {
+            const response = await axios.get(`/api/esg_activity/pageList?myIdx=${myIdx}&page=${page}&pageSize=${pageSize}&keyword=${keyword}`);
+            this.activityList = response.data.data.content;
+            return response.data.data.totalPages;
+        },
+
+        async detail(id) {
+            const response = await axios.get(`/api/esg_activity/detail/${id}`);
             return response.data.data;
         },
 
-        async list(page) {
-            const response = await axios("/api/activity/activityList?page=" + page);
-            this.activityList = response.data.data.activityList;
-
-            return response.data.data.total;
+        async agree(id) {
+            await axios.get(`/api/esg_activity/ativityApproval/agree/${id}`);
         },
 
-        async search(search, page) {
-            const response = await axios.get('/api/activity/activitySearch', {
-                params: { page, search }
-            });
-
-            this.activityList = response.data.data.activityList;
-
-            return response.data.data.total;
+        async oppose(id) {
+            await axios.get(`/api/esg_activity/ativityApproval/oppose/${id}`);
         },
 
-        async detail(idx) {
-            const response = await axios("/api/activity/detail/" + idx);
-            return response.data.data;
-        },
-
-        async agree(idx) {
-            const response = await axios("/api/activity/ativityApproval/agree/" + idx);
-        },
-
-        async oppose(idx) {
-            const response = await axios("/api/activity/ativityApproval/oppose/" + idx);
-        },
-
-
-        async delete(idx) {
-            const response = await axios.delete("/api/activity/delete/" + idx);
-            return response.data.isSuccess;
+        async delete(id) {
+            await axios.delete(`/api/esg_activity/delete/${id}`);
         },
 
         async subjectCreate(formData) {

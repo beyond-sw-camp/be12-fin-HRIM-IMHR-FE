@@ -5,6 +5,12 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const idx = route.params.idx;
 
+// 날짜 범위 상태 추가
+const dateRange = ref({
+  startDate: route.query.startDate,
+  endDate: route.query.endDate
+});
+
 // 활동내역과 피드백을 분리
 const activities = [
   { topic: "활동내역1", type: "activity", date: "2025.01.12" },
@@ -30,22 +36,49 @@ const activityCurrentPage = ref(1);
 const feedbackCurrentPage = ref(1);
 const itemsPerPage = 2; // 페이지당 항목 수
 
-// 페이지네이션된 데이터 계산
+// 날짜 범위에 따른 활동 필터링
+const filteredActivities = computed(() => {
+  return activities.filter(activity => {
+    const activityDate = new Date(activity.date);
+    const start = new Date(dateRange.value.startDate);
+    const end = new Date(dateRange.value.endDate);
+    return activityDate >= start && activityDate <= end;
+  });
+});
+
+// 날짜 범위에 따른 피드백 필터링
+const filteredFeedbacks = computed(() => {
+  return feedbacks.filter(feedback => {
+    const feedbackDate = new Date(feedback.date);
+    const start = new Date(dateRange.value.startDate);
+    const end = new Date(dateRange.value.endDate);
+    return feedbackDate >= start && feedbackDate <= end;
+  });
+});
+
+// 페이지네이션된 데이터 계산 수정
 const paginatedActivities = computed(() => {
   const start = (activityCurrentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return activities.slice(start, end);
+  return filteredActivities.value.slice(start, end);
 });
 
+// 페이지네이션된 피드백 데이터 계산 수정
 const paginatedFeedbacks = computed(() => {
   const start = (feedbackCurrentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return feedbacks.slice(start, end);
+  return filteredFeedbacks.value.slice(start, end);
 });
 
-// 총 페이지 수 계산
-const totalActivityPages = computed(() => Math.ceil(activities.length / itemsPerPage));
-const totalFeedbackPages = computed(() => Math.ceil(feedbacks.length / itemsPerPage));
+// 총 페이지 수 계산 수정
+const totalActivityPages = computed(() => Math.ceil(filteredActivities.value.length / itemsPerPage));
+const totalFeedbackPages = computed(() => Math.ceil(filteredFeedbacks.value.length / itemsPerPage));
+
+// 날짜 변경 핸들러
+const handleDateChange = () => {
+  activityCurrentPage.value = 1; // 활동 내역 첫 페이지로 이동
+  feedbackCurrentPage.value = 1; // 피드백 첫 페이지로 이동
+};
 
 // 페이지 이동 함수
 const goToActivityPage = (page) => {
@@ -88,7 +121,22 @@ onMounted(async () => {
             <ul class="list-disc list-inside pl-4">
               <li>성명: 홍길동</li>
               <li>직급: 과장</li>
-              <li>대상 기간: 2024.01 ~ 2024.03</li>
+              <li class="flex items-center gap-2">
+                <span>대상 기간:</span>
+                <input
+                  type="date"
+                  v-model="dateRange.startDate"
+                  @change="handleDateChange"
+                  class="border border-gray-300 rounded-md px-2 py-1"
+                />
+                <span>~</span>
+                <input
+                  type="date"
+                  v-model="dateRange.endDate"
+                  @change="handleDateChange"
+                  class="border border-gray-300 rounded-md px-2 py-1"
+                />
+              </li>
               <li>총 ESG 인사 평가 점수: 87</li>
             </ul>
           </div>

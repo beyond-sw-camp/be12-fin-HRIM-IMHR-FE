@@ -1,21 +1,33 @@
 <template>
-  <!-- 📊 상단: 등급 카드 + 차트 + 평균 카드 가로 정렬 -->
-  <div class="px-6 grid grid-cols-1 md:grid-cols-1 gap-8 max-w-6xl mx-auto py-8">
-    <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+  <!-- 📊 친환경 점수 차트 + 색상 기준표 -->
+  <div class="bg-white rounded-2xl shadow-md p-6 flex gap-6 justify-between items-start w-full max-w-5xl">
+    <!-- ✅ 차트 -->
+    <canvas ref="chartRef" class="w-[70%] h-80"></canvas>
 
-      <!-- ⬅️ 환경 등급 카드
-      <div class="bg-green-100 rounded-2xl shadow-md p-8 text-center w-60">
-        <p class="text-3xl font-bold text-green-800 mb-2">{{ eScore }} 등급</p>
-        <p class="text-sm text-slate-700">환경 Environmental</p>
-      </div> -->
-
-      <!-- 🎯 친환경 점수 차트 (가운데) -->
-      <div class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-center w-full max-w-2xl">
-        <canvas ref="chartRef" class="w-full h-80"></canvas>
-      </div>
+    <!-- 🎨 색상 기준표 -->
+    <div class="w-[30%]">
+      <p class="text-sm font-semibold text-slate-700 mb-4">색상 기준</p>
+      <ul class="space-y-2 text-sm text-slate-600">
+        <li class="flex items-center gap-2">
+          <span class="w-4 h-4 bg-[#06b6d4] rounded-full"></span>
+          <span><strong>매우 우수</strong> (130점 이상)</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-4 h-4 bg-[#22c55e] rounded-full"></span>
+          <span><strong>우수</strong> (100점 이상)</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-4 h-4 bg-[#f97316] rounded-full"></span>
+          <span><strong>보통</strong> (70점 이상)</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-4 h-4 bg-[#ef4444] rounded-full"></span>
+          <span><strong>미흡</strong> (70점 미만)</span>
+        </li>
+      </ul>
 
       <!-- ➡️ 평균 친환경 점수 카드 -->
-      <div class="bg-blue-100 rounded-2xl shadow-md p-8 text-center w-60 cursor-pointer hover:bg-blue-200 transition"
+      <div class="mt-8 bg-blue-100 rounded-2xl shadow-md p-8 text-center w-60 cursor-pointer hover:bg-blue-200 transition"
         @click="showDonutModal = true">
         <p class="text-3xl font-bold text-blue-800 mb-2">{{ avgScore }} 점</p>
         <p class="text-sm text-slate-700">평균 친환경 점수</p>
@@ -24,13 +36,14 @@
   </div>
 
   <!-- 📊 도넛 차트 모달 -->
-<div v-if="showDonutModal" class="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
-  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
-    <button @click="showDonutModal = false" class="absolute top-3 right-3 text-slate-500 hover:text-slate-700">✖</button>
-    <h3 class="text-lg font-semibold mb-4 text-center">제품별 친환경 점수 (도넛 차트)</h3>
-    <canvas ref="donutRef" class="w-full h-96"></canvas>
+  <div v-if="showDonutModal" class="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+      <button @click="showDonutModal = false"
+        class="absolute top-3 right-3 text-slate-500 hover:text-slate-700">✖</button>
+      <h3 class="text-lg font-semibold mb-4 text-center">제품별 친환경 점수 (도넛 차트)</h3>
+      <canvas ref="donutRef" class="w-full h-96"></canvas>
+    </div>
   </div>
-</div>
 
 
   <!-- 📋 제품 리스트 테이블 -->
@@ -144,8 +157,10 @@ import { watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Search } from 'lucide-vue-next'
 import Chart from 'chart.js/auto'
-import { useProductStore, calculateScore, shortenProductName } from '../../stores/useProductStore'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+import { useProductStore, calculateScore, shortenProductName, getGradeLabel, getGradeColor } from '../../stores/useProductStore'
 import { useScoreStore } from '../../stores/useScoreStore'
+Chart.register(ChartDataLabels)
 
 // 📌 상태 정의
 const chartRef = ref(null)
@@ -182,7 +197,7 @@ onMounted(async () => {
         datasets: [{
           label: '환경 점수',
           data: scores,
-          backgroundColor: ['#4ade80', '#86efac', '#bbf7d0'],
+          backgroundColor: scores.map(score => getGradeColor(score)),
           borderRadius: 8,
           barThickness: 30,
         }]
@@ -217,22 +232,42 @@ onMounted(async () => {
   }
 })
 
+
 watchEffect(() => {
   if (showDonutModal.value && donutRef.value) {
-    const labels = store.productList.map(p => shortenProductName(p.productName))
     const scores = store.productList.map(p => calculateScore(p))
-    const max = Math.max(...scores)
-    const min = Math.min(...scores)
+
+    const gradeCounts = {
+      '매우 우수': 0,
+      '우수': 0,
+      '보통': 0,
+      '미흡': 0
+    }
+
+    scores.forEach(score => {
+      const grade = getGradeLabel(score)
+      gradeCounts[grade] += 1
+    })
+
+    const labels = Object.keys(gradeCounts)
+    const data = Object.values(gradeCounts)
+
+    const colorMap = {
+      '매우 우수': '#06b6d4',
+      '우수': '#22c55e',
+      '보통': '#f97316',
+      '미흡': '#ef4444'
+    }
+
+    const backgroundColor = labels.map(label => colorMap[label])
 
     new Chart(donutRef.value, {
       type: 'doughnut',
       data: {
         labels,
         datasets: [{
-          data: scores,
-          backgroundColor: scores.map(score =>
-            score === max ? '#22c55e' : score === min ? '#f87171' : '#4ade80'
-          ),
+          data,
+          backgroundColor,
           borderWidth: 1
         }]
       },
@@ -242,14 +277,26 @@ watchEffect(() => {
           legend: { position: 'bottom' },
           title: {
             display: true,
-            text: '친환경 점수 분포',
+            text: '친환경 등급별 제품 수',
             font: { size: 16 }
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const label = context.label
+                const value = context.raw
+                return `${label}: ${value}개`
+              }
+            }
           }
         }
       }
     })
   }
 })
+
+
+
 
 // 🔎 필터링된 리스트
 const filteredProducts = computed(() =>

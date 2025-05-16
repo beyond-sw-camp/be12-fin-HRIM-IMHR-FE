@@ -241,7 +241,7 @@
 
 
 ## 🚀 핵심 로직 상세 설명
-### [📃 프로젝트 Wiki](https://주소) <br><br>
+### [📃 프로젝트 Wiki]([https://주소](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-FE/wiki/API-%EC%97%B0%EB%8F%99-%EB%B0%8F-%EC%9D%B8%EC%A6%9D)) <br><br>
 
 
 ## 📂 프로젝트 폴더 바로가기

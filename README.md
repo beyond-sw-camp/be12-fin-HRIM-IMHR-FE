@@ -4,10 +4,10 @@
 </p>
 
 
-<p align="middle">
-[플레이 데이터] 한화시스템 BEYOND SW캠프
-<br>🥪팀 HRIM
-</p>
+## 🎁팀원 소개
+> **[한화시스템 BEYOND SW캠프 12기] Final Project** 
+
+> **HRIM팀 ESG 기반 경영 & 인사관리 프로젝트**
 
 
 <figure>
@@ -27,73 +27,158 @@
     </table>
 </figure>
 
-**서비스 접속 주소**
-- 백엔드 https://www.imhr.p-e.kr/api
+### 목차
+- [🛠 기술 스택](#-기술-스택)
+- [📚 IMHR 데모 사이트 링크](#-IMHR-데모-사이트-바로가기)
+- [🎨 IMHR 서비스 소개](#-IMHR-서비스-소개)
+- [🏗️ 시스템 아키텍처](#-시스템-아키텍처)
+- [📚 프론트엔드 프로젝트 목표](#-프론트엔드-프로젝트-목표)
+- [📈 프로젝트 설계](#-프로젝트-설계)
+- [🚀 핵심 로직 상세 설명](#-핵심-로직-상세-설명)
+- [📂 프로젝트 폴더 바로가기](#-프로젝트-폴더-바로가기)
+<br><br>
 
-- 프론트 엔드 https://www.imhr.p-e.kr/
+## 🛠 기술 스택
 
-- 임직원: member01
-- 관리자: admin01
-- 비밀번호: qwer1234
-- 회사 코드 : qwer1234 ( 사원가입때에 회사 코드에 입력하시면 가입됩니다!)
+#### &nbsp;　[ Frontend ]
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white" style="border-radius: 5px;"/>
+<img src="https://img.shields.io/badge/css3-1572B6?style=for-the-badge&logo=css3&logoColor=white" style="border-radius: 5px;"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white" style="border-radius: 5px;"/>
+![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white" style="border-radius: 5px;"/>
+<img src="https://img.shields.io/badge/pinia-gold?style=for-the-badge&logo=Pinia&logoColor=white" style="border-radius: 5px;"/>
 
-## 📝 프로젝트 소개
-
-> ESG 경영은 환경 오염을 방지하고, 사회적 책임을 강화하며, 투명하고 책임 있는 지배구조를 구축하는 것을 목표로 합니다. 이러한 ESG 요소는 기업의 지속가능성과 직결되며, ESG 평가 점수가 높을수록 투자 유치 가능성도 함께 높아집니다.
-> 하지만 이러한 중요한 ESG 경영에도 불구하고, 일반 직원들은 이에 대한 관심이 낮은 것이 현실입니다. 이를 해결하기 위해 개발된 것이 바로 ‘IMHR’입니다. ‘IMHR’은 직원들이 ESG 점수에 보다 높은 관심을 갖고, 실질적으로 회사의 ESG 성과 향상에 기여할 수 있도록 지원하는 서비스입니다.
-
-## 회원 서비스
-
-회원가입, 아이디 찾기, 비밀번호 변경, 탈퇴까지  
-**사용자의 전반적인 계정 관리**를 지원합니다.
-
-### 🔹 주요 기능
-- 기업 코드를 이용한 회원가입 & 로그인 (임직원 / 관리자)
-- 사업자번호와 증명을 이용한 기업 회원가입 기능
-  - 기능 실험을 위해 임시적으로 사업자번호와 기업코드를 동일하게 사용합니다.
-- 아이디 찾기 기능
-- 비밀번호 변경 기능
-- 로그아웃 처리
-
-## 활동 서비스
-
-봉사활동, 기부활동 등   
-**ESG관련 인사 활동**을 관리 합니다.
-
-### 🔹 주요 기능
-- 활동을 증명할 사진을 활용하여 황동 등록
-- 관리자는 우리 회사의 직원의 활동을 모두 조회
-- 임직원은 본인 활동만 조회
-- 관리자가 활동 승인, 반려 가능
-- 임직원이 본인 활동 삭제 가능
-- 관리자는 임직원의 회원가입을 승인 가능
+#### &nbsp;　[ Backend ]
+&nbsp;&nbsp;&nbsp;&nbsp; ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/Spring data jpa-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/Spring Batch-6DB33F?style=for-the-badge&logo=Spring&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/SMTP-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" style="border-radius: 5px;">
 
 
-## 캠패인 서비스
+#### &nbsp;　[ DB ]
+&nbsp;&nbsp;&nbsp;</a>
+<img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" style="border-radius: 5px;"> 
+<img src="https://img.shields.io/badge/AmazonS3-e05242?style=for-the-badge&logo=AmazonS3&logoColor=white" style="border-radius: 5px;">
+![Elasticsearch](https://img.shields.io/badge/elasticsearch-%230377CC.svg?style=for-the-badge&logo=elasticsearch&logoColor=white)
 
-캠패인 일정 및 참여인원과 같은
-**회사 캠패인 일정**을 관리 합니다.
+#### &nbsp;　[ CI/CD ]
+&nbsp;&nbsp;&nbsp;&nbsp;![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white" style="border-radius: 5px;">
 
-### 🔹 주요 기능
-- 캘린더에서 회사 캠패인 추가 및 조회 가능
-- 캠패인 상세 리스트 확인 가능
-- 우리 회사 사원들 중 캠패인에 참여한 인원 채크 가능
+#### &nbsp;　[ Etc ]
+&nbsp;&nbsp;&nbsp;&nbsp;![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
+<img src="https://img.shields.io/badge/kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white">
+<img src="https://img.shields.io/badge/logstash-f3bd19?style=for-the-badge&logo=logstash&logoColor=white" style="border-radius: 5px;">
+
+#### &nbsp;　[ Communication ]
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/discord-326CE5?style=for-the-badge&logo=discord&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white" style="border-radius: 5px;">
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
+<br><br><br>
 
 
-## 협력업체 관련 서비스
+## 📚 IMHR 데모 사이트 바로가기
+### [IMHR](https://www.imhr.kro.kr)</a>
+<br><br>
+## 🎨 IMHR 서비스 소개
+<img src= "https://주소">
 
-협력업체를 추가, 확인 등과 같이 우리 회사의
-**협력업체**를 관리 합니다.
+#### 프로젝트 배경
+ - 체계적인 지식 관리 서비스 <br>
+ - `Wiki` + `QnA` + `Blog` 3가지 기능을 하나로 통합한 개발자 지식 공유 플랫폼<br>
+   개발을 하다 보면 다양한 문제와 오류에 직면 하게 된다. 이 때 개발자들은 AI, 블로그 등등의 다양한 웹 서비스를 이용하지만, 각기 다른 사이트를 방문해야 하는 번거로움이 존재하곤 한다.<br>
+  이러한 정보들을 `하나의 사이트`에서 관리 하여 개발자들이 효율적으로 문제를 해결하고 공유하며, 공유된 지식들을 체계적으로 관리하기위해 Enadu 서비스를 구축하였다.
+<br>
 
-### 🔹 주요 기능
-- 협력업체 리스트를 확인하여 추가 및 삭제 가능
-- 협력업체의 ESG점수를 대시보드에서 확인 가능
+- `통합 지식 관리` : 개발자들이 하나의 플랫폼에서 프로그래밍 관련 지식, 문제 해결 방법, 최신 기술 정보를 체계적으로 관리할 수 있도록 지원한다.<br>
+- `효율적인 문제 해결` : 직면한 문제와 에러를 즉시 질문하고, 답변을 통해 문제를 해결할 수 있는 QnA 기능을 통해 개발 효율성을 높인다.<br>
+- `지식 아카이빙` : 해결된 문제를 블로그 형태로 정리하여, 단순히 문제 해결에 그치지 않고 과정을 기록함으로써 개발자들이 참고할 수 있는 ErrorArchive를 제공한다.<br>
+- `커뮤니티 형성` : 개발자들 간의 지식 공유를 통해 협력 문화를 조성하고, 개발 커뮤니티의 성장과 발전을 도모한다.
+<br>
 
-## 실시간 알림 서비스
 
-활동승인 알림, 스케줄 알림 등  
-**주요 이벤트를 실시간 알림으로 받아볼 수 있습니다.**
 
-### 🔹 주요 기능
-- 알림 생성 및 WebSocket 실시간 전송
-- 사용자별 알림 목록 조회
+#### 세부 기능
+  - **`WIKI`**<br>
+    유저들이 프로그래밍 언어별 정보, 최신 기술에 관한 지식을 자유롭게 공유하고, 이를 체계적으로 관리할 수 있는 서비스를 제공한다.
+  - **`QnA`**<br>
+    개발자들이 직면한 문제와 에러를 질문하고, 답변을 얻을 수 있는 서비스를 제공한다.
+  - **`ErrorArchive`**<br>
+    단순히 문제를 해결하는 것에 그치지 않고, 해결 과정을 블로그 형태로 정리하고, 공유한다.
+  - **`채팅`**<br>
+    게시글의 작성자에게 추가적인 질문사항이 있을 떄, 실시간 소통이 가능한 1:1채팅 서비스를 제공한다.
+ - **`포인트 및 랭킹`**<br>
+    서비스 사용을 유도하기 위해 특정 조건에 따라 포인트를 부여하고, 활동을 통해 본인의 등급 및 랭킹을 제공한다.    
+<br>
+
+## 🏗️ 시스템 아키텍처
+<img src="https://주소"><br><br>
+
+
+## 📚 프론트엔드 프로젝트 목표
+- `사용자 인터페이스(UI) 개발` : 직관적이고 반응형(Responsive) 디자인 구현
+- `사용자 경험(UX) 향상` : 사용자의 편의성과 흐름을 고려한 화면 흐름 설계
+- `프론트엔드 기술 활용` : HTML, CSS, JavaScript, 프레임워크(Vue, React 등)를 사용할 때 확장성을 고려하여 프로젝트를 진행
+- `API 연동` : 백엔드와의 데이터 통신(fetch, promise, ajax, axios, interceptor 등)
+<br>
+
+## 📈 프로젝트 설계
+
+### [1. 기획서 바로가기](https://구글docs_링크/기획서)
+
+### [2. 요구사항 정의서](https://구글docs_링크/요구사항_정의서)
+
+### [3. WBS](https://구글docs_링크/WBS)
+
+### [4. 화면설계서 바로가기](https://피그마_링크/화면설계서)
+
+<br><br>
+
+## ⚙️ 주요 기능 시연
+<details>
+<summary>회원가입</summary>
+
+![회원가입](https://주소)
+> 이메일, 비밀번호, 닉네임, 프로필 이미지(필수 X)로 회원 가입을 한다.  
+> 이메일, 닉네임은 **중복이 불가능**하다.
+</details>
+
+<details>
+<summary>로그인</summary>
+
+![로그인](https://주소)
+> 일반 로그인, 소셜(Github) 로그인
+
+<img width="1361" alt="image" src="https://source">
+
+> 소셜 로그인은 소셜로 로그인 한 후 최초 로그인시 동의를 받는다.
+</details>
+
+<details>
+<summary>검색</summary>
+
+### 통합 검색
+![통합검색](https://주소)
+> 헤더에 있는 검색창으로 3개의 게시판 **통합 검색** 가능하다.  
+> 검색 후 원하는 게시판으로 더보기 버튼 누를 시 해당 **검색어 유지** 된 상태로 페이지 이동을 한다.
+---
+### 게시판 별 검색
+![상세검색](https://주소)
+> 게시판 별로 상세 검색이 가능하다.  
+> **카테고리**(상위, 하위), **범위**(제목+내용, 제목, 내용), **정렬**(최신순, 좋아요순, 검색 시에만 가능한 **정확도순**)
+</details>
+
+
+## 🚀 핵심 로직 상세 설명
+### [📃 프로젝트 Wiki](https://주소) <br><br>
+
+
+## 📂 프로젝트 폴더 바로가기
+### [📃 Backend](https:/주소) <br>
+### [📃 Devops](https://주소)
+<br>

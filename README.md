@@ -88,7 +88,7 @@
 ### [IMHR](https://www.imhr.kro.kr)</a>
 <br><br>
 ## 🎨 IMHR 서비스 소개
-<img src="/public/image.png" width="400px" />
+<img src="/public/image.png" width="600px" />
 
 #### 프로젝트 배경
  - 체계적인 지식 관리 서비스 <br>

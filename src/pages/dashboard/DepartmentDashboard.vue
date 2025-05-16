@@ -1,6 +1,11 @@
 <script setup>
 import { ref, computed, onMounted, watch, nextTick } from "vue";
-import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import {
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-vue-next";
 import Chart from "chart.js/auto";
 import { useRoute, useRouter } from "vue-router";
 import { useCompanyStore } from "../../stores/useCompanyStore";
@@ -89,26 +94,25 @@ async function fetchData() {
   memberscores.value = companyScoreData.memberScores;
   departmentList.value = companyScoreData.departments;
   companyName.value = companyScoreData.companyName;
-  // 막대그래프를 위한 부서 리스트 목록 
+  // 막대그래프를 위한 부서 리스트 목록
   departments.value = companyScoreData.departments;
-  if(departmentIdx.value===undefined || departmentIdx.value===null)
+  if (departmentIdx.value === undefined || departmentIdx.value === null)
     departmentIdx.value = companyScoreData.departments[0].idx;
-  
+
   companyIdx.value = companyScoreData.idx;
 
   watch(
-  () => route.params.departmentIdx,
-  (newVal) => {
-    departmentIdx.value = newVal ?? 1; // fallback to 1 if null/undefined
-  }
+    () => route.params.departmentIdx,
+    (newVal) => {
+      departmentIdx.value = newVal ?? 1; // fallback to 1 if null/undefined
+    }
   );
-
 
   // departmentIdx가 있으면 파라미터에 포함
   const params = {
     year: year.value,
     month: month.value,
-    departmentIdx:departmentIdx.value,
+    departmentIdx: departmentIdx.value,
   };
 
   const departmentMonthData = await departmentStore.departmentmonth(params);
@@ -164,7 +168,6 @@ watch(
     }
   }
 );
-
 
 let gaugeChartInstance = null;
 let barChartInstance = null;
@@ -230,10 +233,10 @@ function createOrUpdateESGChart(label, ctx, value, color, target) {
 // 바 차트도 동일 패턴 적용
 function createOrUpdateBarChart(ctx) {
   // departmentList.value에서 데이터 추출
-  const labels = departmentList.value.map(dept => dept.name);
-  const eScores = departmentList.value.map(dept => dept.escore ?? 0);
-  const sScores = departmentList.value.map(dept => dept.sscore ?? 0);
-  const gScores = departmentList.value.map(dept => dept.gscore ?? 0);
+  const labels = departmentList.value.map((dept) => dept.name);
+  const eScores = departmentList.value.map((dept) => dept.escore);
+  const sScores = departmentList.value.map((dept) => dept.sscore);
+  const gScores = departmentList.value.map((dept) => dept.gscore);
 
   if (barChartInstance) {
     barChartInstance.data.labels = labels;
@@ -285,10 +288,16 @@ function createOrUpdateBarChart(ctx) {
 // 데이터 변경 감지하여 차트 업데이트
 watch(departmentScoreData, async (newVal) => {
   await nextTick();
+  
   // 부서 평균 점수 게이지 차트
   const gaugeCtx = document.getElementById("gaugeChart");
   if (gaugeCtx && newVal) {
-    createOrUpdateGaugeChart(gaugeCtx, newVal.targetTotalScore, newVal.departmentTotalScore, "#86EFAC");
+    createOrUpdateGaugeChart(
+      gaugeCtx,
+      newVal.targetTotalScore,
+      newVal.departmentTotalScore,
+      "#86EFAC"
+    );
   }
 
   // 부서 ESG 영역별 차트
@@ -304,7 +313,9 @@ watch(departmentScoreData, async (newVal) => {
   });
 });
 
-watch([departmentList, departmentScoreData], () => {
+watch([departmentList, departmentScoreData], async () => {
+  await nextTick();
+
   const barCtx = document.getElementById("barChart");
   if (barCtx && departmentList.value && departmentList.value.length > 0) {
     createOrUpdateBarChart(barCtx);
@@ -344,7 +355,9 @@ const trends = computed(() => {
 
   return [
     {
-      percent: esgScore.value.targetE ? ((esgScore.value.e / esgScore.value.targetE) * 100).toFixed(1) : "0.0",
+      percent: esgScore.value.targetE
+        ? ((esgScore.value.e / esgScore.value.targetE) * 100).toFixed(1)
+        : "0.0",
       title: "환경 Environmental",
       score: esgScore.value.e,
       diff: 0, // 이전 값 비교해서 계산할 수도 있음
@@ -353,7 +366,9 @@ const trends = computed(() => {
       grafanaPath: "84be5e94-2d05-4439-9111-69ef368ea629/21b39ea?orgId=1",
     },
     {
-      percent: esgScore.value.targetS ? ((esgScore.value.s / esgScore.value.targetS) * 100).toFixed(1) : "0.0",
+      percent: esgScore.value.targetS
+        ? ((esgScore.value.s / esgScore.value.targetS) * 100).toFixed(1)
+        : "0.0",
       title: "사회 Social",
       score: esgScore.value.s,
       diff: 0,
@@ -362,7 +377,9 @@ const trends = computed(() => {
       grafanaPath: "8f1b99ce-8e31-42ad-b74a-96b8b72b046a/7b6bc4c?orgId=1",
     },
     {
-      percent: esgScore.value.targetG ? ((esgScore.value.g / esgScore.value.targetG) * 100).toFixed(1) : "0.0",
+      percent: esgScore.value.targetG
+        ? ((esgScore.value.g / esgScore.value.targetG) * 100).toFixed(1)
+        : "0.0",
       title: "지배구조 Governance",
       score: esgScore.value.g,
       diff: 0,
@@ -376,32 +393,38 @@ const trends = computed(() => {
 const subjects = async () => {
   const response = await activityStore.subjectListSearch();
 
-  evalTable.value = response.map(item => ({
-    category: convertEsgValue(item.esgValue),
-    activity: item.esgActivityItem || "-",
-    criteria: item.evaluationCriteria || "-",
-    score: `가점 + ${item.esgScore}`,
-    esgRaw: item.esgValue,
-  }))
-  .sort((a, b) => {
-    const order = { E: 0, S: 1, G: 2 };
-    return order[a.esgRaw] - order[b.esgRaw];
-  });
+  evalTable.value = response
+    .map((item) => ({
+      category: convertEsgValue(item.esgValue),
+      activity: item.esgActivityItem || "-",
+      criteria: item.evaluationCriteria || "-",
+      score: `가점 + ${item.esgScore}`,
+      esgRaw: item.esgValue,
+    }))
+    .sort((a, b) => {
+      const order = { E: 0, S: 1, G: 2 };
+      return order[a.esgRaw] - order[b.esgRaw];
+    });
 };
 
 const convertEsgValue = (value) => {
   switch (value) {
-    case "E": return "환경(E)";
-    case "S": return "사회(S)";
-    case "G": return "지배구조(G)";
-    default: return "-";
+    case "E":
+      return "환경(E)";
+    case "S":
+      return "사회(S)";
+    case "G":
+      return "지배구조(G)";
+    default:
+      return "-";
   }
 };
 
 const evalTable = ref([]);
 
 onMounted(() => {
-  fetchData().then(() => {
+  fetchData().then(async () => {
+    await nextTick();
     // canvas 렌더링 이후 실행되어야 안전함
     esgData.value.forEach((item) => {
       const ctx = document.getElementById(`chart${item.label}`);
@@ -617,20 +640,22 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
-
-
     </div>
 
     <ScoreModel
-    :visible="showScoreModel"
-    :grafanaUrl="grafanaPathForModal"
-    :year="year"
-    :month="month"
-    :companyIdx="companyIdx"
-    :departmentIdx="departmentIdx"
-    :title="scoreValue"
-    :departmentName="departmentName"
-    @close="() => {showScoreModel = false }"
+      :visible="showScoreModel"
+      :grafanaUrl="grafanaPathForModal"
+      :year="year"
+      :month="month"
+      :companyIdx="companyIdx"
+      :departmentIdx="departmentIdx"
+      :title="scoreValue"
+      :departmentName="departmentName"
+      @close="
+        () => {
+          showScoreModel = false;
+        }
+      "
     />
   </div>
 </template>

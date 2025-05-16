@@ -174,8 +174,8 @@
 
 <details>
 <summary>회원가입 및 로그인</summary>
+![기업(관리자)로 로그인](https://github.com/user-attachments/assets/5cd2d1c4-9fdb-4a57-bbb9-360455e1bed3)
 
-![회원가입](https://your-domain.com/image/signup.gif)
 
 > 본 시스템은 **기업 관리자용 회원가입**과 **직원용 회원가입**이 구분되어 있습니다.  
 > 기업 관리자는 **사업자등록증명서 파일 업로드**를 통해 인증된 회원가입 절차를 진행합니다.  

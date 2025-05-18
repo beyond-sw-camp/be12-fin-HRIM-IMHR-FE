@@ -173,16 +173,28 @@
 <details>
 <summary>회원가입 및 로그인</summary>
 
-![회원가입](https://your-domain.com/image/signup.gif)
+<br>
+
+#### 📝 기업(관리자) 회원가입
+
+[![기업(관리자) 회원가입](https://github.com/user-attachments/assets/f3dc2612-c4fe-4429-8170-6905c3ef3751)](https://github.com/user-attachments/assets/f3dc2612-c4fe-4429-8170-6905c3ef3751)
+
+#### 🔐 기업(관리자) 로그인
+
+[![기업(관리자) 로그인](https://github.com/user-attachments/assets/5cd2d1c4-9fdb-4a57-bbb9-360455e1bed3)](https://github.com/user-attachments/assets/5cd2d1c4-9fdb-4a57-bbb9-360455e1bed3)
+
+---
 
 > 본 시스템은 **기업 관리자용 회원가입**과 **직원용 회원가입**이 구분되어 있습니다.  
 > 기업 관리자는 **사업자등록증명서 파일 업로드**를 통해 인증된 회원가입 절차를 진행합니다.  
-> 등록된 기업은 관리자의 **승인 이후** 시스템을 이용할 수 있습니다.
+> 등록된 기업은 **관리자의 승인 이후** 시스템을 이용할 수 있습니다.
 
-> 로그인 시 구분된 페이지(기업 / 직원)로 진입하며, 권한에 따라 접근 가능한 기능이 다르게 구성됩니다.
-
+> 로그인 시 **역할 기반 페이지 분기(기업 / 직원)** 가 적용되며,  
+> 권한에 따라 접근 가능한 기능이 다르게 구성됩니다.
 
 </details>
+
+
 
 <details>
 <summary>회사 등록 및 직원 승인</summary>
@@ -239,7 +251,7 @@
 
 
 ## 🚀 핵심 로직 상세 설명
-### [📃 프로젝트 Wiki](https://주소) <br><br>
+### [📃 프로젝트 Wiki](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-BE/wiki/%ED%95%B5%EC%8B%AC-%EB%A1%9C%EC%A7%81-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85) <br><br>
 
 
 ## 📂 프로젝트 폴더 바로가기

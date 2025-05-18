@@ -11,14 +11,6 @@ const props = defineProps({
   grafanaUrl: String,
 });
 
-watch(
-  () => ({ ...props }),
-  (newVal) => {
-    console.log("props 변경됨:", newVal);
-  },
-  { deep: true, immediate: true }
-);
-
 defineEmits(["close"]);
 </script>
 

@@ -164,11 +164,11 @@
 
 ### [1. 기획서 바로가기](https://www.notion.so/IMHR-1c2977eeefbe805a99a9d7271fbab5e1)
 
-### [2. 요구사항 정의서](https://www.notion.so/1c2977eeefbe8007898cea29b5e836d6)
+### [2. 요구사항 정의서](https://docs.google.com/spreadsheets/d/1NbC2fMWq6Q9psj9yfC09IHeKi16ttwFMdeP_DTnfdCg/edit?gid=1870690557#gid=1870690557)
 
 ### [3. WBS](https://www.notion.so/WBS-Work-Breakdown-Structure-1c2977eeefbe808e9ffde53a0ecbb5ac)
 
-### [4. 화면설계서 바로가기](https://www.notion.so/1c8977eeefbe80048bb9c075c9e64565)
+### [4. 화면설계서 바로가기](https://www.figma.com/design/1AtVQvaxNSPJpre8f60s3p/IMHR?node-id=0-1&p=f&t=j8zDFfguTZCXWMTD-0)
 
 <br><br>
 

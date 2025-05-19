@@ -37,13 +37,13 @@ defineEmits(["close"]);
       <div class="grid grid-cols-2 gap-6 mb-6">
         <!-- 상단 두 개 패널 -->
         <iframe
-          :src="`https://www.imhr.p-e.kr/grafana/d-solo/${props.grafanaUrl}&from=1747258982598&to=1747280582598&timezone=browser&var-company_idx=${props.companyIdx}&var-department_idx=${props.departmentIdx}&var-year=${props.year}&var-month=${props.month}&panelId=1&__feature.dashboardSceneSolo`"
+          :src="`https://www.imhr.p-e.kr/grafana/d-solo/${props.grafanaUrl}&from=now-5y&to=now&timezone=browser&var-company_idx=${props.companyIdx}&var-department_idx=${props.departmentIdx}&var-year=${props.year}&var-month=${props.month}&panelId=1&__feature.dashboardSceneSolo`"
           frameborder="0"
           class="w-full h-[250px] rounded border bg-white"
           allowfullscreen
         ></iframe>
         <iframe
-          :src="`https://www.imhr.p-e.kr/grafana/d-solo/${props.grafanaUrl}&from=1747258982598&to=1747280582598&timezone=browser&var-company_idx=${props.companyIdx}&var-department_idx=${props.departmentIdx}&var-year=${props.year}&var-month=${props.month}&panelId=2&__feature.dashboardSceneSolo`"
+          :src="`https://www.imhr.p-e.kr/grafana/d-solo/${props.grafanaUrl}&from=now-5y&to=now&timezone=browser&var-company_idx=${props.companyIdx}&var-department_idx=${props.departmentIdx}&var-year=${props.year}&var-month=${props.month}&panelId=2&__feature.dashboardSceneSolo`"
           frameborder="0"
           class="w-full h-[250px] rounded border bg-white"
           allowfullscreen
@@ -51,7 +51,7 @@ defineEmits(["close"]);
       </div>
       <!-- 하단 하나 패널 -->
       <iframe
-        :src="`https://www.imhr.p-e.kr/grafana/d-solo/${props.grafanaUrl}&from=1747258982598&to=1747280582598&timezone=browser&var-company_idx=${props.companyIdx}&var-department_idx=${props.departmentIdx}&var-year=${props.year}&var-month=${props.month}&panelId=3&__feature.dashboardSceneSolo`"
+        :src="`https://www.imhr.p-e.kr/grafana/d-solo/${props.grafanaUrl}&from=now-5y&to=now&timezone=browser&var-company_idx=${props.companyIdx}&var-department_idx=${props.departmentIdx}&var-year=${props.year}&var-month=${props.month}&panelId=3&__feature.dashboardSceneSolo`"
         frameborder="0"
         class="w-full h-[320px] rounded border bg-white"
         allowfullscreen

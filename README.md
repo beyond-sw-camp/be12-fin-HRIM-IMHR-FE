@@ -203,8 +203,6 @@
 <details>
 <summary>회사 등록 및 직원 승인</summary>
 
-![회사등록](https://your-domain.com/image/company_regist.gif)
-
 > 관리자는 새로운 회사를 등록하고, 해당 회사에 소속된 직원 계정 요청을 승인할 수 있습니다.  
 > 미승인 계정은 목록에 표시되며 **승인 버튼 클릭 시 정식 사용자로 전환**됩니다.
 ![사원 회원가입 승인](https://github.com/user-attachments/assets/4a82bf47-b8f8-4aa8-9305-abcf768d66f3)
@@ -229,7 +227,7 @@
 
 
 > 관리자와 일반 직원은 권한에 따라 접근 가능한 기능이 다릅니다.
-관리자는 캠페인을 생성 및 수정할 수 있고, 사원을 추가하여 참여를 관리할 수 있습니다.
+> 관리자는 캠페인을 생성 및 수정할 수 있고, 사원을 추가하여 참여를 관리할 수 있습니다.
 > 관리자와 일반 직원은 권한에 따라 접근 가능한 메뉴가 다릅니다.
 
 </details>
@@ -262,15 +260,41 @@
 <details>
 <summary>ESG 시각화 대시보드 (Grafana)</summary>
 
-![ESG 대시보드](https://your-domain.com/image/grafana_embed.gif)
+![영역별 점수변동 추이 그라파나](https://github.com/user-attachments/assets/364471df-ecd4-40d2-9571-dd0078e050c1)
+
 
 > Grafana와 연동된 ESG 대시보드를 통해 기업의 연도별 ESG 점수,  
 > 활동 참여율, 친환경 제품 등급 분포, 파트너사 비교 등을 시각적으로 확인할 수 있습니다.
-
 > 연도 및 회사 선택은 iframe의 파라미터로 반영됩니다.
 
 </details>
 
+<details>
+<summary>협력사 ESG Top3 대시보드</summary>
+	
+![협력사 관리 및 대시보드 출력](https://github.com/user-attachments/assets/8fb14e55-b1cc-48c8-b618-64c37ef20987)
+
+
+
+> ESG 활동 데이터를 기반으로 계산된 종합 ESG 점수를 기준으로,  
+> 상위 3개 협력사를 추출하여 Grafana를 통해 시각화합니다.  
+> 환경(Env), 사회(Soc), 지배구조(Gov) 점수가 색상별로 구분되며,  
+> 기업별 비교가 가능하도록 막대그래프 형태로 표현됩니다.
+</details>
+
+---
+
+<details>
+<summary>협력사 연도별 ESG 점수 추이</summary>
+
+![협력사 연도별 대시보드 출력](https://github.com/user-attachments/assets/817c4f70-f527-47dc-864a-c71ed1eb009e)
+
+
+> 사용자가 연도를 선택하면 해당 연도 기준의 협력사 ESG 점수 변화가 자동 반영됩니다.  
+> `환경`, `사회`, `지배구조`, `종합 점수`의 평균값이 항목별로 시각화되며,  
+> iframe 파라미터를 통해 연도와 회사 필터가 동적으로 변경됩니다.  
+> 이를 통해 연도별 변화 추세, 비교 대상 간 ESG 성과 격차 등을 쉽게 파악할 수 있습니다.
+</details>
 
 
 

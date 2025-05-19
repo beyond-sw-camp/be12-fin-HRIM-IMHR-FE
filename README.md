@@ -88,7 +88,9 @@
 ### [IMHR](https://www.imhr.kro.kr)</a>
 <br>
 ## 🎨 IMHR 서비스 소개
+<p align="center">
 <img src="/public/image.png" width="600px" />
+</p>
 
 #### 프로젝트 배경
 - **인사 관리 & ESG 관리 통합 플랫폼**
@@ -117,7 +119,9 @@
 <br>
 
 ## 🏗️ 시스템 아키텍처
-<img src="https://주소"><br><br>
+<p align="center">
+  <img src="/public/SystemArchitecture.png" width="400px" height="300px" />
+</p>
 
 
 ## 🎯 프론트엔드 프로젝트 목표

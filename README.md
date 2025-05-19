@@ -120,7 +120,7 @@
 
 ## 🏗️ 시스템 아키텍처
 <p align="center">
-  <img src="/public/SystemArchitecture.png" width="700px" height="800px" />
+  <img src="/public/SystemArchitecture.png" width="800px" height="700px" />
 </p>
 
 

@@ -203,16 +203,30 @@
 
 > 관리자는 새로운 회사를 등록하고, 해당 회사에 소속된 직원 계정 요청을 승인할 수 있습니다.  
 > 미승인 계정은 목록에 표시되며 **승인 버튼 클릭 시 정식 사용자로 전환**됩니다.
+![사원 회원가입 승인](https://github.com/user-attachments/assets/4a82bf47-b8f8-4aa8-9305-abcf768d66f3)
 
 </details>
 
 <details>
-<summary>ESG 활동 등록</summary>
+<summary>ESG 활동 주제 등록</summary>
 
-![활동등록](https://your-domain.com/image/activity_regist.gif)
+![ESG 활동 주제 설정](https://github.com/user-attachments/assets/62037194-33c3-48a8-ac1d-2e116396b34d)
+
 
 > 관리자 또는 직원은 ESG 활동(봉사, 기부, 교육 등)을 등록할 수 있습니다.  
 > 활동 유형, 날짜, 참여자 수 등 상세 정보를 기입할 수 있습니다.
+
+</details>
+
+<details>
+<summary>ESG 사내 캠페인 관리 및 사원 추가</summary>
+
+![ESG 사내 캠페인 관리 및 사원 추가](https://github.com/user-attachments/assets/b36c8a79-ec84-4cf4-9525-9c6f37076b0f)
+
+
+> 관리자와 일반 직원은 권한에 따라 접근 가능한 기능이 다릅니다.
+관리자는 캠페인을 생성 및 수정할 수 있고, 사원을 추가하여 참여를 관리할 수 있습니다.
+> 관리자와 일반 직원은 권한에 따라 접근 가능한 메뉴가 다릅니다.
 
 </details>
 
@@ -238,15 +252,6 @@
 
 </details>
 
-<details>
-<summary>권한 기반 페이지 접근 제어</summary>
-
-![권한제어](https://your-domain.com/image/auth.gif)
-
-> 로그인하지 않은 사용자가 접근 시 로그인 페이지로 리디렉션됩니다.  
-> 관리자와 일반 직원은 권한에 따라 접근 가능한 메뉴가 다릅니다.
-
-</details>
 
 
 

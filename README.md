@@ -317,21 +317,11 @@
 </details>
 
 <details>
-<summary>파트너 관리</summary>
-
-![파트너사](https://github.com/user-attachments/assets/10cc9f2f-58a0-489c-9c11-2a0b74eb6069)
-
-> 소속 기업이 선정한 파트너사들중 탑 3의 ESG를 바로 확인가능합니다
-> 선정한 파트너사들을 리스트 목록으로 확인 가능하며,
-> 파트너사를 선정하고 삭제 할 수 있습니다.
-</details>
-
-<details>
-<summarry>피드백 관리 및 피드벡 작성</summarry>
+<summarry>피드백 관리 및 작성</summarry>
 
 ![피드백](https://github.com/user-attachments/assets/c6fb5c97-7475-452f-bcf3-e881194148e3)
 
-> 관리자가 기업 인사 평가 기준에 맞게 피드백 질문지를 작성
+> 관리자가 기업 인사 평가 기준에 맞게 피드백 질문지를 작성,
 > 작성한 질문지에 맞게 사원들 간 피드백을 작성
 > 작성된 피드백을 통해 임원들이 사원들이 활동한 활동들을 같이 참고해 인사평가를 진행할 수 있습니다.
 </details>

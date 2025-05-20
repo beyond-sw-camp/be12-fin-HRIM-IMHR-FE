@@ -4,10 +4,10 @@
 </p>
 
 
-<p align="middle">
-[플레이 데이터] 한화시스템 BEYOND SW캠프
-<br>🥪팀 HRIM
-</p>
+## 🎁팀원 소개
+> **[한화시스템 BEYOND SW캠프 12기] Final Project** 
+
+> **HRIM팀 ESG 기반 경영 & 인사관리 프로젝트**
 
 
 <figure>
@@ -27,73 +27,312 @@
     </table>
 </figure>
 
-**서비스 접속 주소**
-- 백엔드 https://www.imhr.p-e.kr/api
+### 목차
+- [🛠 기술 스택](#-기술-스택)
+- [📚 IMHR 데모 사이트 링크](#-IMHR-데모-사이트-바로가기)
+- [🎨 IMHR 서비스 소개](#-IMHR-서비스-소개)
+- [🏗️ 시스템 아키텍처](#-시스템-아키텍처)
+- [📚 프론트엔드 프로젝트 목표](#-프론트엔드-프로젝트-목표)
+- [📈 프로젝트 설계](#-프로젝트-설계)
+- [🚀 핵심 로직 상세 설명](#-핵심-로직-상세-설명)
+- [📂 프로젝트 폴더 바로가기](#-프로젝트-폴더-바로가기)
+<br><br>
 
-- 프론트 엔드 https://www.imhr.p-e.kr/
+## 🛠 기술 스택
 
-- 임직원: member01
-- 관리자: admin01
-- 비밀번호: qwer1234
-- 회사 코드 : qwer1234 ( 사원가입때에 회사 코드에 입력하시면 가입됩니다!)
+#### &nbsp;　[ Frontend ]
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white" style="border-radius: 5px;"/>
+<img src="https://img.shields.io/badge/css3-1572B6?style=for-the-badge&logo=css3&logoColor=white" style="border-radius: 5px;"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white" style="border-radius: 5px;"/>
+![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white" style="border-radius: 5px;"/>
+<img src="https://img.shields.io/badge/pinia-gold?style=for-the-badge&logo=Pinia&logoColor=white" style="border-radius: 5px;"/>
 
-## 📝 프로젝트 소개
-
-> ESG 경영은 환경 오염을 방지하고, 사회적 책임을 강화하며, 투명하고 책임 있는 지배구조를 구축하는 것을 목표로 합니다. 이러한 ESG 요소는 기업의 지속가능성과 직결되며, ESG 평가 점수가 높을수록 투자 유치 가능성도 함께 높아집니다.
-> 하지만 이러한 중요한 ESG 경영에도 불구하고, 일반 직원들은 이에 대한 관심이 낮은 것이 현실입니다. 이를 해결하기 위해 개발된 것이 바로 ‘IMHR’입니다. ‘IMHR’은 직원들이 ESG 점수에 보다 높은 관심을 갖고, 실질적으로 회사의 ESG 성과 향상에 기여할 수 있도록 지원하는 서비스입니다.
-
-## 회원 서비스
-
-회원가입, 아이디 찾기, 비밀번호 변경, 탈퇴까지  
-**사용자의 전반적인 계정 관리**를 지원합니다.
-
-### 🔹 주요 기능
-- 기업 코드를 이용한 회원가입 & 로그인 (임직원 / 관리자)
-- 사업자번호와 증명을 이용한 기업 회원가입 기능
-  - 기능 실험을 위해 임시적으로 사업자번호와 기업코드를 동일하게 사용합니다.
-- 아이디 찾기 기능
-- 비밀번호 변경 기능
-- 로그아웃 처리
-
-## 활동 서비스
-
-봉사활동, 기부활동 등   
-**ESG관련 인사 활동**을 관리 합니다.
-
-### 🔹 주요 기능
-- 활동을 증명할 사진을 활용하여 황동 등록
-- 관리자는 우리 회사의 직원의 활동을 모두 조회
-- 임직원은 본인 활동만 조회
-- 관리자가 활동 승인, 반려 가능
-- 임직원이 본인 활동 삭제 가능
-- 관리자는 임직원의 회원가입을 승인 가능
+#### &nbsp;　[ Backend ]
+&nbsp;&nbsp;&nbsp;&nbsp; ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+<img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/Springdata jpa-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/SpringBatch-6DB33F?style=for-the-badge&logo=Spring&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/SMTP-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" style="border-radius: 5px;">
 
 
-## 캠패인 서비스
-
-캠패인 일정 및 참여인원과 같은
-**회사 캠패인 일정**을 관리 합니다.
-
-### 🔹 주요 기능
-- 캘린더에서 회사 캠패인 추가 및 조회 가능
-- 캠패인 상세 리스트 확인 가능
-- 우리 회사 사원들 중 캠패인에 참여한 인원 채크 가능
+#### &nbsp;　[ DB ]
+&nbsp;&nbsp;&nbsp;</a>
+<img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white" style="border-radius: 5px;"> 
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" style="border-radius: 5px;">
 
 
-## 협력업체 관련 서비스
+#### &nbsp;　[ CI/CD ]
+&nbsp;&nbsp;&nbsp;&nbsp;![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) 
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white" style="border-radius: 5px;">
 
-협력업체를 추가, 확인 등과 같이 우리 회사의
-**협력업체**를 관리 합니다.
+#### &nbsp;　[ Etc ]
+&nbsp;&nbsp;&nbsp;&nbsp;![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
+![Istio](https://img.shields.io/badge/istio-466BB0?style=for-the-badge&logo=istio&logoColor=white)
+![Kiali](https://img.shields.io/badge/kiali-3A6DA7?style=for-the-badge&logo=kiali&logoColor=white)
 
-### 🔹 주요 기능
-- 협력업체 리스트를 확인하여 추가 및 삭제 가능
-- 협력업체의 ESG점수를 대시보드에서 확인 가능
 
-## 실시간 알림 서비스
+#### &nbsp;　[ Communication ]
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/discord-326CE5?style=for-the-badge&logo=discord&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white" style="border-radius: 5px;">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white" style="border-radius: 5px;">
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
+<br><br><br>
 
-활동승인 알림, 스케줄 알림 등  
-**주요 이벤트를 실시간 알림으로 받아볼 수 있습니다.**
 
-### 🔹 주요 기능
-- 알림 생성 및 WebSocket 실시간 전송
-- 사용자별 알림 목록 조회
+## 📚 IMHR 데모 사이트 바로가기
+### [IMHR](https://www.imhr.kro.kr)</a>
+<br>
+
+## 🎨 IMHR 서비스 소개
+<p align="center">
+<img src="/public/image.png" width="600px" />
+</p>
+
+#### 프로젝트 배경
+- **인사 관리 & ESG 관리 통합 플랫폼**
+- `ESG 관리`와 `인사 관리`를 한 곳에서 통합적으로 관리할 수 있는 플랫폼<br>
+  기업의 ESG를 효과적으로 관리하기 위해 인사 관리도 함께 이루어져야 했지만, 두 시스템을 각각 따로 접속해 관리해야한다는 분편함이 있었다.<br>
+  이 불편함을 해결하고자 Imhr 서비스는 기업 임원, 인사 관리자 등 다양한 사용자가 한 사이트에서 ESG와 인사 정보를 대시보드로 직관적으로 확인하고, 효율적으로 관리할 수 있도록 구축했다.
+<br>
+
+- `기업과 인사 ESG 관리` : 기업 고위 임원들과 관리자들이 인사 ESG 그리고 그와 관련된 기업 ESG를 효율적으로 관리 할 수 있다.<br>
+- `기업 맞춤형 활동과 평가 기준 설정 및 관리` : 각각의 기업이 선정한 ESG 활동들과 그 평가 기준들을 자유롭게 설정 할 수 있다.<br>
+- `효과적인 시각 자료` : 기업 혹은 각 부서의 ESG 관리 현황 및 변화 추이를 한눈에 그리고 선택적으로 간편하게 볼 수 있다.
+<br>
+
+
+#### 주요 기능
+  - **`기업 ESG 대시보드`**<br>
+    인사 혹은 기업의 ESG를 관리 할 수 있도록 기업의 ESG 대시보드 및 E, S, G 상세 대시보드 서비스를 제공한다. 
+  - **`부서 인사 ESG 대시보드`**<br>
+    각 부서의 팀장 혹은 임원들이 부서원들의 ESG 관련 활동들을 적극 참여 할 수 있도록 관리하기 위한 부서의 ESG 대시보드 및 상세 대시보드 서비스를 제공한다.
+  - **`활동 관리`**<br>
+    사원이 활동을 한뒤 승인 요청을 보내고, 관리자가 각 활동들을 승인 및 반려 처리를 통한 인사 ESG 점수를 관리 하는 서비스를 제공한다.
+  - **`일정 관리`**<br>
+    속한 기업의 켐페인 및 기업 일정을 확인 할 수 있는 캘린더 서비스를 제공한다.
+ - **`인사 평가 기능`**<br>
+    사원들의 활동 및 사원들간의 피드벡을 임원들이 확인하고 사원의 인사 평가를 하는 서비스를 제공한다.   
+<br>
+
+## 🏗️ 시스템 아키텍처
+<p align="center">
+  <img src="/public/SystemArchitecture.png" width="800px" height="700px" />
+</p>
+
+
+## 🎯 프론트엔드 프로젝트 목표
+
+본 프로젝트는 HR(인사관리)와 ESG(환경·사회·지배구조)를 통합 관리하는 시스템으로, 사용자 중심의 직관적 UI와 ESG 데이터를 시각적으로 표현하는 기능 구현을 목표로 합니다.
+
+### ✅ 주요 목표
+
+1. **직관적이고 반응형 UI 구현**
+   - Tailwind CSS를 활용한 반응형(Responsive) 디자인 적용
+   - 사용자 역할(관리자/직원 등)에 따라 인터페이스를 분리 구성
+
+2. **사용자 경험(UX) 향상**
+   - ESG 및 인사 데이터를 쉽게 탐색할 수 있는 화면 흐름 설계
+   - 유효성 검사, 알림 메시지, 모달 등 UX 요소 강화
+
+3. **백엔드 API와의 연동 처리**
+   - Axios 및 인터셉터를 통한 RESTful API 통신
+   - 로그인, 토큰 기반 인증, 이미지 업로드 등 CRUD 전반 구현
+
+4. **ESG 시각화 대시보드 구현**
+   - Grafana와 연동하여 ESG 점수/활동 추이/제품 현황을 시각화
+   - 연도 및 회사별 필터 기능 포함한 iframe 기반 대시보드 구성
+
+5. **Vue 기반 최신 프론트엔드 기술 적용**
+   - Vue 3, Composition API, Pinia, Vue Router 활용
+   - 도메인 중심의 디렉토리 구조 설계로 확장성과 유지보수성 확보
+
+6. **권한 기반 화면 접근 제어**
+   - 로그인 여부 및 사용자 유형에 따라 접근 가능한 화면을 제어
+   - 무단 접근 시 로그인 페이지로 리다이렉션 처리
+
+7. **지속적인 개선 및 확장성 고려**
+   - ESG 지표, 시각화 요소, 데이터 흐름의 재사용성과 확장성 확보
+   - 향후 Nuxt 기반 SSR 및 SEO 대응 가능 구조 고려
+<br>
+<br>
+
+## 📈 프로젝트 설계
+
+### [1. 기획서 바로가기](https://www.notion.so/IMHR-1c2977eeefbe805a99a9d7271fbab5e1)
+
+### [2. 요구사항 정의서](https://docs.google.com/spreadsheets/d/1NbC2fMWq6Q9psj9yfC09IHeKi16ttwFMdeP_DTnfdCg/edit?gid=1870690557#gid=1870690557)
+
+### [3. WBS](https://www.notion.so/WBS-Work-Breakdown-Structure-1c2977eeefbe808e9ffde53a0ecbb5ac)
+
+### [4. 화면설계서 바로가기](https://www.figma.com/design/1AtVQvaxNSPJpre8f60s3p/IMHR?node-id=0-1&p=f&t=j8zDFfguTZCXWMTD-0)
+
+<br><br>
+
+## ⚙️ 주요 기능 시연
+
+<details>
+<summary>회원가입 및 로그인</summary>
+
+<br>
+
+#### 📝 기업(관리자) 회원가입
+
+[![기업(관리자) 회원가입](https://github.com/user-attachments/assets/f3dc2612-c4fe-4429-8170-6905c3ef3751)](https://github.com/user-attachments/assets/f3dc2612-c4fe-4429-8170-6905c3ef3751)
+
+#### 🔐 기업(관리자) 로그인
+
+[![기업(관리자) 로그인](https://github.com/user-attachments/assets/5cd2d1c4-9fdb-4a57-bbb9-360455e1bed3)](https://github.com/user-attachments/assets/5cd2d1c4-9fdb-4a57-bbb9-360455e1bed3)
+
+---
+
+> 본 시스템은 **기업 관리자용 회원가입**과 **직원용 회원가입**이 구분되어 있습니다.  
+> 기업 관리자는 **사업자등록증명서 파일 업로드**를 통해 인증된 회원가입 절차를 진행합니다.  
+> 등록된 기업은 **관리자의 승인 이후** 시스템을 이용할 수 있습니다.
+
+> 로그인 시 **역할 기반 페이지 분기(기업 / 직원)** 가 적용되며,  
+> 권한에 따라 접근 가능한 기능이 다르게 구성됩니다.
+
+</details>
+
+
+
+<details>
+<summary>회사 등록 및 직원 승인</summary>
+
+> 관리자는 새로운 회사를 등록하고, 해당 회사에 소속된 직원 계정 요청을 승인할 수 있습니다.  
+> 미승인 계정은 목록에 표시되며 **승인 버튼 클릭 시 정식 사용자로 전환**됩니다.
+![사원 회원가입 승인](https://github.com/user-attachments/assets/4a82bf47-b8f8-4aa8-9305-abcf768d66f3)
+
+</details>
+
+<details>
+<summary>ESG 활동 주제 등록</summary>
+
+![ESG 활동 주제 설정](https://github.com/user-attachments/assets/62037194-33c3-48a8-ac1d-2e116396b34d)
+
+
+> 관리자 또는 직원은 ESG 활동(봉사, 기부, 교육 등)을 등록할 수 있습니다.  
+> 활동 유형, 날짜, 참여자 수 등 상세 정보를 기입할 수 있습니다.
+
+</details>
+
+<details>
+<summary>ESG 사내 캠페인 관리 및 사원 추가</summary>
+
+![ESG 사내 캠페인 관리 및 사원 추가](https://github.com/user-attachments/assets/b36c8a79-ec84-4cf4-9525-9c6f37076b0f)
+
+
+> 관리자와 일반 직원은 권한에 따라 접근 가능한 기능이 다릅니다.
+> 관리자는 캠페인을 생성 및 수정할 수 있고, 사원을 추가하여 참여를 관리할 수 있습니다.
+> 관리자와 일반 직원은 권한에 따라 접근 가능한 메뉴가 다릅니다.
+
+</details>
+
+<details>
+<summary>친환경 제품 등록</summary>
+
+![친환경 제품 등록](https://github.com/user-attachments/assets/db40d7d3-8b8a-4cb1-9370-be34f03ca1ee)
+
+
+> 제품명, 설명, 등급, 이미지 등을 포함한 친환경 제품을 등록할 수 있습니다.  
+> 등록된 제품은 리스트에서 확인 가능하며, 바로 차트에 친환경 점수가 표시됩니다.
+
+</details>
+
+<details>
+<summary>제품 상세보기,친환경 점수,등급 조회</summary>
+
+![제품 상세보기,친환경 점수,등급 조회](https://github.com/user-attachments/assets/68fda943-1468-4989-8067-5b7564c1ad85)
+
+
+> 등록된 제품은 하단의 제품 리스트에서 바로 확인할 수 있습니다.
+> 동시에 상단에 위치한 친환경 점수 시각화 차트에도 반영되어, 제품별로 얼마나 친환경적인지 점수와 색상 기준을 통해 한눈에 확인할 수 있습니다.
+
+> 오른쪽에는 제품 평균 점수가 함께 표시되어,전체적인 친환경 수준을 직관적으로 파악할 수 있도록 구성했습니다.  
+> 등록된 제품은 리스트에서 확인 가능하며, 바로 차트에 친환경 점수가 표시됩니다.
+
+</details>
+
+<details>
+<summary>ESG 시각화 대시보드 (Grafana)</summary>
+
+![영역별 점수변동 추이 그라파나](https://github.com/user-attachments/assets/364471df-ecd4-40d2-9571-dd0078e050c1)
+
+
+> Grafana와 연동된 ESG 대시보드를 통해 기업의 연도별 ESG 점수,  
+> 활동 참여율, 친환경 제품 등급 분포, 파트너사 비교 등을 시각적으로 확인할 수 있습니다.
+> 연도 및 회사 선택은 iframe의 파라미터로 반영됩니다.
+
+</details>
+
+<details>
+<summary>협력사 ESG Top3 대시보드</summary>
+	
+![협력사 관리 및 대시보드 출력](https://github.com/user-attachments/assets/8fb14e55-b1cc-48c8-b618-64c37ef20987)
+
+
+
+> ESG 활동 데이터를 기반으로 계산된 종합 ESG 점수를 기준으로,  
+> 상위 3개 협력사를 추출하여 Grafana를 통해 시각화합니다.  
+> 환경(Env), 사회(Soc), 지배구조(Gov) 점수가 색상별로 구분되며,  
+> 기업별 비교가 가능하도록 막대그래프 형태로 표현됩니다.
+</details>
+
+---
+
+<details>
+<summary>협력사 연도별 ESG 점수 추이</summary>
+
+![협력사 연도별 대시보드 출력](https://github.com/user-attachments/assets/817c4f70-f527-47dc-864a-c71ed1eb009e)
+
+
+> 사용자가 연도를 선택하면 해당 연도 기준의 협력사 ESG 점수 변화가 자동 반영됩니다.  
+> `환경`, `사회`, `지배구조`, `종합 점수`의 평균값이 항목별로 시각화되며,  
+> iframe 파라미터를 통해 연도와 회사 필터가 동적으로 변경됩니다.  
+> 이를 통해 연도별 변화 추세, 비교 대상 간 ESG 성과 격차 등을 쉽게 파악할 수 있습니다.
+</details>
+
+<details>
+<summary>알림</summary>
+	
+![알림](https://github.com/user-attachments/assets/13febc58-aaa0-48a8-8975-18ec8efc0df4)
+
+> 사원 사용자가 활동 승인요청을 관리자에게 요청합니다.
+> 관리자 사용자는 활동 승인 요청 알림을 받아 확인 하여 승인 및 반려처리를 합니다.
+> 사원은 승인 및 반려 처리됨을 알림으로 받을 수 있습니다.
+</details>
+
+<details>
+<summary>부서 ESG 대시보드</summary>
+
+![Department_ESG_Dashbord](https://github.com/user-attachments/assets/ecceb655-053d-44bf-95ff-d0c0281a68fd)
+
+> 해당 기업 소속의 사용자가 원하는 년도 및 월 부서를 선택해 부서의 해당 년, 월의 부서 ESG 대시보드를 확인 할 수 있습니다.
+> `환경`, `사회`, `지배구조`, `종합 점수`의 평균값이 항목별로 시각화되며,
+> 이를 통해 연도별 변화 추세, 부서 간의 ESG 성과 격차 등을 쉽게 파악할 수 있습니다.
+</details>
+
+<details>
+
+<summary>피드백 관리 및 작성</summary>
+
+![피드백](https://github.com/user-attachments/assets/c6fb5c97-7475-452f-bcf3-e881194148e3)
+
+> 관리자가 기업 인사 평가 기준에 맞게 피드백 질문지를 작성,
+> 작성한 질문지에 맞게 사원들 간 피드백을 작성
+> 작성된 피드백을 통해 임원들이 사원들이 활동한 활동들을 같이 참고해 인사평가를 진행할 수 있습니다.
+</details>
+
+## 🚀 핵심 로직 상세 설명
+### [📃 프로젝트 Wiki](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-FE/wiki/API-%EC%97%B0%EB%8F%99-%EB%B0%8F-%EC%9D%B8%EC%A6%9D) <br><br>
+
+
+## 📂 프로젝트 폴더 바로가기
+### [📃 Backend](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-BE) <br>
+### [📃 Devops](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-BE/blob/main/devops/README.md)
+<br>

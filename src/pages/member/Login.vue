@@ -113,7 +113,7 @@ const login = async () => {
 <div class="text-xs text-gray-400 mt-3 mb-2 space-y-1">
   <p>🧪 테스트용 계정</p>
   <p>• 관리자: ID <code>admin01</code> / PW <code>qwer1234</code></p>
-  <p>• 임직원: ID <code>meber</code> / PW <code>qwer1234</code></p>
+  <p>• 임직원: ID <code>member</code> / PW <code>qwer1234</code></p>
 </div>
 
 

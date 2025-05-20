@@ -127,7 +127,9 @@ const submit = async () => {
 const filteredActivitys = computed(() =>
   activityStore.activityList.filter((a) =>
     (a.subject || "").toLowerCase().includes(search.value.toLowerCase())
-  )
+  ),
+
+  console.log("?",activityStore.activityList),
 );
 
 const fetchactivity = async () => {

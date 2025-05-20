@@ -45,11 +45,11 @@
       </div>
     </div>
 
+
     <!-- 버튼 영역 -->
     <div class="flex justify-end gap-3 pt-4" v-if="userRole === 'manager'">
       <router-link
-        :to="{ path: '/productRegist', query: { mode: 'update', companyIdx: companyIdx, idx: product.idx } }"
-      >
+        :to="{ path: '/productRegist', query: { mode: 'update', companyIdx: companyIdx, idx: product.idx } }">
         <button class="px-4 py-1 border-2 border-blue-500 text-blue-500 rounded hover:bg-blue-50">
           수정
         </button>
@@ -59,12 +59,57 @@
       </button>
     </div>
   </div>
+
+  <!-- 📊 친환경 점수 기준표 (접었다 펴기) -->
+  <div class="max-w-4xl mx-auto text-center mt-12 mb-8">
+    <button @click="showScoreTable = !showScoreTable"
+      class="bg-slate-800 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition">
+      {{ showScoreTable ? '기준표 닫기' : '📊 친환경 점수 기준 보기' }}
+    </button>
+
+    <div v-show="showScoreTable"
+      class="mt-4 bg-white border rounded-xl shadow-md p-6 overflow-x-auto transition-all duration-300">
+      <table class="w-full table-auto text-left text-sm border-collapse">
+        <thead class="bg-slate-100 text-slate-700 font-semibold">
+          <tr>
+            <th class="px-4 py-2 border">항목</th>
+            <th class="px-4 py-2 border">점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-4 py-2 border">재활용 가능 여부</td>
+            <td class="px-4 py-2 border">+30</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">생분해/친환경 원료</td>
+            <td class="px-4 py-2 border">+20</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">탄소 저감형 공정</td>
+            <td class="px-4 py-2 border">+25</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">에너지 효율 등급</td>
+            <td class="px-4 py-2 border">1등급 +20 / 2등급 +10 / 3등급 +5</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2 border">단가(가격)</td>
+            <td class="px-4 py-2 border">최대 +100 (낮을수록 가산점)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+
+const showScoreTable = ref(false)
 
 // 라우터 객체들
 const route = useRoute();

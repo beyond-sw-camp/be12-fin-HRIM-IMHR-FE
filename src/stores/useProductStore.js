@@ -34,6 +34,22 @@ export function calculateScore(product) {
   return Math.max(0, Math.round(score))
 }
 
+export function getGradeLabel(score) {
+  if (score >= 130) return '매우 우수'
+  if (score >= 100) return '우수'
+  if (score >= 70) return '보통'
+  return '미흡'
+}
+
+export function getGradeColor(score) {
+  if (score >= 130) return '#06b6d4' // cyan-500 (매우 우수)
+  if (score >= 100) return '#22c55e' // green-500 (우수)
+  if (score >= 70) return '#f97316'  // orange-500 (보통)
+  return '#ef4444'                   // red-500 (미흡)
+}
+
+
+
 /**
  * 제품 목록/등록/수정/삭제/조회 API 핸들링용 스토어
  */

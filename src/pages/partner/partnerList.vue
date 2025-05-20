@@ -153,7 +153,7 @@ onMounted(async () => {
             class="hover:bg-slate-50 border-b"
           >
             <td class="p-2">
-              <router-link to="/partner/1">
+              <router-link :to="`/partner/${idx}`">
                 {{ partner.companyName }}
               </router-link>
             </td>

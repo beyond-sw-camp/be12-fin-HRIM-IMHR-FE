@@ -317,7 +317,8 @@
 </details>
 
 <details>
-<summarry>피드백 관리 및 작성</summarry>
+
+<summary>피드백 관리 및 작성</summary>
 
 ![피드백](https://github.com/user-attachments/assets/c6fb5c97-7475-452f-bcf3-e881194148e3)
 

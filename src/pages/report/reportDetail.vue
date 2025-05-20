@@ -117,7 +117,7 @@ onMounted(async () => {
         >
           <!-- Report Info -->
           <div class="mb-8">
-            <h3 class="text-xl font-semibold mb-2">1. 기본 정보</h3>
+            <h3 class="text-xl font-semibold mb-2">기본 정보</h3>
             <ul class="list-disc list-inside pl-4">
               <li>성명: 홍길동</li>
               <li>직급: 과장</li>
@@ -142,13 +142,13 @@ onMounted(async () => {
           </div>
 
           <!-- Feedback -->
-          <div class="mb-8">
+          <!-- <div class="mb-8">
             <h3 class="text-xl font-semibold mb-2">2. 피드백 내용</h3>
             <ul class="list-disc list-inside pl-4">
               <li>성실하고 적극적으로 참여했습니다.</li>
               <li>열심히 하는 모습이 보기 좋네요.</li>
             </ul>
-          </div>
+          </div> -->
         </section>
 
         <!-- Right: 활동 내역 및 피드백 -->

@@ -332,6 +332,6 @@
 
 
 ## 📂 프로젝트 폴더 바로가기
-### [📃 Backend](https:/주소) <br>
+### [📃 Backend](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-BE) <br>
 ### [📃 Devops](https://주소)
 <br>

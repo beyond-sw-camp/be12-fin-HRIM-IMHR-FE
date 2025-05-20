@@ -30,7 +30,7 @@ const route = useRoute();
 const hideLayout = computed(() => route.meta?.hideLayout === true);
 
 const role = ref(
-  JSON.parse(localStorage.getItem("userInfo"))?.role || "manager"
+  JSON.parse(localStorage.getItem("userInfo"))?.role || "executive"
 );
 
 import { onMounted } from "vue";

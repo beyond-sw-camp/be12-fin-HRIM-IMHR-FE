@@ -129,7 +129,7 @@ const routes = [
     props: true
   },
   {
-    path: '/permissionSetting/:id',
+    path: '/permissionSetting',
     name: 'permissionSetting',
     component: PermissionSetting,
     props: true

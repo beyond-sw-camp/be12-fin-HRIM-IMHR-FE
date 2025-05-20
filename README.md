@@ -296,7 +296,45 @@
 > 이를 통해 연도별 변화 추세, 비교 대상 간 ESG 성과 격차 등을 쉽게 파악할 수 있습니다.
 </details>
 
+<details>
+<summary>알림</summary>
+	
+![알림](https://github.com/user-attachments/assets/13febc58-aaa0-48a8-8975-18ec8efc0df4)
 
+> 사원 사용자가 활동 승인요청을 관리자에게 요청합니다.
+> 관리자 사용자는 활동 승인 요청 알림을 받아 확인 하여 승인 및 반려처리를 합니다.
+> 사원은 승인 및 반려 처리됨을 알림으로 받을 수 있습니다.
+</details>
+
+<details>
+<summary>부서 ESG 대시보드</summary>
+
+![Department_ESG_Dashbord](https://github.com/user-attachments/assets/ecceb655-053d-44bf-95ff-d0c0281a68fd)
+
+> 해당 기업 소속의 사용자가 원하는 년도 및 월 부서를 선택해 부서의 해당 년, 월의 부서 ESG 대시보드를 확인 할 수 있습니다.
+> `환경`, `사회`, `지배구조`, `종합 점수`의 평균값이 항목별로 시각화되며,
+> 이를 통해 연도별 변화 추세, 부서 간의 ESG 성과 격차 등을 쉽게 파악할 수 있습니다.
+</details>
+
+<details>
+<summary>파트너 관리</summary>
+
+![파트너사](https://github.com/user-attachments/assets/10cc9f2f-58a0-489c-9c11-2a0b74eb6069)
+
+> 소속 기업이 선정한 파트너사들중 탑 3의 ESG를 바로 확인가능합니다
+> 선정한 파트너사들을 리스트 목록으로 확인 가능하며,
+> 파트너사를 선정하고 삭제 할 수 있습니다.
+</details>
+
+<details>
+<summarry>피드백 관리 및 피드벡 작성</summarry>
+
+![피드백](https://github.com/user-attachments/assets/c6fb5c97-7475-452f-bcf3-e881194148e3)
+
+> 관리자가 기업 인사 평가 기준에 맞게 피드백 질문지를 작성
+> 작성한 질문지에 맞게 사원들 간 피드백을 작성
+> 작성된 피드백을 통해 임원들이 사원들이 활동한 활동들을 같이 참고해 인사평가를 진행할 수 있습니다.
+</details>
 
 ## 🚀 핵심 로직 상세 설명
 ### [📃 프로젝트 Wiki](https://github.com/beyond-sw-camp/be12-fin-HRIM-IMHR-BE/wiki/%ED%95%B5%EC%8B%AC-%EB%A1%9C%EC%A7%81-%EC%83%81%EC%84%B8-%EC%84%A4%EB%AA%85) <br><br>

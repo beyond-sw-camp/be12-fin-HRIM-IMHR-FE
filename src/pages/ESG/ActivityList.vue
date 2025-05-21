@@ -128,9 +128,29 @@ const filteredActivitys = computed(() =>
   activityStore.activityList.filter((a) =>
     (a.subject || "").toLowerCase().includes(search.value.toLowerCase())
   ),
-
   console.log("?",activityStore.activityList),
 );
+
+// 페이지네이션을 위한 computed 속성 추가
+const displayedPages = computed(() => {
+  const pages = [];
+  const maxVisiblePages = 9;
+  const halfVisible = Math.floor(maxVisiblePages / 2);
+
+  let startPage = Math.max(0, currentPage.value - halfVisible);
+  let endPage = Math.min(totalPages.value - 1, startPage + maxVisiblePages - 1);
+
+  // 시작 페이지 조정
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(0, endPage - maxVisiblePages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i + 1);
+  }
+
+  return pages;
+});
 
 const fetchactivity = async () => {
   totalPages.value = await activityStore.activityListsearch(
@@ -249,14 +269,14 @@ onMounted(async () => {
     <div class="flex justify-center items-center mt-6 space-x-2 text-sm">
       <button
         class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
-        :disabled="currentPage === 1"
+        :disabled="currentPage === 0"
         @click="currentPage--"
       >
         ← 이전
       </button>
 
       <button
-        v-for="page in totalPages"
+        v-for="page in displayedPages"
         :key="page"
         @click="currentPage = page - 1"
         :class="[

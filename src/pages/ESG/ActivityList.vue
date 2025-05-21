@@ -161,6 +161,12 @@ const fetchactivity = async () => {
   );
 };
 
+// 페이지 변경 핸들러 추가
+const handlePageChange = async (page) => {
+  currentPage.value = page - 1;
+  await fetchactivity();
+};
+
 onMounted(async () => {
   userRole.value = await memberStore.isAdmin();
   const rawSubjects = await activityStore.subjectListSearch();
@@ -270,7 +276,7 @@ onMounted(async () => {
       <button
         class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="currentPage === 0"
-        @click="currentPage--"
+        @click="handlePageChange(currentPage)"
       >
         ← 이전
       </button>
@@ -278,7 +284,7 @@ onMounted(async () => {
       <button
         v-for="page in displayedPages"
         :key="page"
-        @click="currentPage = page - 1"
+        @click="handlePageChange(page)"
         :class="[
           'px-3 py-1 rounded',
           currentPage === page - 1
@@ -292,7 +298,7 @@ onMounted(async () => {
       <button
         class="px-3 py-1 bg-slate-700 text-white rounded disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="currentPage === totalPages - 1"
-        @click="currentPage++"
+        @click="handlePageChange(currentPage + 2)"
       >
         다음 →
       </button>
